@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	cors "github.com/rs/cors/wrapper/gin"
 	"github.com/jackc/pgx/v5"
 	"github.com/joho/godotenv"
 	"fmt"
@@ -36,7 +37,10 @@ func main() {
 	gameService := services.InitGameService(gameRepo)
 	gameController := controllers.InitGameController(gameService)
 
+	r.Use(cors.Default())
+
 	r.GET("/game", gameController.GetGame)
+
 	rErr := r.Run()
 
 	if rErr != nil {
