@@ -1,4 +1,4 @@
-FROM golang:1.23.1
+FROM golang:latest
 
 WORKDIR /app
 
@@ -7,7 +7,6 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY *.go ./
-COPY .env ./
 COPY controllers/ ./controllers
 COPY models/ ./models
 COPY repositories/ ./repositories
