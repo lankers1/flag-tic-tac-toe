@@ -1,8 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 
 async function getGame() {
-  const res = await fetch(`${import.meta.env.API_URL}/game`);
-  return await res.json();
+  return await fetch(`${import.meta.env.VITE_API_URL}/game`);
 }
 
-export const getGameQuery = useQuery({ queryKey: ["game"], queryFn: getGame });
+export const useGetGameQuery = () =>
+  useQuery({
+    queryKey: ["game"],
+    queryFn: getGame,
+  });
