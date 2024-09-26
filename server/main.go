@@ -15,7 +15,7 @@ func main() {
 
 	defer conn.Close(context.Background())
 
-	handlers := config.InitializeHandlers(config.InitializeRepositories(conn))
+	handlers := config.InitHandlers(config.InitRepositories(conn))
 
 	api := api.InitApi(handlers)
 

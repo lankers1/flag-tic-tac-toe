@@ -25,10 +25,10 @@ func InitConfig() Config {
 	return config
 }
 
-func InitializeRepositories(conn *pgx.Conn) *repositories.Repositories {
+func InitRepositories(conn *pgx.Conn) *repositories.Repositories {
 	return repositories.NewRepositories(conn)
 }
 
-func InitializeHandlers(r *repositories.Repositories) *handlers.Handlers {
-	return handlers.NewHandlers(r.GameRepository)
+func InitHandlers(repo *repositories.Repositories) *handlers.Handlers {
+	return handlers.NewHandlers(repo.GameRepository)
 }
