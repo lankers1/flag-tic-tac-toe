@@ -1,3 +1,5 @@
+import { Gameboard } from "../components/Gameboard";
+
 export const Game = () => {
-  return <div>game</div>;
+  return <Gameboard />;
 };
