@@ -30,5 +30,5 @@ func InitRepositories(conn *pgx.Conn) *repositories.Repositories {
 }
 
 func InitHandlers(repo *repositories.Repositories) *handlers.Handlers {
-	return handlers.NewHandlers(repo.GameRepository)
+	return handlers.NewHandlers(repo.GameRepository, repo.FlagRepository)
 }

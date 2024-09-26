@@ -11,6 +11,7 @@ func InitApi(handlers *handlers.Handlers) *gin.Engine {
 	router.Use(cors.Default())
 
 	router.GET("/game", handlers.GameHandler.CreateGame)
+	router.POST("/search_flags", handlers.FlagHandler.SearchFlags)
 
 	return router
 }
