@@ -4,6 +4,7 @@ services:
     depends_on:
       - postgres
       - go-server
+    restart: always
     volumes:
       - ./client:/app
       - /app/node_modules
