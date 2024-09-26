@@ -11,22 +11,22 @@ export const Gameboard = () => {
     <div className="board-container">
       <div className="board-grid">
         <div className="row-1 squares">
-          <p>{data.game.first_row.split("_").join(" ")}</p>
+          <p>{data?.first_row?.split("_").join(" ")}</p>
         </div>
         <div className="row-2 squares">
-          <p>{data.game.second_row.split("_").join(" ")}</p>
+          <p>{data?.second_row?.split("_").join(" ")}</p>
         </div>
         <div className="row-3 squares">
-          <p>{data.game.third_row.split("_").join(" ")}</p>
+          <p>{data?.third_row?.split("_").join(" ")}</p>
         </div>
         <div className="col-1 squares">
-          <p>{data.game.first_column.split("_").join(" ")}</p>
+          <p>{data?.first_column?.split("_").join(" ")}</p>
         </div>
         <div className="col-2 squares">
-          <p>{data.game.second_column.split("_").join(" ")}</p>
+          <p>{data?.second_column?.split("_").join(" ")}</p>
         </div>
         <div className="col-3 squares">
-          <p>{data.game.third_column.split("_").join(" ")}</p>
+          <p>{data?.third_column?.split("_").join(" ")}</p>
         </div>
         <div className="one squares guess-square"></div>
         <div className="two squares guess-square"></div>

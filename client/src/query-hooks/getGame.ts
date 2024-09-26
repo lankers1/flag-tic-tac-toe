@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 
 async function getGame() {
-  return await fetch(`${import.meta.env.VITE_API_URL}/game`);
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/game`);
+  return await res.json();
 }
 
 export const useGetGameQuery = () =>
