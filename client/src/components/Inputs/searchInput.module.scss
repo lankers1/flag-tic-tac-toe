@@ -1,9 +1,16 @@
 .searchInput {
   width: 100%;
-  font-weight: 500;
   border-radius: 28px;
+  border: 2px black solid;
+  color: black;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 0rem 0.75rem;
+  box-shadow: 5px 5px rgba(0, 0, 0, 0.5);
 
-  &::-webkit-input-placeholder {
-    font-weight: 500;
+
+  &::placeholder {
+    color: rgba(0, 0, 0, 0.9);
+    font-size: 16px;
   }
 }
