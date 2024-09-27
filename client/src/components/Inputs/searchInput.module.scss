@@ -1,0 +1,9 @@
+.searchInput {
+  width: 100%;
+  font-weight: 500;
+  border-radius: 28px;
+
+  &::-webkit-input-placeholder {
+    font-weight: 500;
+  }
+}
