@@ -24,7 +24,7 @@ func NewFlagRepository(conn *pgx.Conn) *FlagRepository {
 
 func (flagRepo *FlagRepository) SearchFlags(searchTerm string) *[]models.Flag {
 	fmt.Println(searchTerm)
-	query := "SELECT iso_2, name FROM flags WHERE name LIKE $1;"
+	query := "SELECT iso_2, name FROM flags WHERE name ILIKE $1;"
 	rows, queryErr := flagRepo.conn.Query(context.Background(), query, "%" + searchTerm + "%")
 
 	if queryErr != nil {
