@@ -1,10 +1,7 @@
-export function debounce<Type>(
-  callback: (...args: Type[]) => void,
-  timeout: number
-) {
+export function debounce<T>(callback: (...args: T[]) => void, timeout: number) {
   let timeoutId: null | number = null;
 
-  return (...args: Type[]) => {
+  return (...args: T[]) => {
     if (timeoutId) {
       window.clearTimeout(timeoutId);
     }
