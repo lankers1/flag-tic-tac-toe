@@ -1,10 +1,10 @@
-export const debounce = (
-  callback: (...args: unknown[]) => void,
+export function debounce<Type>(
+  callback: (...args: Type[]) => void,
   timeout: number
-) => {
+) {
   let timeoutId: null | number = null;
 
-  return (...args: unknown[]) => {
+  return (...args: Type[]) => {
     if (timeoutId) {
       window.clearTimeout(timeoutId);
     }
@@ -12,4 +12,4 @@ export const debounce = (
       callback(...args);
     }, timeout);
   };
-};
+}
