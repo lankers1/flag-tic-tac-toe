@@ -1,0 +1,19 @@
+@use 'src/sass/theme' as *;
+
+.list {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  width: 100%;
+}
+
+.listItem {
+  padding: 12px 0px;
+  font-weight: 500;
+  border-bottom: 2px solid black;
+
+  &:hover {
+    background-color: rgba(#000000, 0.2);
+    cursor: pointer;
+  }
+}
