@@ -1,126 +1,21 @@
 import { capitaliseFirst } from "../../utils/capitaliseFirst";
 import { removeSnakeCase } from "../../utils/removeSnakeCase";
-import { GameboardButton } from "./GameboardButton";
-import "./styles.scss";
+import { GameboardButton } from "../GameboardButton";
 
-const squares = [
-  { type: "inside", key: "" },
-  { type: "inside", key: "" },
-  { type: "inside", key: "" },
-  { type: "inside", key: "" },
-  { type: "inside", key: "" },
-  { type: "inside", key: "" },
-  { type: "inside", key: "" },
-  { type: "inside", key: "" },
-  { type: "inside", key: "" },
-];
+import styles from "./styles.module.scss";
 
 export const Gameboard = ({ data, handleClick }) => {
   return (
-    <div className="board-container">
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        <div
-          style={{
-            display: "flex",
-            gap: "18px",
-            justifyContent: "flex-end",
-            marginBottom: "0.5rem",
-          }}
-        >
-          <div
-            style={{
-              height: "auto",
-              width: "7rem",
-              display: "flex",
-              justifyContent: "center",
-              textAlign: "center",
-            }}
-          >
-            {capitaliseFirst(removeSnakeCase(data.first_column))}
-          </div>
-          <div
-            style={{
-              height: "auto",
-              width: "7rem",
-              display: "flex",
-              justifyContent: "center",
-              textAlign: "center",
-            }}
-          >
-            {capitaliseFirst(removeSnakeCase(data.second_column))}
-          </div>
-          <div
-            style={{
-              height: "auto",
-              width: "7rem",
-              display: "flex",
-              justifyContent: "center",
-              textAlign: "center",
-            }}
-          >
-            {capitaliseFirst(removeSnakeCase(data.third_column))}
-          </div>
-        </div>
-        <div style={{ display: "flex" }}>
-          <div
-            style={{ display: "flex", maxWidth: "7rem", marginRight: "0.5rem" }}
-          >
-            <div
-              style={{
-                display: "flex",
-                gap: "18px",
-                flexDirection: "column",
-              }}
-            >
-              <div
-                style={{
-                  height: "7rem",
-                  width: "auto",
-                  display: "flex",
-                  alignItems: "center",
-
-                  justifyContent: "center",
-                }}
-              >
-                <p style={{ height: "fit-content", textAlign: "center" }}>
-                  {capitaliseFirst(removeSnakeCase(data.first_row))}
-                </p>
-              </div>
-              <div
-                style={{
-                  height: "7rem",
-                  width: "auto",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <p style={{ height: "fit-content", textAlign: "center" }}>
-                  {capitaliseFirst(removeSnakeCase(data.second_row))}
-                </p>
-              </div>
-              <div
-                style={{
-                  height: "7rem",
-                  width: "auto",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <p style={{ height: "fit-content", textAlign: "center" }}>
-                  {capitaliseFirst(removeSnakeCase(data.third_row))}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="board-grid">
-            {squares.map(({ type, key }, index) => (
-              <RenderSquare
-                handleClick={() => handleClick(index)}
-                type={type}
-                wording={data[key]}
-                key={type + index}
+    <div className={styles.boardContainer}>
+      <div className={styles.innerContainer}>
+        <ColumnLabels data={data} />
+        <div className={styles.innerRow}>
+          <RowLabels data={data} />
+          <div className={styles.boardGrid}>
+            {[...Array(9)].map((_, index) => (
+              <GameboardButton
+                key={"gameboard-button" + index}
+                handleClick={handleClick}
               />
             ))}
           </div>
@@ -130,31 +25,30 @@ export const Gameboard = ({ data, handleClick }) => {
   );
 };
 
-const RenderSquare = ({
-  type,
-  wording,
-  handleClick,
-}: {
-  handleClick: () => void;
-  type?: string;
-  wording: string;
-}) => {
-  switch (type) {
-    // case "row":
-    //   return (
-    //     <div className="text-square">
-    //       <p>{capitaliseFirst(removeSnakeCase(wording))}</p>
-    //     </div>
-    //   );
-    // case "col":
-    //   return (
-    //     <div className="text-square vertical">
-    //       <p>{capitaliseFirst(removeSnakeCase(wording))}</p>
-    //     </div>
-    //   );
-    case "inside":
-      return <GameboardButton handleClick={handleClick} />;
-    default:
-      return <div />;
-  }
-};
+const ColumnLabels = ({ data }) => (
+  <div className={styles.columnLabelContainer}>
+    <div className={styles.columnLabel}>
+      <p>{capitaliseFirst(removeSnakeCase(data.first_column))}</p>
+    </div>
+    <div className={styles.columnLabel}>
+      <p>{capitaliseFirst(removeSnakeCase(data.second_column))}</p>
+    </div>
+    <div className={styles.columnLabel}>
+      <p>{capitaliseFirst(removeSnakeCase(data.third_column))}</p>
+    </div>
+  </div>
+);
+
+const RowLabels = ({ data }) => (
+  <div className={styles.rowLabelContainer}>
+    <div className={styles.rowLabel}>
+      <p>{capitaliseFirst(removeSnakeCase(data.first_row))}</p>
+    </div>
+    <div className={styles.rowLabel}>
+      <p>{capitaliseFirst(removeSnakeCase(data.second_row))}</p>
+    </div>
+    <div className={styles.rowLabel}>
+      <p>{capitaliseFirst(removeSnakeCase(data.third_row))}</p>
+    </div>
+  </div>
+);
