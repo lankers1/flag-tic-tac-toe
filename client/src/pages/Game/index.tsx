@@ -5,6 +5,9 @@ import { Modal } from "../../components/Modal";
 import { AnswerModalContent } from "./components/AnswerModalContent";
 
 export const Game = () => {
+  const [selectedFlags, setSelectedFlags] = useState([
+    ...Array(9).fill(null, 0),
+  ]);
   const [selectedSquare, setSelectedSquare] = useState<null | number>(null);
   const { data, isLoading, isPending, error } = useGetGameQuery();
 
@@ -17,9 +20,18 @@ export const Game = () => {
 
   return (
     <>
-      <Gameboard handleClick={handleClick} data={data} />
+      <Gameboard
+        handleClick={handleClick}
+        data={data}
+        selectedFlags={selectedFlags}
+      />
       <Modal isOpen={!!selectedSquare}>
-        <AnswerModalContent closeModal={() => setSelectedSquare(null)} />
+        <AnswerModalContent
+          selectedSquareIndex={selectedSquare}
+          closeModal={() => setSelectedSquare(null)}
+          onSelect={setSelectedFlags}
+          selectedFlags={selectedFlags}
+        />
       </Modal>
     </>
   );

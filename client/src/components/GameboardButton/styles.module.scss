@@ -1,4 +1,6 @@
-.gameboardButton {
+@use 'src/sass/theme' as *;
+
+.button {
   border-radius: 28px;
   background-color: #F7F7F9;
   cursor: pointer;
@@ -6,4 +8,22 @@
   box-shadow: 3px 3px rgba(0, 0, 0, 0.5);
   height: 7rem;
   width: 7rem;
+  padding: 0.25rem;
+
+  .flag {
+    margin-top: 0.25rem;
+    height: 2rem;
+    border-radius: 5px;
+    box-shadow: 4px 4px rgba(0, 0, 0, 0.5);
+  }
+
+
+  .text {
+    font-weight: 500;
+  }
+}
+
+.flagSelected {
+  background-color: $background-green;
+  cursor: default;
 }

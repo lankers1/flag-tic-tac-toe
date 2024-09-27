@@ -11,6 +11,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+input,
+textarea,
+button {
+  font-family: inherit
+}
+
+
 body {
   margin: 0;
   display: flex;

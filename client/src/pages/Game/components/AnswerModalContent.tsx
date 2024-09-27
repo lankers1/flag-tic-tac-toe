@@ -11,15 +11,30 @@ import styles from "./styles.module.scss";
 
 interface Props {
   closeModal: () => void;
+  selectedSquareIndex: number;
+  onSelect: (flags: null[] | Flag[]) => void;
+  selectedFlags: null[] | Flag[];
 }
 
-export const AnswerModalContent = ({ closeModal }: Props) => {
+export const AnswerModalContent = ({
+  closeModal,
+  onSelect,
+  selectedSquareIndex,
+  selectedFlags,
+}: Props) => {
   const { data: flags, mutate } = searchFlags();
 
   const handleSearch = debounce(
     (event: React.ChangeEvent<HTMLInputElement>) => mutate(event.target.value),
     500
   );
+
+  const handleSelect = (flag: Flag) => {
+    selectedFlags[selectedSquareIndex - 1] = flag;
+
+    onSelect(selectedFlags);
+    closeModal();
+  };
 
   return (
     <div className={styles.container}>
@@ -30,7 +45,11 @@ export const AnswerModalContent = ({ closeModal }: Props) => {
       <div className={styles.listContainer}>
         <List>
           {flags?.map((flag) => (
-            <ListItem key={flag.iso2} content={flag.name} />
+            <ListItem
+              key={flag.iso_2}
+              handleClick={() => handleSelect(flag)}
+              content={flag.name}
+            />
           ))}
         </List>
       </div>
