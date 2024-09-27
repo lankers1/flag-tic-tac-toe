@@ -9,7 +9,9 @@ export const Modal = ({ isOpen, children }: PropsWithChildren<Props>) => {
   if (!isOpen) return null;
   return (
     <div className={styles.modalBackground}>
-      <div className={styles.modal}>{children}</div>
+      <dialog className={styles.modal} open={isOpen}>
+        {children}
+      </dialog>
     </div>
   );
 };
