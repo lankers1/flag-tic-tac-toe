@@ -12,7 +12,13 @@ export const GameboardButton = ({ handleClick, selectedFlag }: Props) => {
   return (
     <button
       onClick={handleClick}
-      className={`${styles.button} ${selectedFlag ? styles.flagSelected : ""}`}
+      className={`${styles.button} ${
+        selectedFlag
+          ? selectedFlag.isCorrect
+            ? styles.flagSelected
+            : styles.flagFalse
+          : ""
+      }`}
     >
       {selectedFlag && (
         <>

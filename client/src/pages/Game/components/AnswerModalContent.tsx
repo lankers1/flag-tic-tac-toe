@@ -16,8 +16,21 @@ interface Props {
   selectedFlags: null[] | Flag[];
 }
 
+const answerMap = {
+  "1": "r1c1",
+  "2": "r1c2",
+  "3": "r1c3",
+  "4": "r2c1",
+  "5": "r2c2",
+  "6": "r2c3",
+  "7": "r3c1",
+  "8": "r3c2",
+  "9": "r3c3",
+};
+
 export const AnswerModalContent = ({
   closeModal,
+  answers,
   onSelect,
   selectedSquareIndex,
   selectedFlags,
@@ -30,7 +43,12 @@ export const AnswerModalContent = ({
   );
 
   const handleSelect = (flag: Flag) => {
-    selectedFlags[selectedSquareIndex - 1] = flag;
+    const answerKey = answerMap[selectedSquareIndex.toString()];
+    const answerArr = answers[answerKey];
+    selectedFlags[selectedSquareIndex - 1] = {
+      ...flag,
+      isCorrect: answerArr.includes(flag.iso_2),
+    };
 
     onSelect(selectedFlags);
     closeModal();

@@ -22,11 +22,12 @@ export const Game = () => {
     <>
       <Gameboard
         handleClick={handleClick}
-        data={data}
+        data={data?.game}
         selectedFlags={selectedFlags}
       />
       <Modal isOpen={!!selectedSquare}>
         <AnswerModalContent
+          answers={data?.answers}
           selectedSquareIndex={selectedSquare}
           closeModal={() => setSelectedSquare(null)}
           onSelect={setSelectedFlags}
