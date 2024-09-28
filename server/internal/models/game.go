@@ -14,3 +14,15 @@ type Game struct {
 	ThirdColumnId int  `json:"third_column_id"`
 	ThirdColumn  string `json:"third_column"`
 }
+
+type Answer struct {
+	R1c1 []string `json:"r1c1"`  
+	R2c1 []string `json:"r2c1"` 
+	R3c1 []string `json:"r3c1"` 
+	R1c2 []string `json:"r1c2"` 
+	R2c2 []string `json:"r2c2"` 
+	R3c2 []string `json:"r3c2"` 
+	R1c3 []string `json:"r1c3"` 
+	R2c3 []string `json:"r2c3"` 
+	R3c3 []string `json:"r3c3"`
+}

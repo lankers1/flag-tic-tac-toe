@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	"fmt"
 	"log"
 	"context"
 	"github.com/jackc/pgx/v5"
@@ -9,7 +8,7 @@ import (
 )
 
 type FlagInterface interface {
-	Create(*models.Flag) error
+	SearchFlags(*models.Flag) error
 }
 
 type FlagRepository struct {
@@ -23,7 +22,6 @@ func NewFlagRepository(conn *pgx.Conn) *FlagRepository {
 }
 
 func (flagRepo *FlagRepository) SearchFlags(searchTerm string) *[]models.Flag {
-	fmt.Println(searchTerm)
 	query := "SELECT iso_2, name FROM flags WHERE name ILIKE $1;"
 	rows, queryErr := flagRepo.conn.Query(context.Background(), query, "%" + searchTerm + "%")
 
@@ -33,7 +31,6 @@ func (flagRepo *FlagRepository) SearchFlags(searchTerm string) *[]models.Flag {
 
 	flags, err := pgx.CollectRows(rows, pgx.RowToStructByPos[models.Flag])
 	
-	fmt.Println(flags)
 	if err != nil {
 		log.Printf("CollectRows error: %v", err)
 	}
