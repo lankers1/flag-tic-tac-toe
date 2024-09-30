@@ -4,6 +4,7 @@ import { useGetGameQuery } from "../../query-hooks/getGame";
 import { Modal } from "../../components/Modal";
 import { AnswerModalContent } from "./components/AnswerModalContent";
 import { useGameStore } from "../../store/useGameStore";
+import { LinkButton } from "../../components/Buttons/LinkButton";
 
 export const Game = () => {
   const [selectedFlags, setSelectedFlags] = useState([
@@ -21,15 +22,21 @@ export const Game = () => {
   }
 
   return (
-    <div
-      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-    >
+    <>
+      <header style={{ width: "100%" }}>
+        <h1
+          style={{ fontWeight: 400, letterSpacing: ".2rem", fontSize: "64px" }}
+        >
+          Flag tic-tac-toe
+        </h1>
+      </header>
       <h2>Player {playersTurn} it's your turn!</h2>
       <Gameboard
         handleClick={handleClick}
         data={data?.game}
         selectedFlags={selectedFlags}
       />
+      <LinkButton to="/" label="Give up!" />
       <Modal isOpen={!!selectedSquare}>
         <AnswerModalContent
           answers={data?.answers}
@@ -39,6 +46,6 @@ export const Game = () => {
           selectedFlags={selectedFlags}
         />
       </Modal>
-    </div>
+    </>
   );
 };

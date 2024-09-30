@@ -1,13 +1,20 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import { Game } from "../pages/Game";
+import { Home } from "../pages/Home";
+import { Layout } from "../components/Layout";
 
 export const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Navigate to="/game" />,
-  },
-  {
-    path: "/game",
-    element: <Game />,
+    element: <Layout />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/game",
+        element: <Game />,
+      },
+    ],
   },
 ]);
