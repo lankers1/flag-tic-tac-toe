@@ -1,0 +1,9 @@
+@use 'src/sass/theme' as *;
+
+.card {
+  padding: 1rem;
+  background-color: $background-blue;
+  border-radius: 28px;
+  box-shadow: 15px 15px rgba(0, 0, 0, 0.5);
+  border: 3px solid black;
+}
