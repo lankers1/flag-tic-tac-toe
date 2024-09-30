@@ -24,11 +24,19 @@
 }
 
 .flagSelected {
-  background-color: $background-green;
+  // background-color: $background-green;
   cursor: default;
 }
 
 .flagFalse {
   background-color: $background-red;
 
+}
+
+.playerOne {
+  border: 6px solid #94D3FF;
+}
+
+.playerTwo {
+  border: 6px solid #CA94FF;
 }

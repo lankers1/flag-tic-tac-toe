@@ -8,6 +8,7 @@ import { IconButton } from "../../../components/Buttons/IconButton";
 import { searchFlags } from "../../../query-hooks/searchFlags";
 
 import styles from "./styles.module.scss";
+import { useGameStore } from "../../../store/useGameStore";
 
 interface Props {
   closeModal: () => void;
@@ -35,6 +36,7 @@ export const AnswerModalContent = ({
   selectedSquareIndex,
   selectedFlags,
 }: Props) => {
+  const { togglePlayerTurn, playersTurn } = useGameStore((state) => state);
   const { data: flags, mutate } = searchFlags();
 
   const handleSearch = debounce(
@@ -47,10 +49,12 @@ export const AnswerModalContent = ({
     const answerArr = answers[answerKey];
     selectedFlags[selectedSquareIndex - 1] = {
       ...flag,
+      playersMove: playersTurn,
       isCorrect: answerArr.includes(flag.iso_2),
     };
 
     onSelect(selectedFlags);
+    togglePlayerTurn();
     closeModal();
   };
 

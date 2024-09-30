@@ -9,4 +9,5 @@ export const useGetGameQuery = () =>
   useQuery({
     queryKey: ["game"],
     queryFn: getGame,
+    refetchOnWindowFocus: false,
   });

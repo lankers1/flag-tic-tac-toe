@@ -3,6 +3,7 @@ import { Gameboard } from "../../components/Gameboard";
 import { useGetGameQuery } from "../../query-hooks/getGame";
 import { Modal } from "../../components/Modal";
 import { AnswerModalContent } from "./components/AnswerModalContent";
+import { useGameStore } from "../../store/useGameStore";
 
 export const Game = () => {
   const [selectedFlags, setSelectedFlags] = useState([
@@ -10,6 +11,7 @@ export const Game = () => {
   ]);
   const [selectedSquare, setSelectedSquare] = useState<null | number>(null);
   const { data, isLoading, isPending, error } = useGetGameQuery();
+  const { playersTurn } = useGameStore((state) => state);
 
   if (isLoading || isPending) return <p>loading...</p>;
   if (error) return <p>Error... {error.message}</p>;
@@ -19,7 +21,10 @@ export const Game = () => {
   }
 
   return (
-    <>
+    <div
+      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
+      <h2>Player {playersTurn} it's your turn!</h2>
       <Gameboard
         handleClick={handleClick}
         data={data?.game}
@@ -34,6 +39,6 @@ export const Game = () => {
           selectedFlags={selectedFlags}
         />
       </Modal>
-    </>
+    </div>
   );
 };

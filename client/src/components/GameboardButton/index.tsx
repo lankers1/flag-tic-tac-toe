@@ -18,6 +18,8 @@ export const GameboardButton = ({ handleClick, selectedFlag }: Props) => {
             ? styles.flagSelected
             : styles.flagFalse
           : ""
+      } ${selectedFlag?.playersMove === 1 && styles.playerOne} ${
+        selectedFlag?.playersMove === 2 && styles.playerTwo
       }`}
     >
       {selectedFlag && (
