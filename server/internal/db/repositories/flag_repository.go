@@ -3,6 +3,7 @@ package repositories
 import (
 	"log"
 	"context"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jackc/pgx/v5"
 	"fttt/internal/models"
 )
@@ -12,10 +13,10 @@ type FlagInterface interface {
 }
 
 type FlagRepository struct {
-	conn *pgx.Conn
+	conn *pgxpool.Pool
 }
 
-func NewFlagRepository(conn *pgx.Conn) *FlagRepository {
+func NewFlagRepository(conn *pgxpool.Pool) *FlagRepository {
 	return &FlagRepository{
 		conn: conn,
 	}

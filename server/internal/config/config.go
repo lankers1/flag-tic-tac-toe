@@ -4,7 +4,7 @@ import (
 	"os"
 	"log"
 	"github.com/joho/godotenv"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"fttt/internal/db/repositories"
 	"fttt/internal/handlers"
 )
@@ -25,7 +25,7 @@ func InitConfig() Config {
 	return config
 }
 
-func InitRepositories(conn *pgx.Conn) *repositories.Repositories {
+func InitRepositories(conn *pgxpool.Pool) *repositories.Repositories {
 	return repositories.NewRepositories(conn)
 }
 

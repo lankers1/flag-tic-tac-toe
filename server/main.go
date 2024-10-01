@@ -5,7 +5,6 @@ import (
 	"fttt/internal/db"
 	"fttt/internal/api"
 	"log"
-	"context"
 )
 
 func main() {
@@ -13,7 +12,7 @@ func main() {
 
 	conn := db.Connect(cfg.DatabaseUrl)
 
-	defer conn.Close(context.Background())
+	defer conn.Close()
 
 	handlers := config.InitHandlers(config.InitRepositories(conn))
 

@@ -1,10 +1,10 @@
 package repositories
 
 import (
-	"fmt"
 	"strconv"
 	"log"
 	"context"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jackc/pgx/v5"
 	"fttt/internal/models"
 )
@@ -15,10 +15,10 @@ type GameInterface interface {
 }
 
 type GameRepository struct {
-	conn *pgx.Conn
+	conn *pgxpool.Pool
 }
 
-func NewGameRepository(conn *pgx.Conn) *GameRepository {
+func NewGameRepository(conn *pgxpool.Pool) *GameRepository {
 	return &GameRepository{
 		conn: conn,
 	}
@@ -42,7 +42,6 @@ func (gameRepo *GameRepository) Create() *models.Game {
 }
 
 func (gameRepo *GameRepository) GetAnswers(game *models.Game) *models.Answer {
-	fmt.Println(game.FirstColumnId)
 	query := `SELECT 
 							r1c1,
 							r2c1,
