@@ -26,18 +26,15 @@ export const Game = () => {
 
   return (
     <>
-      <header className={styles.header}>
-        <Heading variant="h1">Flag tic-tac-toe</Heading>
-      </header>
       <Notification backgroundColor={playersTurn === 1 ? "#002080" : "#ff6600"}>
         {!!winner ? (
-          <h2 style={{ color: "white" }}>
+          <Heading variant="h2" className={styles.notificationHeading}>
             Player {winner} has won! Congrats!!
-          </h2>
+          </Heading>
         ) : (
-          <h2 style={{ color: "white" }}>
+          <Heading variant="h2" className={styles.notificationHeading}>
             Player {playersTurn} it's your turn!
-          </h2>
+          </Heading>
         )}
       </Notification>
       <Gameboard

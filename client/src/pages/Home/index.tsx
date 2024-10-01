@@ -7,15 +7,12 @@ import styles from "./styles.module.scss";
 export const Home = () => {
   return (
     <>
-      <header>
-        <Heading variant="h1">Flag tic-tac-toe</Heading>
-        <div className={styles.subheading}>
-          <Heading variant="h2">
-            Aim to beat your opponent by guessing the flags based on categories.
-            The first to complete three in a row, column or diagonally wins.
-          </Heading>
-        </div>
-      </header>
+      <div className={styles.subheading}>
+        <Heading variant="h2">
+          Aim to beat your opponent by guessing the flags based on categories.
+          The first to complete three in a row, column or diagonally wins.
+        </Heading>
+      </div>
       <div className={styles.cardContainer}>
         <Card className={styles.cards}>
           <Heading variant="h2">Play versus a player</Heading>
