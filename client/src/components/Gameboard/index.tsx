@@ -6,25 +6,35 @@ import styles from "./styles.module.scss";
 
 interface Props {
   data: Game;
-  handleClick: (index: number) => void;
-  selectedFlags: null[] | Flag[];
+  handleClick: (outerIndex: number, innerIndex: number) => void;
+  selectedFlags: SelectedFlags;
+  disabled: boolean;
 }
 
-export const Gameboard = ({ data, handleClick, selectedFlags }: Props) => {
+export const Gameboard = ({
+  data,
+  handleClick,
+  selectedFlags,
+  disabled,
+}: Props) => {
   return (
     <div className={styles.boardContainer}>
       <div className={styles.innerContainer}>
-        <ColumnLabels data={data} />
+        <Labels data={data} labelKey="column" />
         <div className={styles.innerRow}>
-          <RowLabels data={data} />
+          <Labels data={data} labelKey="row" />
           <div className={styles.boardGrid}>
-            {[...Array(9)].map((_, index) => (
-              <GameboardButton
-                selectedFlag={selectedFlags[index]}
-                key={"gameboard-button" + index}
-                handleClick={() => handleClick(index)}
-              />
-            ))}
+            {[[...Array(3)], [...Array(3)], [...Array(3)]].map(
+              (arr, outerIndex) =>
+                arr.map((_, innerIndex) => (
+                  <GameboardButton
+                    disabled={disabled}
+                    selectedFlag={selectedFlags[outerIndex][innerIndex]}
+                    key={"gameboard-button" + outerIndex + innerIndex}
+                    handleClick={() => handleClick(outerIndex, innerIndex)}
+                  />
+                ))
+            )}
           </div>
         </div>
       </div>
@@ -34,32 +44,23 @@ export const Gameboard = ({ data, handleClick, selectedFlags }: Props) => {
 
 interface LabelProps {
   data: Game;
+  labelKey: string;
 }
 
-const ColumnLabels = ({ data }: LabelProps) => (
-  <div className={styles.columnLabelContainer}>
-    <div className={styles.columnLabel}>
-      <p>{capitaliseFirst(removeSnakeCase(data.first_column))}</p>
-    </div>
-    <div className={styles.columnLabel}>
-      <p>{capitaliseFirst(removeSnakeCase(data.second_column))}</p>
-    </div>
-    <div className={styles.columnLabel}>
-      <p>{capitaliseFirst(removeSnakeCase(data.third_column))}</p>
-    </div>
-  </div>
-);
+const Labels = ({ data, labelKey }: LabelProps) => {
+  const labels = [
+    data[`first_${labelKey}` as keyof Game],
+    data[`second_${labelKey}` as keyof Game],
+    data[`third_${labelKey}` as keyof Game],
+  ] as string[];
 
-const RowLabels = ({ data }: LabelProps) => (
-  <div className={styles.rowLabelContainer}>
-    <div className={styles.rowLabel}>
-      <p>{capitaliseFirst(removeSnakeCase(data.first_row))}</p>
+  return (
+    <div className={styles[`${labelKey}LabelContainer`]}>
+      {labels.map((label) => (
+        <div className={styles[`${labelKey}Label`]} key={label}>
+          <p>{capitaliseFirst(removeSnakeCase(label))}</p>
+        </div>
+      ))}
     </div>
-    <div className={styles.rowLabel}>
-      <p>{capitaliseFirst(removeSnakeCase(data.second_row))}</p>
-    </div>
-    <div className={styles.rowLabel}>
-      <p>{capitaliseFirst(removeSnakeCase(data.third_row))}</p>
-    </div>
-  </div>
-);
+  );
+};
