@@ -17,3 +17,5 @@ type Game = {
   third_row: string;
   third_row_id: number;
 };
+
+type Answers = Record<string, string[]>;

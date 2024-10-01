@@ -14,20 +14,14 @@ export const GameboardButton = ({
   disabled,
 }: Props) => {
   const Flag = flags?.[selectedFlag?.iso_2 as keyof typeof flags];
-  const currentPlayerStyle =
-    selectedFlag?.playersMove === 1 ? styles.playerOne : styles.playerTwo;
-
-  const isAnsweredFlagCorrect = selectedFlag
-    ? selectedFlag.isCorrect
-      ? styles.flagSelected
-      : styles.flagFalse
-    : "";
 
   return (
     <button
       disabled={disabled}
       onClick={handleClick}
-      className={`${styles.button} ${isAnsweredFlagCorrect} ${currentPlayerStyle}`}
+      className={`${styles.button} ${answeredButtonStyle(
+        selectedFlag
+      )} ${currentPlayerStyle(selectedFlag)}`}
     >
       {selectedFlag && (
         <>
@@ -38,3 +32,17 @@ export const GameboardButton = ({
     </button>
   );
 };
+
+function answeredButtonStyle(selectedFlag: SelectedFlag | null) {
+  if (selectedFlag) {
+    if (selectedFlag?.isCorrect) return styles.flagSelected;
+    return styles.flagFalse;
+  }
+  return "";
+}
+
+function currentPlayerStyle(selectedFlag: SelectedFlag | null) {
+  if (selectedFlag?.playersMove === 1) return styles.playerOne;
+  if (selectedFlag?.playersMove === 2) return styles.playerTwo;
+  return "";
+}

@@ -12,22 +12,17 @@ import { useGameStore } from "../../../store/useGameStore";
 
 interface Props {
   closeModal: () => void;
-  selectedSquareIndex: number;
-  onSelect: (flags: null[] | Flag[]) => void;
-  selectedFlags: null[] | Flag[];
+  selectedSquareIndex: number[];
+  onSelect: (flags: SelectedFlags) => void;
+  selectedFlags: SelectedFlags;
+  answers: Answers;
 }
 
-const answerMap = {
-  "1": "r1c1",
-  "2": "r1c2",
-  "3": "r1c3",
-  "4": "r2c1",
-  "5": "r2c2",
-  "6": "r2c3",
-  "7": "r3c1",
-  "8": "r3c2",
-  "9": "r3c3",
-};
+const answerMap = [
+  ["r1c1", "r1c2", "r1c3"],
+  ["r2c1", "r2c2", "r2c3"],
+  ["r3c1", "r3c2", "r3c3"],
+];
 
 export const AnswerModalContent = ({
   closeModal,
@@ -45,9 +40,11 @@ export const AnswerModalContent = ({
   );
 
   const handleSelect = (flag: Flag) => {
-    const answerKey = answerMap[selectedSquareIndex.toString()];
+    const answerKey =
+      answerMap[selectedSquareIndex[0] - 1][selectedSquareIndex[1] - 1];
+
     const answerArr = answers[answerKey];
-    selectedFlags[selectedSquareIndex - 1] = {
+    selectedFlags[selectedSquareIndex[0] - 1][selectedSquareIndex[1] - 1] = {
       ...flag,
       playersMove: playersTurn,
       isCorrect: answerArr.includes(flag.iso_2),
