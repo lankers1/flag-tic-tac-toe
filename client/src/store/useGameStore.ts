@@ -10,10 +10,9 @@ interface GameState {
 }
 
 function equal(arr: (null | SelectedFlag)[]) {
-  return arr.every(
-    (r) =>
-      (r?.isCorrect && r?.playersMove === 1) ||
-      (r?.isCorrect && r?.playersMove === 2)
+  return (
+    arr.every((r) => r?.isCorrect && r?.playersMove === 1) ||
+    arr.every((r) => r?.isCorrect && r?.playersMove === 2)
   );
 }
 

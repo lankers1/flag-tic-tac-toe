@@ -1,8 +1,9 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
-export const searchFlags = () =>
-  useMutation<Flag[], void, string>({
-    mutationFn: async (search_term: string) => {
+export const useSearchFlags = (search_term: string) =>
+  useQuery<Flag[], void, string>({
+    queryKey: [search_term],
+    queryFn: async () => {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/search_flags`, {
         method: "POST",
         body: JSON.stringify({ search_term }),

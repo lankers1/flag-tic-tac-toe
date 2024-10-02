@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Gameboard } from "../../components/Gameboard";
 import { useGetGameQuery } from "../../query-hooks/getGame";
@@ -9,13 +9,45 @@ import { LinkButton } from "../../components/Buttons/LinkButton";
 import { Notification } from "../../components/Notification";
 import { Heading } from "../../components/Heading";
 import styles from "./styles.module.scss";
+import { determineMove, easyComputer } from "../../computer/rulesets";
+import { useSearchFlags } from "../../query-hooks/searchFlags";
 
 export const Game = () => {
+  const { data: flags } = useSearchFlags("");
   const [selectedSquare, setSelectedSquare] = useState<number[]>([0, 0]);
   const { data, isLoading, isPending, error } = useGetGameQuery();
-  const { selectedFlags, playersTurn, winner, setSelectedFlags } = useGameStore(
-    (state) => state
-  );
+  const {
+    selectedFlags,
+    playersTurn,
+    winner,
+    setSelectedFlags,
+    togglePlayerTurn,
+  } = useGameStore((state) => state);
+
+  useEffect(() => {
+    if (playersTurn === 2 && !winner) {
+      setTimeout(() => {
+        setSelectedFlags(
+          determineMove(
+            easyComputer,
+            selectedFlags.reduce((acc, r, oIndex) => {
+              r.map((item, index) => {
+                if (!item) {
+                  acc = [...acc, [oIndex, index]];
+                }
+              });
+
+              return acc;
+            }, []),
+            flags,
+            selectedFlags,
+            data.answers
+          )
+        );
+        togglePlayerTurn();
+      }, 2000);
+    }
+  }, [playersTurn, winner]);
 
   if (isLoading || isPending) return <p>loading...</p>;
   if (error) return <p>Error... {error.message}</p>;
