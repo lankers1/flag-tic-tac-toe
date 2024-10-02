@@ -33,28 +33,25 @@ function flagArray(flags, selectedFlags, answerArr) {
 
 export function easyComputer(spaces, flags, selectedFlags, answers) {
   const otherMoves = playGame(
-    selectedFlags?.map((arr) =>
-      arr.map((r) =>
-        r?.playersMove === 1 ? "X" : r?.playersMove === 2 ? "O" : ""
-      )
-    )
+    selectedFlags.map((arr) => arr.map((r) => r?.playersMove || null))
   );
 
   const answerKey = answerMap[otherMoves[0]][otherMoves[1]];
   const answerArr = answers[answerKey];
   const flagSelection = flagArray(flags, selectedFlags, answerArr);
-  console.log(flagSelection);
   const randomFlag = randomNumber(flagSelection.length - 1);
+  const guess = answerArr.includes(flagSelection[randomFlag].iso_2);
 
   return selectedFlags.map((arr, index) =>
     otherMoves[0] === index
       ? arr.map((item, idx) =>
           idx === otherMoves[1]
-            ? {
-                ...flagSelection[randomFlag],
-                playersMove: 2,
-                isCorrect: answerArr.includes(flagSelection[randomFlag].iso_2),
-              }
+            ? guess
+              ? {
+                  ...flagSelection[randomFlag],
+                  playersMove: 2,
+                }
+              : null
             : item
         )
       : arr
@@ -97,13 +94,13 @@ export function determineMove(
   return rules(freeSpace, flags, selectedFlags, answerArr);
 }
 
-const PLAYER = "X";
-const AI = "O";
+const PLAYER = 1;
+const AI = 2;
 
 function isMovesLeft(board) {
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
-      if (board[i][j] === "") return true;
+      if (board[i][j] === null) return true;
     }
   }
   return false;
@@ -124,7 +121,6 @@ function evaluate(board) {
     }
   }
 
-  // Check diagonals for victory
   if (board[0][0] === board[1][1] && board[1][1] === board[2][2]) {
     if (board[0][0] === PLAYER) return -10;
     if (board[0][0] === AI) return 10;
@@ -134,7 +130,6 @@ function evaluate(board) {
     if (board[0][2] === AI) return 10;
   }
 
-  // No winner
   return 0;
 }
 
@@ -152,10 +147,11 @@ function minimax(board, depth, isMaximizing) {
 
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
-        if (board[i][j] === "") {
+        if (board[i][j] === null) {
           board[i][j] = AI;
+
           best = Math.max(best, minimax(board, depth + 1, false));
-          board[i][j] = "";
+          board[i][j] = null;
         }
       }
     }
@@ -165,10 +161,11 @@ function minimax(board, depth, isMaximizing) {
 
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
-        if (board[i][j] === "") {
+        if (board[i][j] === null) {
           board[i][j] = PLAYER;
+
           best = Math.min(best, minimax(board, depth + 1, true));
-          board[i][j] = "";
+          board[i][j] = null;
         }
       }
     }
@@ -182,10 +179,11 @@ function findBestMove(board) {
 
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
-      if (board[i][j] === "") {
+      if (board[i][j] === null) {
         board[i][j] = AI;
+
         let moveVal = minimax(board, 0, false);
-        board[i][j] = ""; // Undo the move
+        board[i][j] = null;
 
         if (moveVal > bestVal) {
           bestMove.row = i;
@@ -199,18 +197,7 @@ function findBestMove(board) {
   return bestMove;
 }
 
-function makeMove(row, col, player, board) {
-  if (board[row][col] === "") {
-    board[row][col] = player;
-    return true;
-  }
-  return false;
-}
-
 function playGame(board) {
   let bestMove = findBestMove(board);
-
-  makeMove(bestMove.row, bestMove.col, AI, board);
-
   return [bestMove.row, bestMove.col];
 }

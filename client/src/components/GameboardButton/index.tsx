@@ -35,8 +35,7 @@ export const GameboardButton = ({
 
 function answeredButtonStyle(selectedFlag: SelectedFlag | null) {
   if (selectedFlag) {
-    if (selectedFlag?.isCorrect) return styles.flagSelected;
-    return styles.flagFalse;
+    return styles.flagSelected;
   }
   return "";
 }

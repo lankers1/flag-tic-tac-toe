@@ -46,11 +46,13 @@ export const AnswerModalContent = ({
       answerMap[selectedSquareIndex[0] - 1][selectedSquareIndex[1] - 1];
 
     const answerArr = answers[answerKey];
-    selectedFlags[selectedSquareIndex[0] - 1][selectedSquareIndex[1] - 1] = {
-      ...flag,
-      playersMove: playersTurn,
-      isCorrect: answerArr.includes(flag.iso_2),
-    };
+    selectedFlags[selectedSquareIndex[0] - 1][selectedSquareIndex[1] - 1] =
+      answerArr.includes(flag.iso_2)
+        ? {
+            ...flag,
+            playersMove: playersTurn,
+          }
+        : null;
 
     onSelect(selectedFlags);
     togglePlayerTurn();

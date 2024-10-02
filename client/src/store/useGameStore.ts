@@ -9,41 +9,32 @@ interface GameState {
   setSelectedFlags: (selectedFlags: SelectedFlags) => void;
 }
 
-function equal(arr: (null | SelectedFlag)[]) {
-  return (
-    arr.every((r) => r?.isCorrect && r?.playersMove === 1) ||
-    arr.every((r) => r?.isCorrect && r?.playersMove === 2)
-  );
-}
+function evaluate(board) {
+  for (let row = 0; row < 3; row++) {
+    if (board[row][0] === board[row][1] && board[row][1] === board[row][2]) {
+      if (board[row][0] || board[row][0]) return true;
+    }
+  }
 
-function completedDiagonal(selectedFlags: SelectedFlags) {
-  return (
-    equal([selectedFlags[0][0], selectedFlags[1][1], selectedFlags[2][2]]) ||
-    equal([selectedFlags[0][2], selectedFlags[1][1], selectedFlags[2][0]])
-  );
-}
+  for (let col = 0; col < 3; col++) {
+    if (board[0][col] === board[1][col] && board[1][col] === board[2][col]) {
+      if (board[0][col] || board[0][col]) return true;
+    }
+  }
 
-function completedVertical(selectedFlags: SelectedFlags) {
-  return (
-    equal([selectedFlags[0][0], selectedFlags[1][0], selectedFlags[2][0]]) ||
-    equal([selectedFlags[0][1], selectedFlags[1][1], selectedFlags[2][1]]) ||
-    equal([selectedFlags[0][2], selectedFlags[1][2], selectedFlags[2][2]])
-  );
-}
+  if (board[0][0] === board[1][1] && board[1][1] === board[2][2]) {
+    if (board[0][0]) return true;
+  }
+  if (board[0][2] === board[1][1] && board[1][1] === board[2][0]) {
+    if (board[0][2]) return true;
+  }
 
-function completedHorizontal(selectedFlags: SelectedFlags) {
-  return (
-    equal(selectedFlags[0]) ||
-    equal(selectedFlags[1]) ||
-    equal(selectedFlags[2])
-  );
+  return 0;
 }
 
 function setSelectedFlags(selectedFlags: SelectedFlags) {
   if (
-    completedDiagonal(selectedFlags) ||
-    completedVertical(selectedFlags) ||
-    completedHorizontal(selectedFlags)
+    evaluate(selectedFlags.map((arr) => arr.map((r) => r?.playersMove || null)))
   ) {
     return (state: GameState) => ({ selectedFlags, winner: state.playersTurn });
   }
