@@ -7,8 +7,8 @@
   flex: 1;
   flex-direction: column;
 
-  @media screen and (max-width: $medium) {
-    padding: 0rem 1rem;
+  @media screen and (max-width: 614px) {
+    padding: 0rem;
   }
 
   .header {

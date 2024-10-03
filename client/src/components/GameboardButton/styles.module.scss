@@ -7,19 +7,16 @@
   border: 2px solid black;
   box-shadow: 3px 3px rgba(0, 0, 0, 0.5);
   padding: 0.25rem;
-  height: 5rem;
-  width: 5rem;
+  width: 7rem;
+  height: 7rem;
+  border-radius: 28px;
 
   @media screen and (max-width: $medium) {
-    height: 4.5rem;
-    width: 4.5rem;
     border-radius: 18px;
   }
 
-  @media screen and (min-width: $large) {
-    width: 7rem;
-    height: 7rem;
-    border-radius: 28px;
+  @media screen and (min-width: $medium) {
+    border-radius: 20px;
   }
 
   .flag {

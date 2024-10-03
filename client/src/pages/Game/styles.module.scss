@@ -13,14 +13,16 @@
 
 .container {
   display: flex;
+  align-items: center;
+  flex-direction: column;
 
-  @media screen and (max-width: $medium) {
-    flex-direction: column;
-  }
+  // @media screen and (max-width: $medium) {
+  //   flex-direction: column;
+  // }
 
-  @media screen and (min-width: $medium) {
-    flex-direction: row;
-  }
+  // @media screen and (min-width: $medium) {
+  //   flex-direction: row;
+  // }
 
 
 }

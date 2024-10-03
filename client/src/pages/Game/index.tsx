@@ -58,13 +58,24 @@ export const Game = () => {
   return (
     <>
       <div className={styles.container}>
+        <Notification
+          backgroundColor={
+            playersTurn === 1 || winner === 1 ? "#b0ddff" : "#9dff94"
+          }
+        >
+          {!!winner ? (
+            <Heading variant="h3">Player {winner} has won! Congrats!!</Heading>
+          ) : (
+            <Heading variant="h3">Player {playersTurn} it's your turn!</Heading>
+          )}
+        </Notification>
         <Gameboard
           handleClick={handleClick}
           data={data?.game}
           selectedFlags={selectedFlags}
           disabled={!!winner}
         />
-        <div>
+        {/* <div>
           <Notification
             backgroundColor={
               playersTurn === 1 || winner === 1 ? "#b0ddff" : "#9dff94"
@@ -88,7 +99,7 @@ export const Game = () => {
               ))}
             </List>
           </Card>
-        </div>
+        </div> */}
       </div>
       <LinkButton to="/" label="Give up!" />
       <Modal isOpen={!!selectedSquare[0]}>
