@@ -7,19 +7,22 @@
   flex: 1;
   flex-direction: column;
 
+
+  @media screen and (max-width: $x-large) {
+    padding: 0rem 3rem;
+  }
+
+
   @media screen and (max-width: 614px) {
     padding: 0rem;
   }
 
   .header {
-    width: 100%;
+    padding-left: 1rem;
   }
 
   .main {
     display: flex;
-    flex: 1;
-    justify-content: space-evenly;
-    flex-direction: column;
-    align-items: center;
+    flex: 1
   }
 }

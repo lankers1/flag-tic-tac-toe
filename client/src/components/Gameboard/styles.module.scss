@@ -30,12 +30,13 @@
         height: auto;
         display: flex;
         justify-content: center;
+        align-items: center;
         text-align: center;
         font-weight: 500;
-
         width: 7rem;
 
         p {
+          height: fit-content;
           font-size: 0.75rem;
           font-size: clamp(0.75rem, 0.65rem + 0.5vw, 1.25rem);
         }

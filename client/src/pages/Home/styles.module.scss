@@ -1,11 +1,31 @@
+@use 'src/sass/theme' as *;
+
 .subheading {
-  width: 75%;
+  padding: 0rem 1rem;
 }
 
 .cardContainer {
   display: flex;
-  gap: 120px;
+  gap: 100px;
   justify-content: space-between;
+
+  padding: 1rem;
+
+  @media screen and (max-width: $x-large) {
+    gap: 60px;
+  }
+
+  @media screen and (min-width: $large) {
+    align-items: center;
+    flex: 1;
+  }
+
+
+  @media screen and (max-width: $large) {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 20px;
+  }
 
   .cards {
     flex: 1;
@@ -16,23 +36,28 @@
       padding-bottom: 1rem;
     }
 
-    .cardRightColumn {
-      flex: 1;
-      padding-left: 1rem;
+    .cardContentContainer {
       display: flex;
-      font-size: 20px;
-      flex-direction: column;
-      justify-content: space-between;
 
-      p {
-        padding-bottom: 1rem;
-        line-height: normal;
-      }
-
-      .buttonContainer {
+      .cardRightColumn {
+        flex: 1;
         display: flex;
-        justify-content: flex-end;
+        font-size: 1.3rem;
+        flex-direction: column;
+        justify-content: space-between;
+
+        p {
+          padding-bottom: 1rem;
+          line-height: normal;
+        }
+
+
       }
     }
   }
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
 }

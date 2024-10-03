@@ -48,19 +48,30 @@ export const AnswerModalContent = ({
       answerMap[selectedSquareIndex[0] - 1][selectedSquareIndex[1] - 1];
 
     const answerArr = answers[answerKey];
-    selectedFlags[selectedSquareIndex[0] - 1][selectedSquareIndex[1] - 1] =
-      answerArr.includes(flag.iso_2)
-        ? {
-            ...flag,
-            playersMove: playersTurn,
-          }
-        : null;
+
     if (!answerArr.includes(flag.iso_2)) {
       if (playersTurn === 1) {
         setIncorrectAnswers({ ...flag, player: 1 });
       }
     }
-    onSelect(selectedFlags);
+    onSelect(
+      selectedFlags.map((outerArr, outerIndex) => {
+        return outerArr.map((innerArray, index) => {
+          if (
+            outerIndex === selectedSquareIndex[0] - 1 &&
+            index === selectedSquareIndex[1] - 1
+          ) {
+            return answerArr.includes(flag.iso_2)
+              ? {
+                  ...flag,
+                  playersMove: playersTurn,
+                }
+              : null;
+          }
+          return innerArray;
+        });
+      })
+    );
     togglePlayerTurn();
     closeModal();
   };
@@ -68,7 +79,7 @@ export const AnswerModalContent = ({
   return (
     <div className={styles.container}>
       <header className={styles.modalHeader}>
-        <SearchInput handleSearch={handleSearch} />
+        <SearchInput handleSearch={handleSearch} autoFocus />
         <IconButton handleClick={closeModal} Icon={IoClose} />
       </header>
       <div className={styles.listContainer}>

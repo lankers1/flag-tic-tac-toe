@@ -11,18 +11,21 @@
   max-width: 300px;
 }
 
-.container {
+.pageContainer {
   display: flex;
-  align-items: center;
   flex-direction: column;
+  flex: 1;
+  justify-content: space-around;
 
-  // @media screen and (max-width: $medium) {
-  //   flex-direction: column;
-  // }
-
-  // @media screen and (min-width: $medium) {
-  //   flex-direction: row;
-  // }
+  .container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
 
 
+  .buttonContainer {
+    display: flex;
+    justify-content: center;
+  }
 }

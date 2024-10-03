@@ -30,7 +30,7 @@ function minimax(
   depth: number,
   isMaximizing: boolean
 ) {
-  let score = evaluate(board);
+  let score = evaluateBoardForWinner(board);
 
   if (score) return 10 + depth;
   if (!isMovesLeft(board)) return 0;

@@ -4,7 +4,7 @@ import styles from "./styles.module.scss";
 
 interface Props {
   className?: string;
-  backgroundColor: string;
+  backgroundColor?: string;
 }
 
 export const Card = ({
