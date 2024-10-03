@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { capitaliseFirst } from "../../utils/capitaliseFirst";
 import { removeSnakeCase } from "../../utils/removeSnakeCase";
 import { GameboardButton } from "../GameboardButton";
@@ -9,6 +10,7 @@ interface Props {
   handleClick: (outerIndex: number, innerIndex: number) => void;
   selectedFlags: SelectedFlags;
   disabled: boolean;
+  incorrectAnswer: IncorrectAnswer;
 }
 
 export const Gameboard = ({
@@ -16,6 +18,7 @@ export const Gameboard = ({
   handleClick,
   selectedFlags,
   disabled,
+  incorrectAnswer,
 }: Props) => {
   return (
     <div className={styles.boardContainer}>
@@ -28,6 +31,8 @@ export const Gameboard = ({
               (arr, outerIndex) =>
                 arr.map((_, innerIndex) => (
                   <GameboardButton
+                    cell={{ row: outerIndex, col: innerIndex }}
+                    incorrectAnswer={incorrectAnswer}
                     disabled={disabled}
                     selectedFlag={selectedFlags[outerIndex][innerIndex]}
                     key={"gameboard-button" + outerIndex + innerIndex}

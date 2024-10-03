@@ -5,7 +5,7 @@ interface Args {
   flags: Flag[];
   answers: Answers;
   selectedFlags: SelectedFlags;
-  setIncorrectAnswers: (incorrectAnswer: IncorrectAnswer) => void;
+  setIncorrectAnswer: (incorrectAnswer: IncorrectAnswer) => void;
 }
 
 function randomNumber(multiplier: number) {
@@ -47,7 +47,7 @@ export function easyComputer({
   flags,
   selectedFlags,
   answers,
-  setIncorrectAnswers,
+  setIncorrectAnswer,
 }: Args): SelectedFlags | undefined {
   const { row, col } = determineComputerMove(
     selectedFlags.map((arr) => arr.map((r) => r?.playersMove || null))
@@ -59,7 +59,11 @@ export function easyComputer({
   const randomFlag = randomNumber(flagSelection.length - 1);
   const guess = answerArr.includes(flagSelection[randomFlag].iso_2);
   if (!guess) {
-    setIncorrectAnswers({ ...flagSelection[randomFlag], player: 2 });
+    setIncorrectAnswer({
+      ...flagSelection[randomFlag],
+      player: 2,
+      cell: { row, col },
+    });
     return;
   }
 

@@ -16,7 +16,7 @@ interface Props {
   onSelect: (flags: SelectedFlags) => void;
   selectedFlags: SelectedFlags;
   answers: Answers;
-  setIncorrectAnswers: (incorrectAnswers: IncorrectAnswer) => void;
+  setIncorrectAnswer: (incorrectAnswer: IncorrectAnswer) => void;
 }
 
 export const answerMap = [
@@ -31,7 +31,7 @@ export const AnswerModalContent = ({
   onSelect,
   selectedSquareIndex,
   selectedFlags,
-  setIncorrectAnswers,
+  setIncorrectAnswer,
 }: Props) => {
   const { togglePlayerTurn, playersTurn } = useGameStore((state) => state);
   const [searchTerm, setSearchTerm] = useState("");
@@ -51,27 +51,35 @@ export const AnswerModalContent = ({
 
     if (!answerArr.includes(flag.iso_2)) {
       if (playersTurn === 1) {
-        setIncorrectAnswers({ ...flag, player: 1 });
-      }
-    }
-    onSelect(
-      selectedFlags.map((outerArr, outerIndex) => {
-        return outerArr.map((innerArray, index) => {
-          if (
-            outerIndex === selectedSquareIndex[0] - 1 &&
-            index === selectedSquareIndex[1] - 1
-          ) {
-            return answerArr.includes(flag.iso_2)
-              ? {
-                  ...flag,
-                  playersMove: playersTurn,
-                }
-              : null;
-          }
-          return innerArray;
+        setIncorrectAnswer({
+          ...flag,
+          player: 1,
+          cell: {
+            row: selectedSquareIndex[0] - 1,
+            col: selectedSquareIndex[1] - 1,
+          },
         });
-      })
-    );
+      }
+    } else {
+      onSelect(
+        selectedFlags.map((outerArr, outerIndex) => {
+          return outerArr.map((innerArray, index) => {
+            if (
+              outerIndex === selectedSquareIndex[0] - 1 &&
+              index === selectedSquareIndex[1] - 1
+            ) {
+              return answerArr.includes(flag.iso_2)
+                ? {
+                    ...flag,
+                    playersMove: playersTurn,
+                  }
+                : null;
+            }
+            return innerArray;
+          });
+        })
+      );
+    }
     togglePlayerTurn();
     closeModal();
   };

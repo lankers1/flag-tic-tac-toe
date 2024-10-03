@@ -22,8 +22,8 @@ export const Game = () => {
     winner,
     setSelectedFlags,
     togglePlayerTurn,
-    incorrectAnswers,
-    setIncorrectAnswers,
+    incorrectAnswer,
+    setIncorrectAnswer,
     reset,
   } = useGameStore((state) => state);
 
@@ -35,7 +35,7 @@ export const Game = () => {
           flags,
           selectedFlags,
           answers: data.answers,
-          setIncorrectAnswers,
+          setIncorrectAnswer,
         });
 
         if (computerFlag) {
@@ -81,6 +81,7 @@ export const Game = () => {
           </Notification>
           <div style={{ display: "flex" }}>
             <Gameboard
+              incorrectAnswer={incorrectAnswer}
               handleClick={handleClick}
               data={data?.game}
               selectedFlags={selectedFlags}
@@ -94,7 +95,7 @@ export const Game = () => {
       </div>
       <Modal isOpen={!!selectedSquare[0]}>
         <AnswerModalContent
-          setIncorrectAnswers={setIncorrectAnswers}
+          setIncorrectAnswer={setIncorrectAnswer}
           answers={data?.answers}
           selectedSquareIndex={selectedSquare}
           closeModal={() => setSelectedSquare([0, 0])}

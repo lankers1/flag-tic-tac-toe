@@ -14,7 +14,7 @@
   left: 0px;
   position: relative;
 
-  transition: box-shadow 0.25s, top 0.25s, left 0.25s;
+  transition: box-shadow 0.25s, top 0.25s, left 0.25s, background-color 0.5s;
 
   @media screen and (max-width: $medium) {
     border-radius: 18px;
@@ -49,11 +49,6 @@
   }
 }
 
-.flagFalse {
-  background-color: $background-red;
-
-}
-
 .playerOne {
   background-color: $background-blue;
   cursor: default;
@@ -63,4 +58,8 @@
 .playerTwo {
   background-color: $background-green;
   cursor: default;
+}
+
+.incorrectAnswer {
+  background-color: $background-red;
 }

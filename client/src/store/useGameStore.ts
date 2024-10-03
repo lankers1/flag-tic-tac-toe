@@ -9,8 +9,8 @@ interface GameState {
   togglePlayerTurn: () => void;
   reset: () => void;
   setSelectedFlags: (selectedFlags: SelectedFlags) => void;
-  incorrectAnswers: IncorrectAnswer[];
-  setIncorrectAnswers: (incorrectAnswer: IncorrectAnswer) => void;
+  incorrectAnswer: IncorrectAnswer | null;
+  setIncorrectAnswer: (incorrectAnswer: IncorrectAnswer) => void;
 }
 
 function setSelectedFlags(selectedFlags: SelectedFlags) {
@@ -22,13 +22,13 @@ function setSelectedFlags(selectedFlags: SelectedFlags) {
     return (state: GameState) => ({ selectedFlags, winner: state.playersTurn });
   }
 
-  return () => ({ selectedFlags });
+  return () => ({ selectedFlags, incorrectAnswer: null });
 }
 
 const initialState = {
   playersTurn: 1,
   moveCounter: 0,
-  incorrectAnswers: [],
+  incorrectAnswer: null,
   selectedFlags: [
     [...Array(3).fill(null, 0)],
     [...Array(3).fill(null, 0)],
@@ -39,10 +39,10 @@ const initialState = {
 
 export const useGameStore = create<GameState>((set) => ({
   ...initialState,
-  setIncorrectAnswers: (incorrectAnswer: IncorrectAnswer) =>
-    set((state) => ({
-      incorrectAnswers: [...state.incorrectAnswers, incorrectAnswer],
-    })),
+  setIncorrectAnswer: (incorrectAnswer: IncorrectAnswer) =>
+    set({
+      incorrectAnswer,
+    }),
   togglePlayerTurn: () =>
     set((state) => ({ playersTurn: state.playersTurn === 1 ? 2 : 1 })),
   setSelectedFlags: (selectedFlags: SelectedFlags) =>
