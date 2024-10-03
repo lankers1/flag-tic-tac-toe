@@ -1,7 +1,26 @@
+@use 'src/sass/theme' as *;
+
 .header {
   width: 100%;
 }
 
-.notificationHeading {
-  color: white;
+.playerCards {
+  min-height: 100px;
+  width: auto;
+  margin-top: 2rem;
+  max-width: 300px;
+}
+
+.container {
+  display: flex;
+
+  @media screen and (max-width: $medium) {
+    flex-direction: column;
+  }
+
+  @media screen and (min-width: $medium) {
+    flex-direction: row;
+  }
+
+
 }

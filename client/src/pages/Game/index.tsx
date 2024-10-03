@@ -11,6 +11,9 @@ import { Heading } from "../../components/Heading";
 import styles from "./styles.module.scss";
 import { determineMove, easyComputer } from "../../computer/rulesets";
 import { useSearchFlags } from "../../query-hooks/searchFlags";
+import { Card } from "../../components/Card";
+import { List } from "../../components/List";
+import { ListItem } from "../../components/List/ListItem";
 
 export const Game = () => {
   const { data: flags } = useSearchFlags("");
@@ -22,28 +25,24 @@ export const Game = () => {
     winner,
     setSelectedFlags,
     togglePlayerTurn,
+    incorrectAnswers,
+    setIncorrectAnswers,
   } = useGameStore((state) => state);
 
   useEffect(() => {
-    if (playersTurn === 2 && !winner) {
+    if (playersTurn === 2 && !winner && flags) {
       setTimeout(() => {
-        setSelectedFlags(
-          determineMove(
-            easyComputer,
-            selectedFlags.reduce((acc, r, oIndex) => {
-              r.map((item, index) => {
-                if (!item) {
-                  acc = [...acc, [oIndex, index]];
-                }
-              });
+        const computerFlag = determineMove(easyComputer, {
+          flags,
+          selectedFlags,
+          answers: data.answers,
+          setIncorrectAnswers,
+        });
 
-              return acc;
-            }, []),
-            flags,
-            selectedFlags,
-            data.answers
-          )
-        );
+        if (computerFlag) {
+          setSelectedFlags(computerFlag);
+        }
+
         togglePlayerTurn();
       }, 2000);
     }
@@ -58,26 +57,43 @@ export const Game = () => {
 
   return (
     <>
-      <Notification backgroundColor={playersTurn === 1 ? "#002080" : "#ff6600"}>
-        {!!winner ? (
-          <Heading variant="h2" className={styles.notificationHeading}>
-            Player {winner} has won! Congrats!!
-          </Heading>
-        ) : (
-          <Heading variant="h2" className={styles.notificationHeading}>
-            Player {playersTurn} it's your turn!
-          </Heading>
-        )}
-      </Notification>
-      <Gameboard
-        handleClick={handleClick}
-        data={data?.game}
-        selectedFlags={selectedFlags}
-        disabled={!!winner}
-      />
+      <div className={styles.container}>
+        <Gameboard
+          handleClick={handleClick}
+          data={data?.game}
+          selectedFlags={selectedFlags}
+          disabled={!!winner}
+        />
+        <div>
+          <Notification
+            backgroundColor={
+              playersTurn === 1 || winner === 1 ? "#b0ddff" : "#9dff94"
+            }
+          >
+            {!!winner ? (
+              <Heading variant="h3">
+                Player {winner} has won! Congrats!!
+              </Heading>
+            ) : (
+              <Heading variant="h3">
+                Player {playersTurn} it's your turn!
+              </Heading>
+            )}
+          </Notification>
+          <Card backgroundColor="white" className={styles.playerCards}>
+            <Heading variant="h3">Incorrect answers</Heading>
+            <List>
+              {incorrectAnswers.map((answer) => (
+                <ListItem content={answer.name} />
+              ))}
+            </List>
+          </Card>
+        </div>
+      </div>
       <LinkButton to="/" label="Give up!" />
       <Modal isOpen={!!selectedSquare[0]}>
         <AnswerModalContent
+          setIncorrectAnswers={setIncorrectAnswers}
           answers={data?.answers}
           selectedSquareIndex={selectedSquare}
           closeModal={() => setSelectedSquare([0, 0])}

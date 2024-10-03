@@ -4,8 +4,17 @@ import styles from "./styles.module.scss";
 
 interface Props {
   className?: string;
+  backgroundColor: string;
 }
 
-export const Card = ({ children, className }: PropsWithChildren<Props>) => {
-  return <div className={`${styles.card} ${className}`}>{children}</div>;
+export const Card = ({
+  children,
+  className,
+  backgroundColor,
+}: PropsWithChildren<Props>) => {
+  return (
+    <div className={`${styles.card} ${className}`} style={{ backgroundColor }}>
+      {children}
+    </div>
+  );
 };

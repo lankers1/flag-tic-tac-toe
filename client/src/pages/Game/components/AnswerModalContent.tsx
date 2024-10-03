@@ -16,6 +16,7 @@ interface Props {
   onSelect: (flags: SelectedFlags) => void;
   selectedFlags: SelectedFlags;
   answers: Answers;
+  setIncorrectAnswers: (incorrectAnswers: IncorrectAnswer) => void;
 }
 
 export const answerMap = [
@@ -30,6 +31,7 @@ export const AnswerModalContent = ({
   onSelect,
   selectedSquareIndex,
   selectedFlags,
+  setIncorrectAnswers,
 }: Props) => {
   const { togglePlayerTurn, playersTurn } = useGameStore((state) => state);
   const [searchTerm, setSearchTerm] = useState("");
@@ -53,7 +55,11 @@ export const AnswerModalContent = ({
             playersMove: playersTurn,
           }
         : null;
-
+    if (!answerArr.includes(flag.iso_2)) {
+      if (playersTurn === 1) {
+        setIncorrectAnswers({ ...flag, player: 1 });
+      }
+    }
     onSelect(selectedFlags);
     togglePlayerTurn();
     closeModal();
@@ -77,6 +83,7 @@ export const AnswerModalContent = ({
             )
             .map((flag) => (
               <ListItem
+                clickable
                 key={flag.iso_2}
                 handleClick={() => handleSelect(flag)}
                 content={flag.name}

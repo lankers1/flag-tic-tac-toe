@@ -1,3 +1,5 @@
+@use 'src/sass/theme' as *;
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -9,6 +11,14 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  @media screen and (max-width: $medium) {
+    font-size: 12px;
+  }
+
+  @media screen and (min-width: $medium) {
+    font-size: 16px;
+  }
 }
 
 input,

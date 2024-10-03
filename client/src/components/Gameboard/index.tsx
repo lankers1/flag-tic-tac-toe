@@ -36,6 +36,7 @@ export const Gameboard = ({
                 ))
             )}
           </div>
+          <div className={styles.spacer} />
         </div>
       </div>
     </div>

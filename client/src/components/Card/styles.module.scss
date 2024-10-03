@@ -5,5 +5,9 @@
   background-color: $background-blue;
   border-radius: 28px;
   box-shadow: 15px 15px rgba(0, 0, 0, 0.5);
-  border: 3px solid black;
+  border: 2px solid black;
+
+  @media screen and (max-width: $medium) {
+    box-shadow: 8px 8px rgba(0, 0, 0, 0.5)
+  }
 }
