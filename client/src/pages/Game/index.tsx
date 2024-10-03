@@ -11,8 +11,10 @@ import { Heading } from "../../components/Heading";
 import styles from "./styles.module.scss";
 import { determineMove, easyComputer } from "../../computer/rulesets";
 import { useSearchFlags } from "../../query-hooks/searchFlags";
+import { useParams } from "react-router-dom";
 
 export const Game = () => {
+  const { player } = useParams();
   const { data: flags } = useSearchFlags("");
   const [selectedSquare, setSelectedSquare] = useState<number[]>([0, 0]);
   const { data, isLoading, isPending, error } = useGetGameQuery();
@@ -29,7 +31,7 @@ export const Game = () => {
 
   useEffect(() => {
     let timeout = null;
-    if (playersTurn === 2 && !winner && flags) {
+    if (playersTurn === 2 && !winner && flags && player === "computer") {
       timeout = setTimeout(() => {
         const computerFlag = determineMove(easyComputer, {
           flags,
@@ -51,7 +53,7 @@ export const Game = () => {
         clearTimeout(timeout);
       }
     };
-  }, [playersTurn, winner]);
+  }, [playersTurn, winner, player]);
 
   if (isLoading || isPending) return <p>loading...</p>;
   if (error) return <p>Error... {error.message}</p>;
@@ -66,7 +68,7 @@ export const Game = () => {
         <div className={styles.container}>
           <Notification
             backgroundColor={
-              playersTurn === 1 || winner === 1 ? "#b0ddff" : "#9dff94"
+              playersTurn === 1 || winner === 1 ? "#b0ddff" : "#C4FFBF"
             }
           >
             {!!winner ? (
@@ -85,7 +87,9 @@ export const Game = () => {
               handleClick={handleClick}
               data={data?.game}
               selectedFlags={selectedFlags}
-              disabled={!!winner}
+              disabled={
+                !!winner || !!(player === "computer" && playersTurn === 2)
+              }
             />
           </div>
         </div>

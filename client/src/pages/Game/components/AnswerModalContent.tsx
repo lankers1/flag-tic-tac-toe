@@ -9,6 +9,7 @@ import { useSearchFlags } from "../../../query-hooks/searchFlags";
 
 import styles from "./styles.module.scss";
 import { useGameStore } from "../../../store/useGameStore";
+import { useParams } from "react-router-dom";
 
 interface Props {
   closeModal: () => void;
@@ -33,6 +34,7 @@ export const AnswerModalContent = ({
   selectedFlags,
   setIncorrectAnswer,
 }: Props) => {
+  const { player } = useParams();
   const { togglePlayerTurn, playersTurn } = useGameStore((state) => state);
   const [searchTerm, setSearchTerm] = useState("");
   const { data: flags } = useSearchFlags(searchTerm);
@@ -53,7 +55,7 @@ export const AnswerModalContent = ({
       if (playersTurn === 1) {
         setIncorrectAnswer({
           ...flag,
-          player: 1,
+          player: playersTurn,
           cell: {
             row: selectedSquareIndex[0] - 1,
             col: selectedSquareIndex[1] - 1,
