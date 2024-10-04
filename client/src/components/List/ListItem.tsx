@@ -16,7 +16,7 @@ export const ListItem = ({
   return (
     <li
       className={`${styles.listItem} ${clickable && styles.clickable}`}
-      onClick={clickable && handleClick}
+      onClick={clickable ? handleClick : undefined}
     >
       {content}
     </li>

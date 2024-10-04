@@ -5,8 +5,8 @@ import (
 	"log"
 	"github.com/joho/godotenv"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"fttt/internal/db/repositories"
-	"fttt/internal/handlers"
+	"github.com/lankers1/fttt/internal/db/repositories"
+	"github.com/lankers1/fttt/internal/handlers"
 )
 
 type Config struct {

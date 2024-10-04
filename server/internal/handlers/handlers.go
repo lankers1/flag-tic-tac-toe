@@ -1,6 +1,6 @@
 package handlers
 
-import "fttt/internal/db/repositories"
+import "github.com/lankers1/fttt/internal/db/repositories"
 
 type Handlers struct {
 	GameHandler *GameHandler

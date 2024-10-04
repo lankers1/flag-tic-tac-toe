@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fttt/internal/config"
-	"fttt/internal/db"
-	"fttt/internal/api"
+	"github.com/lankers1/fttt/internal/config"
+	"github.com/lankers1/fttt/internal/db"
+	"github.com/lankers1/fttt/internal/api"
 	"log"
 )
 

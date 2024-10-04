@@ -1,7 +1,7 @@
 package api
 
 import (
-	"fttt/internal/handlers"
+	"github.com/lankers1/fttt/internal/handlers"
 	"github.com/gin-gonic/gin"
 	cors "github.com/rs/cors/wrapper/gin"
 )

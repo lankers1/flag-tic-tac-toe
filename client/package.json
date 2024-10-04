@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build --mode production",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "gsutil cp -r dist/* gs://flag-tic-tac-toe-client"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.56.2",

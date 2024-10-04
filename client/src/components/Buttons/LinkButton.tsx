@@ -5,7 +5,7 @@ import styles from "./styles.module.scss";
 interface Props {
   to: string;
   label: string;
-  size: string;
+  size?: string;
   handleClick?: () => void;
 }
 

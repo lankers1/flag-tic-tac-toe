@@ -5,7 +5,7 @@ import (
 	"context"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jackc/pgx/v5"
-	"fttt/internal/models"
+	"github.com/lankers1/fttt/internal/models"
 )
 
 type FlagInterface interface {

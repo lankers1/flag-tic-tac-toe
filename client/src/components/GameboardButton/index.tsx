@@ -7,7 +7,7 @@ interface Props {
   handleClick: () => void;
   selectedFlag: SelectedFlag | null;
   disabled: boolean;
-  incorrectAnswer: IncorrectAnswer;
+  incorrectAnswer: IncorrectAnswer | null;
   cell: { row: number; col: number };
 }
 

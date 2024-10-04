@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { capitaliseFirst } from "../../utils/capitaliseFirst";
 import { removeSnakeCase } from "../../utils/removeSnakeCase";
 import { GameboardButton } from "../GameboardButton";
@@ -10,7 +9,7 @@ interface Props {
   handleClick: (outerIndex: number, innerIndex: number) => void;
   selectedFlags: SelectedFlags;
   disabled: boolean;
-  incorrectAnswer: IncorrectAnswer;
+  incorrectAnswer: IncorrectAnswer | null;
 }
 
 export const Gameboard = ({

@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"fttt/internal/db/repositories"
+	"github.com/lankers1/fttt/internal/db/repositories"
 	"github.com/gin-gonic/gin"
-	"fttt/internal/models"
+	"github.com/lankers1/fttt/internal/models"
 	"net/http"
 )
 
