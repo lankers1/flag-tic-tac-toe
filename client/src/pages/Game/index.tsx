@@ -12,6 +12,7 @@ import styles from "./styles.module.scss";
 import { determineMove, easyComputer } from "../../computer/rulesets";
 import { useSearchFlags } from "../../query-hooks/searchFlags";
 import { useParams } from "react-router-dom";
+import { Loader } from "../../components/Loader";
 
 export const Game = () => {
   const { player } = useParams();
@@ -55,7 +56,23 @@ export const Game = () => {
     };
   }, [playersTurn, winner, player]);
 
-  if (isLoading || isPending) return <p>loading...</p>;
+  if (isLoading || isPending) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          height: "100%",
+          justifyContent: "center",
+          flexDirection: "column",
+        }}
+      >
+        <div style={{ display: "flex", height: "8rem" }}>
+          <Loader />
+        </div>
+      </div>
+    );
+  }
+
   if (error) return <p>Error... {error.message}</p>;
 
   function handleClick(outerIndex: number, innerIndex: number) {
