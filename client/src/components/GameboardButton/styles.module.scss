@@ -1,6 +1,7 @@
 @use 'src/sass/theme' as *;
 
 .button {
+  -webkit-tap-highlight-color: transparent;
   border-radius: 28px;
   background-color: #F7F7F9;
   cursor: pointer;
