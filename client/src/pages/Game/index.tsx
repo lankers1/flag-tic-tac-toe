@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 import { Gameboard } from "../../components/Gameboard";
 import { useGetGameQuery } from "../../query-hooks/getGame";
@@ -8,11 +9,11 @@ import { useGameStore } from "../../store/useGameStore";
 import { LinkButton } from "../../components/Buttons/LinkButton";
 import { Notification } from "../../components/Notification";
 import { Heading } from "../../components/Heading";
-import styles from "./styles.module.scss";
 import { determineMove, easyComputer } from "../../computer/rulesets";
 import { useSearchFlags } from "../../query-hooks/searchFlags";
-import { useParams } from "react-router-dom";
 import { Loader } from "../../components/Loader";
+
+import styles from "./styles.module.scss";
 
 export const Game = () => {
   const { player } = useParams();
@@ -89,13 +90,13 @@ export const Game = () => {
             }
           >
             {!!winner ? (
-              <Heading variant="h3">
+              <p style={{ fontSize: "1.5rem", lineHeight: "normal" }}>
                 Player {winner} has won! Congrats!!
-              </Heading>
+              </p>
             ) : (
-              <Heading variant="h3">
+              <p style={{ fontSize: "1.5rem", lineHeight: "normal" }}>
                 Player {playersTurn} it's your turn!
-              </Heading>
+              </p>
             )}
           </Notification>
           <div style={{ display: "flex" }}>

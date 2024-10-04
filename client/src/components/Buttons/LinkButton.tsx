@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 
 import styles from "./styles.module.scss";
+import { ReactNode } from "react";
 
 interface Props {
   to: string;
-  label: string;
+  label: ReactNode;
   size?: string;
   handleClick?: () => void;
 }

@@ -9,6 +9,7 @@ interface Props {
   disabled: boolean;
   incorrectAnswer: IncorrectAnswer | null;
   cell: { row: number; col: number };
+  ariaLabel: string;
 }
 
 export const GameboardButton = ({
@@ -17,6 +18,7 @@ export const GameboardButton = ({
   incorrectAnswer,
   disabled,
   cell,
+  ariaLabel,
 }: Props) => {
   const Flag = flags?.[selectedFlag?.iso_2 as keyof typeof flags];
   const [displayIncorrectAnswer, setDisplayIncorrectAnswer] = useState(false);
@@ -42,6 +44,7 @@ export const GameboardButton = ({
       )} ${currentPlayerStyle(selectedFlag)} ${
         displayIncorrectAnswer && styles.incorrectAnswer
       }`}
+      aria-label={ariaLabel}
     >
       {displayIncorrectAnswer && <p>Wrong!</p>}
       {selectedFlag && (

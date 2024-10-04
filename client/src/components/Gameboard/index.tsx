@@ -30,6 +30,7 @@ export const Gameboard = ({
               (arr, outerIndex) =>
                 arr.map((_, innerIndex) => (
                   <GameboardButton
+                    ariaLabel={`Row ${outerIndex + 1} Col ${innerIndex + 1}`}
                     cell={{ row: outerIndex, col: innerIndex }}
                     incorrectAnswer={incorrectAnswer}
                     disabled={disabled}
