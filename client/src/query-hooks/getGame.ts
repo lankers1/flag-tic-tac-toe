@@ -8,6 +8,7 @@ async function getGame() {
 export const useGetGameQuery = () =>
   useQuery({
     queryKey: ["game"],
+    gcTime: 0,
     queryFn: getGame,
     refetchOnWindowFocus: false,
   });
