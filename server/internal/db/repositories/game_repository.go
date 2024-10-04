@@ -4,7 +4,6 @@ import (
 	"strconv"
 	"log"
 	"context"
-	// "fmt"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jackc/pgx/v5"
 	"github.com/lankers1/fttt/internal/models"
