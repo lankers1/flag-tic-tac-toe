@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"log"
 	"context"
+	// "fmt"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jackc/pgx/v5"
 	"github.com/lankers1/fttt/internal/models"
@@ -24,9 +25,9 @@ func NewGameRepository(conn *pgxpool.Pool) *GameRepository {
 	}
 }
 
-func (gameRepo *GameRepository) Create() *models.Game {
+func generateGame(conn *pgxpool.Pool) *models.Game {
 	query := "SELECT * FROM generate_game"
-	rows, queryErr := gameRepo.conn.Query(context.Background(),query)
+	rows, queryErr := conn.Query(context.Background(), query)
 
 	if queryErr != nil {
 		log.Printf("Query error: %v", queryErr)
@@ -36,9 +37,16 @@ func (gameRepo *GameRepository) Create() *models.Game {
 
 	if err != nil {
 		log.Printf("CollectRows error: %v", err)
+		return generateGame(conn)
 	}
 
-	return &game
+	 return &game
+}
+
+func (gameRepo *GameRepository) Create() *models.Game {
+	game := generateGame(gameRepo.conn)
+
+	return game
 }
 
 func (gameRepo *GameRepository) GetAnswers(game *models.Game) *models.Answer {
