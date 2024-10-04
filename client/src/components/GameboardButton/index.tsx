@@ -1,4 +1,5 @@
 import flags from "country-flag-icons/react/3x2";
+import { IoCloseSharp } from "react-icons/io5";
 
 import styles from "./styles.module.scss";
 import { useEffect, useState } from "react";
@@ -46,7 +47,7 @@ export const GameboardButton = ({
       }`}
       aria-label={ariaLabel}
     >
-      {displayIncorrectAnswer && <p>Wrong!</p>}
+      {displayIncorrectAnswer && <IoCloseSharp style={{ fontSize: "3rem" }} />}
       {selectedFlag && (
         <>
           <p className={styles.text}>{selectedFlag?.name}</p>

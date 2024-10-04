@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { GrPowerReset } from "react-icons/gr";
 
 import { Gameboard } from "../../components/Gameboard";
 import { useGetGameQuery } from "../../query-hooks/getGame";
@@ -8,18 +9,18 @@ import { AnswerModalContent } from "./components/AnswerModalContent";
 import { useGameStore } from "../../store/useGameStore";
 import { LinkButton } from "../../components/Buttons/LinkButton";
 import { Notification } from "../../components/Notification";
-import { Heading } from "../../components/Heading";
 import { determineMove, easyComputer } from "../../computer/rulesets";
 import { useSearchFlags } from "../../query-hooks/searchFlags";
 import { Loader } from "../../components/Loader";
 
 import styles from "./styles.module.scss";
+import { Button } from "../../components/Buttons/Button";
 
 export const Game = () => {
   const { player } = useParams();
   const { data: flags } = useSearchFlags("");
   const [selectedSquare, setSelectedSquare] = useState<number[]>([0, 0]);
-  const { data, isLoading, isPending, error } = useGetGameQuery();
+  const { data, isLoading, isPending, error, refetch } = useGetGameQuery();
   const {
     selectedFlags,
     playersTurn,
@@ -80,6 +81,11 @@ export const Game = () => {
     setSelectedSquare([outerIndex + 1, innerIndex + 1]);
   }
 
+  function handleReset() {
+    refetch();
+    reset();
+  }
+
   return (
     <>
       <div className={styles.pageContainer}>
@@ -113,6 +119,15 @@ export const Game = () => {
         </div>
         <div className={styles.buttonContainer}>
           <LinkButton handleClick={reset} to="/" label="Give up!" />
+          <Button
+            handleClick={handleReset}
+            label={
+              <>
+                <GrPowerReset style={{ marginRight: "0.5rem" }} />
+                {winner ? "Play Again" : "Reset Game"}
+              </>
+            }
+          />
         </div>
       </div>
       <Modal isOpen={!!selectedSquare[0]}>
