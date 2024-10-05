@@ -8,7 +8,12 @@ import (
 
 func InitApi(handlers *handlers.Handlers) *gin.Engine {
 	router := gin.Default()
-	router.Use(cors.Default())
+	c := cors.New(cors.Options{
+    AllowedOrigins: []string{"http://localhost:8000", "https://flag-tic-tac-toe.it.com"},
+    AllowCredentials: true,
+})
+
+	router.Use(c)
 
 	router.GET("/game", handlers.GameHandler.CreateGame)
 	router.POST("/search_flags", handlers.FlagHandler.SearchFlags)
