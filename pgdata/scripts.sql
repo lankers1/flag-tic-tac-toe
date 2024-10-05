@@ -119,7 +119,26 @@ return flag_ids;
 end;
 $$;
 DO $BODY$
-DECLARE omgjson json := '[{ "characteristic_id_1": 10, "characteristic_id_2": 12, "result": 79 }]';
+DECLARE omgjson json := '[
+{ "characteristic_id_1": 1, "characteristic_id_2": 2, "result": 68 },
+{ "characteristic_id_1": 1, "characteristic_id_2": 3, "result": 69 },
+{ "characteristic_id_1": 1, "characteristic_id_2": 4, "result": 70 },
+{ "characteristic_id_1": 1, "characteristic_id_2": 6, "result": 71 },
+{ "characteristic_id_1": 1, "characteristic_id_2": 7, "result": 72 },
+{ "characteristic_id_1": 1, "characteristic_id_2": 9, "result": 73 },
+{ "characteristic_id_1": 2, "characteristic_id_2": 3, "result": 74 },
+{ "characteristic_id_1": 2, "characteristic_id_2": 4, "result": 75 },
+{ "characteristic_id_1": 2, "characteristic_id_2": 6, "result": 76 },
+{ "characteristic_id_1": 2, "characteristic_id_2": 7, "result": 77 },
+{ "characteristic_id_1": 2, "characteristic_id_2": 9, "result": 78 },
+{ "characteristic_id_1": 3, "characteristic_id_2": 4, "result": 79 },
+{ "characteristic_id_1": 3, "characteristic_id_2": 6, "result": 80 },
+{ "characteristic_id_1": 3, "characteristic_id_2": 7, "result": 81 },
+{ "characteristic_id_1": 3, "characteristic_id_2": 9, "result": 82 },
+{ "characteristic_id_1": 4, "characteristic_id_2": 6, "result": 83 },
+{ "characteristic_id_1": 4, "characteristic_id_2": 7, "result": 84 },
+{ "characteristic_id_1": 4, "characteristic_id_2": 9, "result": 85 }
+]';
 i json;
 BEGIN FOR i IN
 SELECT *
@@ -139,3 +158,30 @@ WHERE cardinality(results) > 1;
 END LOOP;
 END;
 $BODY$ language plpgsql
+INSERT INTO related_characteristics
+SELECT id,
+  related_id,
+  count
+FROM (
+    SELECT DISTINCT A.characteristic_id as id,
+      fc2.characteristic_id as related_id,
+      count(*)
+    FROM (
+        SELECT f.name,
+          f.iso_2,
+          c.characteristic_id,
+          c.name,
+          c.difficulty
+        FROM flags f
+          JOIN flag_characteristics fc ON f.iso_2 = fc.flag_id
+          JOIN characteristics c ON fc.characteristic_id = c.characteristic_id
+        WHERE c.difficulty = 'easy'
+      ) AS A
+      JOIN flags f2 ON f2.iso_2 = a.iso_2
+      JOIN flag_characteristics fc2 ON f2.iso_2 = fc2.flag_id
+      JOIN characteristics c2 ON fc2.characteristic_id = c2.characteristic_id
+    WHERE fc2.characteristic_id != A.characteristic_id
+    GROUP BY id,
+      related_id
+  ) final
+WHERE count > 10;
