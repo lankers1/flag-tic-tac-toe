@@ -1,1 +1,5 @@
-/pgdata
+
+/pgdata/*
+
+!/pgdata/init.sql
+!/pgdata/scripts.sql
