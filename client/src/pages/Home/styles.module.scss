@@ -4,35 +4,46 @@
   padding: 0rem 1rem 3rem 1rem;
 }
 
-.card {
-  max-width: 700px;
-  width: 80%;
-  background-color: #fafafa;
+.container {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-  .cardContainer {
-    flex-direction: column;
+  .card {
+    max-width: 700px;
+    width: 80%;
+    background-color: #fafafa;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    flex: 1;
-    width: 100%;
 
-    .buttons {
-      gap: 20px;
+    .cardContainer {
+      flex-direction: column;
       display: flex;
+      justify-content: center;
+      align-items: center;
       flex: 1;
       width: 100%;
 
-      a {
+      .buttons {
+        gap: 20px;
+        display: flex;
         flex: 1;
+        width: 100%;
 
-        &:first-child {
-          background-color: $background-blue;
+        a {
+          flex: 1;
+
+          &:first-child {
+            background-color: $background-blue;
+          }
+
+          &:nth-child(2) {
+            background-color: $background-green;
+          }
         }
 
-        &:nth-child(2) {
-          background-color: $background-green;
+        .buttonIcons {
+          margin-right: 0.5rem;
         }
       }
     }

@@ -8,14 +8,7 @@ import styles from "./styles.module.scss";
 
 export const Home = () => {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: " center",
-        justifyContent: "center",
-      }}
-    >
+    <div className={styles.container}>
       <Card className={styles.card}>
         <div className={styles.cardContainer}>
           <div className={styles.subheading}>
@@ -32,7 +25,7 @@ export const Home = () => {
               to="/game/local"
               label={
                 <>
-                  <FaUserFriends style={{ marginRight: "0.5rem" }} />
+                  <FaUserFriends className={styles.buttonIcons} />
                   {"Local Play"}
                 </>
               }
@@ -42,7 +35,7 @@ export const Home = () => {
               to="/game/computer"
               label={
                 <>
-                  <FaRobot style={{ marginRight: "0.5rem" }} />
+                  <FaRobot className={styles.buttonIcons} />
                   {"Vs Computer"}
                 </>
               }

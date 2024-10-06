@@ -60,15 +60,8 @@ export const Game = () => {
 
   if (isLoading || isPending) {
     return (
-      <div
-        style={{
-          display: "flex",
-          height: "100%",
-          justifyContent: "center",
-          flexDirection: "column",
-        }}
-      >
-        <div style={{ display: "flex", height: "8rem" }}>
+      <div className={styles.loadingContainer}>
+        <div className={styles.loader}>
           <Loader />
         </div>
       </div>
@@ -96,16 +89,16 @@ export const Game = () => {
             }
           >
             {!!winner ? (
-              <p style={{ fontSize: "1.5rem", lineHeight: "normal" }}>
+              <p className={styles.notificationText}>
                 Player {winner} has won! Congrats!!
               </p>
             ) : (
-              <p style={{ fontSize: "1.5rem", lineHeight: "normal" }}>
+              <p className={styles.notificationText}>
                 Player {playersTurn} it's your turn!
               </p>
             )}
           </Notification>
-          <div style={{ display: "flex" }}>
+          <div className={styles.gameboardContainer}>
             <Gameboard
               incorrectAnswer={incorrectAnswer}
               handleClick={handleClick}
@@ -123,7 +116,7 @@ export const Game = () => {
             handleClick={handleReset}
             label={
               <>
-                <GrPowerReset style={{ marginRight: "0.5rem" }} />
+                <GrPowerReset className={styles.buttonIcon} />
                 {winner ? "Play Again" : "Reset Game"}
               </>
             }
