@@ -1,28 +1,44 @@
 @use 'src/sass/theme' as *;
 
 .container {
-  padding: 0rem 6rem;
   display: flex;
   flex: 1;
   flex-direction: column;
 
 
-  @media screen and (max-width: $x-large) {
-    padding: 0rem 3rem;
-  }
 
-
-  @media screen and (max-width: 614px) {
-    padding: 0rem;
-  }
 
   .header {
-    padding-left: 1rem;
+    padding: 0rem 6rem;
+
+    @media screen and (max-width: $x-large) {
+      padding: 0rem 3rem;
+    }
+
+
+    @media screen and (max-width: 614px) {
+      padding: 0rem;
+    }
+
+    background-color: #E1E2C1;
   }
 
   .main {
+    padding: 0rem 6rem;
+
+    @media screen and (max-width: $x-large) {
+      padding: 0rem 3rem;
+    }
+
+
+    @media screen and (max-width: 614px) {
+      padding: 0rem;
+    }
+
     justify-content: center;
     display: flex;
-    flex: 1
+    flex: 1;
+    background-image: url('/background.png');
+    background-size: cover;
   }
 }
