@@ -100,6 +100,9 @@ WHERE rc.related_id <> sixth.first_row_id
   )
 ORDER BY (random())
 LIMIT 1;
+--
+-- Function for returning results
+--
 create or replace function get_flag_ids_on_char_id(ids int []) returns text [] language plpgsql as $$
 declare flag_ids text [];
 begin
@@ -117,7 +120,9 @@ FROM (
   ) r2;
 return flag_ids;
 end;
-$$;
+--
+-- Loop for 'and' colours, requires flag_characteristics to be populated first
+--
 DO $BODY$
 DECLARE omgjson json := '[
 { "characteristic_id_1": 1, "characteristic_id_2": 2, "result": 68 },
@@ -157,31 +162,47 @@ FROM (
 WHERE cardinality(results) > 1;
 END LOOP;
 END;
-$BODY$ language plpgsql
+$BODY$ language plpgsql;
+--
+-- INSERT INTO related_characteristics
+--
 INSERT INTO related_characteristics
 SELECT id,
   related_id,
   count
 FROM (
-    SELECT DISTINCT A.characteristic_id as id,
-      fc2.characteristic_id as related_id,
-      count(*)
+    SELECT id,
+      related_id,
+      count
     FROM (
-        SELECT f.name,
-          f.iso_2,
-          c.characteristic_id,
-          c.name,
-          c.difficulty
-        FROM flags f
-          JOIN flag_characteristics fc ON f.iso_2 = fc.flag_id
-          JOIN characteristics c ON fc.characteristic_id = c.characteristic_id
-        WHERE c.difficulty = 'easy'
-      ) AS A
-      JOIN flags f2 ON f2.iso_2 = a.iso_2
-      JOIN flag_characteristics fc2 ON f2.iso_2 = fc2.flag_id
-      JOIN characteristics c2 ON fc2.characteristic_id = c2.characteristic_id
-    WHERE fc2.characteristic_id != A.characteristic_id
-    GROUP BY id,
-      related_id
-  ) final
-WHERE count > 10;
+        SELECT DISTINCT A.characteristic_id as id,
+          fc2.characteristic_id as related_id,
+          count(*)
+        FROM (
+            SELECT f.name,
+              f.iso_2,
+              c.characteristic_id,
+              c.name,
+              c.difficulty
+            FROM flags f
+              JOIN flag_characteristics fc ON f.iso_2 = fc.flag_id
+              JOIN characteristics c ON fc.characteristic_id = c.characteristic_id
+            WHERE c.difficulty = 'easy'
+          ) AS A
+          JOIN flags f2 ON f2.iso_2 = a.iso_2
+          JOIN flag_characteristics fc2 ON f2.iso_2 = fc2.flag_id
+          JOIN characteristics c2 ON fc2.characteristic_id = c2.characteristic_id
+        WHERE fc2.characteristic_id != A.characteristic_id
+        GROUP BY id,
+          related_id
+      ) final
+  ) filter
+  LEFT JOIN restricted_characteristics rc ON rc.characteristic_id = id
+  AND rc.restricted_id = related_id
+  LEFT JOIN restricted_characteristics rc2 ON rc2.restricted_id = id
+  AND rc2.characteristic_id = related_id
+WHERE rc.characteristic_id IS NULL
+  AND rc.restricted_id IS NULL
+  AND rc2.characteristic_id IS NULL
+  AND rc2.restricted_id IS NULL
+  AND count > 9;
