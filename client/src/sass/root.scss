@@ -12,6 +12,8 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
+
+
   @media screen and (max-width: $medium) {
     font-size: 10px;
   }
@@ -39,6 +41,8 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background-color: #ECEDD5;
+  background-image: url('/public/background.png');
+  background-size: cover;
 }
 
 #root {
