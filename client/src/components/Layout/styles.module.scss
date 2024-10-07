@@ -40,5 +40,10 @@
     flex: 1;
     background-image: url('/background.png');
     background-size: cover;
+
+
+    @media screen and (orientation:portrait) {
+      background-size: contain;
+    }
   }
 }
