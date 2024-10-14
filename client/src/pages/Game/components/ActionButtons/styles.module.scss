@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  font-weight: 500;
+
+  .buttonIcon {
+    margin-right: 0.5rem;
+  }
+
+  .buttonContainer {
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem 0rem 0rem 0rem;
+  }
+}

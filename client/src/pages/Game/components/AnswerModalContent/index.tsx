@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { IoClose } from "react-icons/io5";
-import { SearchInput } from "../../../components/Inputs/SearchInput";
-import { debounce } from "../../../utils/debounce";
-import { List } from "../../../components/List";
-import { ListItem } from "../../../components/List/ListItem";
-import { IconButton } from "../../../components/Buttons/IconButton";
-import { useSearchFlags } from "../../../query-hooks/searchFlags";
+import { SearchInput } from "../../../../components/Inputs/SearchInput";
+import { debounce } from "../../../../utils/debounce";
+import { List } from "../../../../components/List";
+import { ListItem } from "../../../../components/List/ListItem";
+import { IconButton } from "../../../../components/Buttons/IconButton";
+import { useSearchFlags } from "../../../../query-hooks/searchFlags";
 
 import styles from "./styles.module.scss";
-import { useGameStore } from "../../../store/useGameStore";
+import { useGameStore } from "../../../../store/useGameStore";
 
 interface Props {
   closeModal: () => void;

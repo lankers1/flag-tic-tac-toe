@@ -15,7 +15,7 @@ export const IconButton = ({
   width = "1.25rem",
   Icon,
 }: Props) => (
-  <button onClick={handleClick} className={styles.button}>
+  <button onClick={handleClick} className={styles.iconButton}>
     <Icon
       className={styles.icon}
       style={{

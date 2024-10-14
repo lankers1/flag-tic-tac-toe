@@ -5,16 +5,12 @@
   flex: 1;
   flex-direction: column;
 
-
-
-
   .header {
     padding: 0rem 6rem;
 
     @media screen and (max-width: $x-large) {
       padding: 0rem 3rem;
     }
-
 
     @media screen and (max-width: 614px) {
       padding: 0rem;
