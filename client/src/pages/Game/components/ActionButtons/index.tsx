@@ -19,7 +19,9 @@ export const ActionButtons = ({
   handleResetGame,
   resetQuery,
 }: Props) => {
-  const [openModal, setOpenModal] = useState<string | boolean>(false);
+  const [openModal, setOpenModal] = useState<"give_up" | "restart" | false>(
+    false
+  );
 
   return (
     <div className={styles.container}>
@@ -46,7 +48,7 @@ export const ActionButtons = ({
 };
 
 interface ModalContentProps {
-  type: "give_up" | "restart";
+  type: "give_up" | "restart" | false;
   closeModal: () => void;
   resetQuery: () => void;
   handleResetGame: () => void;
