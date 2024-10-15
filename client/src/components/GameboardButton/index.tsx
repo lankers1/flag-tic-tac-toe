@@ -15,6 +15,7 @@ interface Props {
 
 export const GameboardButton = ({
   handleClick,
+  eleRef,
   selectedFlag,
   incorrectAnswer,
   disabled,
@@ -38,6 +39,7 @@ export const GameboardButton = ({
 
   return (
     <button
+      ref={eleRef}
       disabled={disabled}
       onClick={handleClick}
       className={`${styles.button} ${answeredButtonStyle(

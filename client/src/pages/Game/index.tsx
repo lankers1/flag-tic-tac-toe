@@ -28,6 +28,7 @@ export const Game = () => {
     togglePlayerTurn,
     incorrectAnswer,
     setIncorrectAnswer,
+    winnerDirection,
     reset,
   } = useGameStore((state) => state);
 
@@ -99,6 +100,7 @@ export const Game = () => {
           </Notification>
           <div className={styles.gameboardContainer}>
             <Gameboard
+              winnerDirection={winnerDirection}
               incorrectAnswer={incorrectAnswer}
               handleClick={handleClick}
               data={data?.game}

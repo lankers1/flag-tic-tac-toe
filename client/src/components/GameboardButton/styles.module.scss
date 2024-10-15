@@ -41,6 +41,11 @@
   .text {
     font-size: clamp(0.75rem, 0.65rem + 0.5vw, 1.25rem);
     font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 3;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
   }
 
   &:disabled {
@@ -52,7 +57,6 @@
 .playerOne {
   background-color: $background-blue;
   cursor: default;
-
 }
 
 .playerTwo {
