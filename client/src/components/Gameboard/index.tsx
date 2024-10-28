@@ -1,10 +1,10 @@
-import { useRef } from "react";
-import { capitaliseFirst } from "../../utils/capitaliseFirst";
-import { removeSnakeCase } from "../../utils/removeSnakeCase";
-import { GameboardButton } from "../GameboardButton";
+import { useRef } from 'react';
+import { capitaliseFirst } from '../../utils/capitaliseFirst';
+import { removeSnakeCase } from '../../utils/removeSnakeCase';
+import { GameboardButton } from '../GameboardButton';
 
-import styles from "./styles.module.scss";
-import { WinningLine } from "./WinningLine";
+import styles from './styles.module.scss';
+import { WinningLine } from './WinningLine';
 
 interface Props {
   data: Game;
@@ -12,6 +12,7 @@ interface Props {
   selectedFlags: SelectedFlags;
   disabled: boolean;
   incorrectAnswer: IncorrectAnswer | null;
+  winnerDirection: null | { row: [number, number]; direction: string };
 }
 
 export const Gameboard = ({
@@ -20,7 +21,7 @@ export const Gameboard = ({
   selectedFlags,
   disabled,
   winnerDirection,
-  incorrectAnswer,
+  incorrectAnswer
 }: Props) => {
   const ref = useRef(null);
   const gameboardRef = useRef([[], [], []]);
@@ -52,7 +53,7 @@ export const Gameboard = ({
                     incorrectAnswer={incorrectAnswer}
                     disabled={disabled}
                     selectedFlag={selectedFlags[outerIndex][innerIndex]}
-                    key={"gameboard-button" + outerIndex + innerIndex}
+                    key={'gameboard-button' + outerIndex + innerIndex}
                     handleClick={() => handleClick(outerIndex, innerIndex)}
                   />
                 ))
@@ -74,7 +75,7 @@ const Labels = ({ data, labelKey }: LabelProps) => {
   const labels = [
     data[`first_${labelKey}` as keyof Game],
     data[`second_${labelKey}` as keyof Game],
-    data[`third_${labelKey}` as keyof Game],
+    data[`third_${labelKey}` as keyof Game]
   ] as string[];
 
   return (

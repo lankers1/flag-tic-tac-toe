@@ -1,6 +1,6 @@
 
 /pgdata/*
-
+/nginx/*
 !/pgdata/init.sql
 !/pgdata/scripts.sql
 .DS_store

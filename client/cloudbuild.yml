@@ -1,0 +1,22 @@
+
+steps: 
+  - name: gcr.io/cloud-builders/docker
+    id: build
+    args:
+      - build
+      - --no-cache
+      - -t
+      - '$_GCR_HOSTNAME/$PROJECT_ID/test-james-fe:0.0.1'
+      - -f
+      - 'fttt-build.dockerfile'
+      - .
+    volumes:
+    - name: 'testvolume'
+      path: '/opt/public'
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['cp', '/opt/dist/*', 'gs://flag-tic-tac-toe-client/']
+    volumes:
+    - name: 'testvolume'
+      path: '/opt/public'
+substitutions:
+  _GCR_HOSTNAME: gcr.io

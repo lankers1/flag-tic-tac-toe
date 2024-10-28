@@ -34,7 +34,7 @@ const initialState = {
   playersTurn: 1,
   moveCounter: 0,
   incorrectAnswer: null,
-  winnerDirection: { from: [0, 0], to: [2, 0], direction: 'col' },
+  winnerDirection: null,
   selectedFlags: [
     [...Array(3).fill(null, 0)],
     [...Array(3).fill(null, 0)],
