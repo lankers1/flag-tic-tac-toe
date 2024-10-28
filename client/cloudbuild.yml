@@ -16,7 +16,7 @@ steps:
       path: '/opt/dist'
   - name: 'gcr.io/cloud-builders/gsutil'
     entrypoint: 'bash'
-    args: ['-c', 'ls']
+    args: ['-c', 'ls /opt/dist']
     volumes:
     - name: 'testvolume'
       path: '/opt/dist'
