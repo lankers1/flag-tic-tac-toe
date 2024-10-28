@@ -3,6 +3,7 @@ FROM node:latest AS builder
 WORKDIR /opt
 
 COPY ./client/package.json /opt
+COPY ./workspace /opt
 
 RUN yarn install
 

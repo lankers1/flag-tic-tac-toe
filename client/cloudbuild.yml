@@ -3,7 +3,7 @@ steps:
   - name: 'gcr.io/cloud-builders/gcloud'
     secretEnv: ["SERVICE_ACCOUNT"]
     entrypoint: 'bash'
-    args: ['-c', 'mkdir -p /opt/secrets && echo $$SERVICE_ACCOUNT > /opt/secrets/api_key.json && cat /opt/secrets/api_key.json']
+    args: ['-c', 'mkdir -p /workspace/secrets && echo $$SERVICE_ACCOUNT > /workspace/secrets/api_key.json && cat /workspace/secrets/api_key.json']
   - name: gcr.io/cloud-builders/docker
     id: build
     entrypoint: 'bash'
