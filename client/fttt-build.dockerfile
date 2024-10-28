@@ -8,7 +8,7 @@ RUN yarn install
 
 COPY ./client /opt/
 RUN yarn test-deploy
-RUN tsc -b && vite build --mode production
+RUN yarn build
 RUN ls -lah /opt/public/js
 
 FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:stable
