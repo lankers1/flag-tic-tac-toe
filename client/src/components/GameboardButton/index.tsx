@@ -1,4 +1,4 @@
-import flags from 'country-flag-icons/react/3x2';
+import * as flags from 'country-flag-icons/react/3x2';
 import { IoCloseSharp } from 'react-icons/io5';
 
 import styles from './styles.module.scss';
