@@ -4,6 +4,7 @@ WORKDIR /opt
 
 COPY ./client/package.json /opt
 
+RUN apk add --no-cache python3 make g++
 RUN yarn install
 
 COPY ./client /opt/
