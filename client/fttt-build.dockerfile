@@ -15,4 +15,4 @@ WORKDIR /opt
 COPY --from=builder /opt/dist /opt
 
 ENV BOTO_CONFIG=/opt/boto 
-RUN gsutil cp /opt/assets /opt/index.html /opt/background.png gs://flag-tic-tac-toe-client/
+RUN gsutil cp -r /opt/assets /opt/index.html /opt/background.png gs://flag-tic-tac-toe-client/
