@@ -8,7 +8,7 @@ steps:
       - -t
       - '$_GCR_HOSTNAME/$PROJECT_ID/test-james-fe:0.0.1'
       - -f
-      - '/client/fttt-build.dockerfile'
+      - 'client/fttt-build.dockerfile'
       - .
     volumes:
     - name: 'testvolume'
