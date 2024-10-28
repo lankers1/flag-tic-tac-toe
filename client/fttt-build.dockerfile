@@ -14,4 +14,4 @@ FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:stable
 WORKDIR /opt
 COPY --from=builder /opt/dist /opt
 
-RUN gsutil cp -r /opt/assets /opt/index.html /opt/background.png gs://flag-tic-tac-toe-client
+RUN gsutil cp -r /opt/assets /opt/index.html /opt/background.png gs://flag-tic-tac-toe-client/
