@@ -2,12 +2,12 @@ FROM node:18.17-alpine AS builder
 
 WORKDIR /opt
 
-COPY ./yarn.lock /opt
-COPY ./package.json /opt
+COPY ./client/yarn.lock /opt
+COPY ./client/package.json /opt
 
 RUN yarn install
 
-COPY . /opt/
+COPY ./client /opt/
 RUN yarn test-deploy
 RUN tsc -b && vite build --mode production
 RUN ls -lah /opt/public/js
