@@ -1,24 +1,26 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
-import { Gameboard } from "../../components/Gameboard";
-import { useGetGameQuery } from "../../query-hooks/getGame";
-import { Modal } from "../../components/Modal";
-import { useGameStore } from "../../store/useGameStore";
-import { Notification } from "../../components/Notification";
-import { determineMove, easyComputer } from "../../computer/rulesets";
-import { useSearchFlags } from "../../query-hooks/searchFlags";
-import { Loader } from "../../components/Loader";
+import { Gameboard } from '../../components/Gameboard';
+import { useGetGameQuery } from '../../query-hooks/getGame';
+import { Modal } from '../../components/Modal';
+import { useGameStore } from '../../store/useGameStore';
+import { Notification } from '../../components/Notification';
+import { determineMove, easyComputer } from '../../computer/rulesets';
+import { useSearchFlags } from '../../query-hooks/searchFlags';
+import { Loader } from '../../components/Loader';
 
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
-import { AnswerModalContent } from "./components/AnswerModalContent";
-import { ActionButtons } from "./components/ActionButtons";
+import { AnswerModalContent } from './components/AnswerModalContent';
+import { ActionButtons } from './components/ActionButtons';
 
 export const Game = () => {
   const { player } = useParams();
-  const { data: flags } = useSearchFlags("");
-  const [selectedSquare, setSelectedSquare] = useState<number[]>([0, 0]);
+  const { data: flags } = useSearchFlags('');
+  const [selectedSquare, setSelectedSquare] = useState<[number, number]>([
+    0, 0
+  ]);
   const { data, isLoading, isPending, error, refetch } = useGetGameQuery();
   const {
     selectedFlags,
@@ -29,18 +31,18 @@ export const Game = () => {
     incorrectAnswer,
     setIncorrectAnswer,
     winnerDirection,
-    reset,
+    reset
   } = useGameStore((state) => state);
 
   useEffect(() => {
     let timeout = null;
-    if (playersTurn === 2 && !winner && flags && player === "computer") {
+    if (playersTurn === 2 && !winner && flags && player === 'computer') {
       timeout = setTimeout(() => {
         const computerFlag = determineMove(easyComputer, {
           flags,
           selectedFlags,
           answers: data.answers,
-          setIncorrectAnswer,
+          setIncorrectAnswer
         });
 
         if (computerFlag) {
@@ -85,7 +87,7 @@ export const Game = () => {
         <div className={styles.container}>
           <Notification
             backgroundColor={
-              playersTurn === 1 || winner === 1 ? "#b0ddff" : "#C4FFBF"
+              playersTurn === 1 || winner === 1 ? '#b0ddff' : '#C4FFBF'
             }
           >
             {!!winner ? (
@@ -106,7 +108,7 @@ export const Game = () => {
               data={data?.game}
               selectedFlags={selectedFlags}
               disabled={
-                !!winner || !!(player === "computer" && playersTurn === 2)
+                !!winner || !!(player === 'computer' && playersTurn === 2)
               }
             />
           </div>

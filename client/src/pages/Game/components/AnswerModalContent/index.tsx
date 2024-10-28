@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import { IoClose } from "react-icons/io5";
-import { SearchInput } from "../../../../components/Inputs/SearchInput";
-import { debounce } from "../../../../utils/debounce";
-import { List } from "../../../../components/List";
-import { ListItem } from "../../../../components/List/ListItem";
-import { IconButton } from "../../../../components/Buttons/IconButton";
-import { useSearchFlags } from "../../../../query-hooks/searchFlags";
+import React, { useState } from 'react';
+import { IoClose } from 'react-icons/io5';
+import { SearchInput } from '../../../../components/Inputs/SearchInput';
+import { debounce } from '../../../../utils/debounce';
+import { List } from '../../../../components/List';
+import { ListItem } from '../../../../components/List/ListItem';
+import { IconButton } from '../../../../components/Buttons/IconButton';
+import { useSearchFlags } from '../../../../query-hooks/searchFlags';
 
-import styles from "./styles.module.scss";
-import { useGameStore } from "../../../../store/useGameStore";
+import styles from './styles.module.scss';
+import { useGameStore } from '../../../../store/useGameStore';
 
 interface Props {
   closeModal: () => void;
-  selectedSquareIndex: number[];
+  selectedSquareIndex: [number, number];
   onSelect: (flags: SelectedFlags) => void;
   selectedFlags: SelectedFlags;
   answers: Answers;
@@ -20,9 +20,9 @@ interface Props {
 }
 
 export const answerMap = [
-  ["r1c1", "r1c2", "r1c3"],
-  ["r2c1", "r2c2", "r2c3"],
-  ["r3c1", "r3c2", "r3c3"],
+  ['r1c1', 'r1c2', 'r1c3'],
+  ['r2c1', 'r2c2', 'r2c3'],
+  ['r3c1', 'r3c2', 'r3c3']
 ];
 
 export const AnswerModalContent = ({
@@ -31,10 +31,10 @@ export const AnswerModalContent = ({
   onSelect,
   selectedSquareIndex,
   selectedFlags,
-  setIncorrectAnswer,
+  setIncorrectAnswer
 }: Props) => {
   const { togglePlayerTurn, playersTurn } = useGameStore((state) => state);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const { data: flags } = useSearchFlags(searchTerm);
 
   const handleSearch = debounce(
@@ -56,8 +56,8 @@ export const AnswerModalContent = ({
           player: playersTurn,
           cell: {
             row: selectedSquareIndex[0] - 1,
-            col: selectedSquareIndex[1] - 1,
-          },
+            col: selectedSquareIndex[1] - 1
+          }
         });
       }
     } else {
@@ -71,7 +71,7 @@ export const AnswerModalContent = ({
               return answerArr.includes(flag.iso_2)
                 ? {
                     ...flag,
-                    playersMove: playersTurn,
+                    playersMove: playersTurn
                   }
                 : null;
             }

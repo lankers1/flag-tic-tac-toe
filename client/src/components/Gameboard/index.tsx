@@ -12,7 +12,7 @@ interface Props {
   selectedFlags: SelectedFlags;
   disabled: boolean;
   incorrectAnswer: IncorrectAnswer | null;
-  winnerDirection: null | { row: [number, number]; direction: string };
+  winnerDirection: null | { from: [number, number]; direction: string };
 }
 
 export const Gameboard = ({
@@ -23,8 +23,8 @@ export const Gameboard = ({
   winnerDirection,
   incorrectAnswer
 }: Props) => {
-  const ref = useRef(null);
-  const gameboardRef = useRef([[], [], []]);
+  const ref = useRef<HTMLDivElement>(null);
+  const gameboardRef = useRef<HTMLButtonElement[][]>([[], [], []]);
 
   return (
     <div className={styles.boardContainer}>

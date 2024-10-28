@@ -75,29 +75,29 @@ function isMovesLeft(board: (number | null)[][]) {
   return false;
 }
 
-export function evaluateBoardForWinner(board: (number | null)[][]) {
+export function evaluateBoardForWinner(
+  board: (number | null)[][]
+): { from: [number, number]; direction: string } | null {
   for (let row = 0; row < 3; row++) {
     if (board[row][0] === board[row][1] && board[row][1] === board[row][2]) {
       if (board[row][0] || board[row][0])
-        return { from: [row, 0], to: [row, 2], direction: "row" };
+        return { from: [row, 0], direction: 'row' };
     }
   }
 
   for (let col = 0; col < 3; col++) {
     if (board[0][col] === board[1][col] && board[1][col] === board[2][col]) {
       if (board[0][col] || board[0][col])
-        return { from: [0, col], to: [2, col], direction: "col" };
+        return { from: [0, col], direction: 'col' };
     }
   }
 
   if (board[0][0] === board[1][1] && board[1][1] === board[2][2]) {
-    if (board[0][0])
-      return { from: [0, 1], to: [2, 1], direction: "diagonal-right" };
+    if (board[0][0]) return { from: [0, 1], direction: 'diagonal-right' };
   }
   if (board[0][2] === board[1][1] && board[1][1] === board[2][0]) {
-    if (board[0][2])
-      return { from: [0, 1], to: [2, 1], direction: "diagonal-left" };
+    if (board[0][2]) return { from: [0, 1], direction: 'diagonal-left' };
   }
 
-  return false;
+  return null;
 }

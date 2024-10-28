@@ -1,8 +1,8 @@
-import flags from "country-flag-icons/react/3x2";
-import { IoCloseSharp } from "react-icons/io5";
+import flags from 'country-flag-icons/react/3x2';
+import { IoCloseSharp } from 'react-icons/io5';
 
-import styles from "./styles.module.scss";
-import { useEffect, useState } from "react";
+import styles from './styles.module.scss';
+import { useEffect, useState } from 'react';
 
 interface Props {
   handleClick: () => void;
@@ -11,6 +11,7 @@ interface Props {
   incorrectAnswer: IncorrectAnswer | null;
   cell: { row: number; col: number };
   ariaLabel: string;
+  eleRef: (ref: HTMLButtonElement) => void;
 }
 
 export const GameboardButton = ({
@@ -20,7 +21,7 @@ export const GameboardButton = ({
   incorrectAnswer,
   disabled,
   cell,
-  ariaLabel,
+  ariaLabel
 }: Props) => {
   const Flag = flags?.[selectedFlag?.iso_2 as keyof typeof flags];
   const [displayIncorrectAnswer, setDisplayIncorrectAnswer] = useState(false);
@@ -49,7 +50,7 @@ export const GameboardButton = ({
       }`}
       aria-label={ariaLabel}
     >
-      {displayIncorrectAnswer && <IoCloseSharp style={{ fontSize: "3rem" }} />}
+      {displayIncorrectAnswer && <IoCloseSharp style={{ fontSize: '3rem' }} />}
       {selectedFlag && (
         <>
           <p className={styles.text}>{selectedFlag?.name}</p>
@@ -64,11 +65,11 @@ function answeredButtonStyle(selectedFlag: SelectedFlag | null) {
   if (selectedFlag) {
     return styles.flagSelected;
   }
-  return "";
+  return '';
 }
 
 function currentPlayerStyle(selectedFlag: SelectedFlag | null) {
   if (selectedFlag?.playersMove === 1) return styles.playerOne;
   if (selectedFlag?.playersMove === 2) return styles.playerTwo;
-  return "";
+  return '';
 }

@@ -11,7 +11,7 @@ interface GameState {
   setSelectedFlags: (selectedFlags: SelectedFlags) => void;
   incorrectAnswer: IncorrectAnswer | null;
   setIncorrectAnswer: (incorrectAnswer: IncorrectAnswer) => void;
-  winnerDirection: null | { from: [number, number]; to: [number, number] };
+  winnerDirection: null | { from: [number, number]; direction: string };
 }
 
 function setSelectedFlags(selectedFlags: SelectedFlags) {
@@ -27,7 +27,7 @@ function setSelectedFlags(selectedFlags: SelectedFlags) {
     });
   }
 
-  return () => ({ selectedFlags, incorrectAnswer: null });
+  return { selectedFlags, incorrectAnswer: null };
 }
 
 const initialState = {
@@ -51,7 +51,10 @@ export const useGameStore = create<GameState>((set) => ({
     }),
   togglePlayerTurn: () =>
     set((state) => ({ playersTurn: state.playersTurn === 1 ? 2 : 1 })),
-  setSelectedFlags: (selectedFlags: SelectedFlags) =>
-    set(setSelectedFlags(selectedFlags)),
+  setSelectedFlags: (selectedFlags: SelectedFlags) => {
+    const flags = setSelectedFlags(selectedFlags);
+
+    return set(flags);
+  },
   reset: () => set(initialState)
 }));

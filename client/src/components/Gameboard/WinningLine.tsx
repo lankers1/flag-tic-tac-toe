@@ -1,4 +1,6 @@
-function dimensionOffsets(direction) {
+import { RefObject } from 'react';
+
+function dimensionOffsets(direction: string | undefined) {
   switch (direction) {
     case 'row':
       return {
@@ -46,31 +48,38 @@ function dimensionOffsets(direction) {
   }
 }
 
-export const WinningLine = ({ gameboardRef, winnerDirection }) => {
-  const offsetTop = gameboardRef.current.offsetTop;
-  const offsetLeft = gameboardRef.current.offsetLeft;
+interface Props {
+  gameboardRef: RefObject<HTMLDivElement>;
+  winnerDirection: { from: [number, number]; direction: string } | null;
+}
+
+export const WinningLine = ({ gameboardRef, winnerDirection }: Props) => {
+  const offsetTop = gameboardRef.current?.offsetTop;
+  const offsetLeft = gameboardRef.current?.offsetLeft;
   const { height, topOffset, leftOffset, width, transition, transform } =
     dimensionOffsets(winnerDirection?.direction);
 
   return (
-    <div
-      style={{
-        height,
-        width,
-        transition,
-        transform,
-        borderRadius: '12px',
-        border: '2px black solid',
-        position: 'absolute',
-        left: `calc(${offsetLeft}px + ${
-          winnerDirection?.from[1] + 1
-        } * ${leftOffset} + ${winnerDirection?.from[1]} * 4.5rem)`,
-        top: `calc(${offsetTop}px + ${
-          winnerDirection?.from[0] + 1
-        } * ${topOffset} + ${winnerDirection?.from[0]} * 4.5rem)`,
-        backgroundColor: 'black',
-        zIndex: 1000
-      }}
-    />
+    winnerDirection && (
+      <div
+        style={{
+          height,
+          width,
+          transition,
+          transform,
+          borderRadius: '12px',
+          border: '2px black solid',
+          position: 'absolute',
+          left: `calc(${offsetLeft}px + ${
+            winnerDirection?.from[1] + 1
+          } * ${leftOffset} + ${winnerDirection?.from[1]} * 4.5rem)`,
+          top: `calc(${offsetTop}px + ${
+            winnerDirection?.from[0] + 1
+          } * ${topOffset} + ${winnerDirection?.from[0]} * 4.5rem)`,
+          backgroundColor: 'black',
+          zIndex: 1000
+        }}
+      />
+    )
   );
 };
