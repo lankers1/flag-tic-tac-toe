@@ -18,6 +18,7 @@ steps:
     volumes:
     - name: 'testvolume'
       path: '/opt/public'
-serviceAccount: 'projects/$PROJECT_ID/serviceAccounts/flag-tic-tac-toe-554@flag-tic-tac-toe.iam.gserviceaccount.com'
 substitutions:
   _GCR_HOSTNAME: gcr.io
+options:
+logging: CLOUD_LOGGING_ONLY
