@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build --mode production",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy": "tsc -b && vite build --mode production && gsutil cp -r dist/* gs://flag-tic-tac-toe-client"
+    "deploy": "tsc -b && vite build --mode production && gsutil cp -r dist/* gs://flag-tic-tac-toe-client",
+    "test-deploy": "jest"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.56.2",
@@ -21,6 +22,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
+    "@testing-library/react": "^16.0.1",
+    "@types/jest": "^29.5.14",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
@@ -28,7 +31,11 @@
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jest-transform-stub": "^2.0.0",
     "sass": "^1.79.3",
+    "ts-jest": "^29.2.5",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
     "vite": "^5.4.1"
