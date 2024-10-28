@@ -2,7 +2,6 @@ FROM node:latest AS builder
 
 WORKDIR /opt
 
-COPY ./client/yarn.lock /opt
 COPY ./client/package.json /opt
 
 RUN yarn install
