@@ -17,4 +17,4 @@ COPY --from=builder /opt/dist /opt
 RUN echo "SERVICE_ACCOUNT" > /opt/boto
 ENV BOTO_CONFIG=/opt/boto 
 
-RUN gsutil -i flag-tic-tac-toe-554@flag-tic-tac-toe.iam.gserviceaccount.com@flag-tic-tac-toe cp -r /opt/assets /opt/index.html /opt/background.png gs://flag-tic-tac-toe-client
+RUN gsutil cp -r /opt/assets /opt/index.html /opt/background.png gs://flag-tic-tac-toe-client/
