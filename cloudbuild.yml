@@ -21,4 +21,4 @@ steps:
 substitutions:
   _GCR_HOSTNAME: gcr.io
 options:
-logging: CLOUD_LOGGING_ONLY
+  logging: CLOUD_LOGGING_ONLY
