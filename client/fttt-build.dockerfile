@@ -4,7 +4,6 @@ WORKDIR /opt
 
 COPY ./client/package.json /opt
 
-RUN apk add --no-cache python3 make g++
 RUN yarn install
 
 COPY ./client /opt/
@@ -15,7 +14,8 @@ FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:stable
 WORKDIR /opt
 COPY --from=builder /opt/dist /opt
 
-RUN echo "SERVICE_ACCOUNT" > /opt/boto
+RUN printf 
+RUN echo $SERVICE_ACCOUNT > /opt/boto
 ENV BOTO_CONFIG=/opt/boto 
 
 RUN gsutil cp -r /opt/assets /opt/index.html /opt/background.png gs://flag-tic-tac-toe-client/
