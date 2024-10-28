@@ -12,12 +12,12 @@ steps:
       - .
     volumes:
     - name: 'testvolume'
-      path: '/opt/public'
+      path: '/opt/dist'
   - name: 'gcr.io/cloud-builders/gsutil'
     args: ['cp', '/opt/dist/*', 'gs://flag-tic-tac-toe-client/']
     volumes:
     - name: 'testvolume'
-      path: '/opt/public'
+      path: '/opt/dist'
 substitutions:
   _GCR_HOSTNAME: gcr.io
 options:
