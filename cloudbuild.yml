@@ -9,7 +9,7 @@ steps:
       - '$_GCR_HOSTNAME/$PROJECT_ID/test-james-fe:0.0.1'
       - -f
       - 'fttt-build.dockerfile'
-      - .
+      - ./client
     volumes:
     - name: 'testvolume'
       path: '/opt/public'
