@@ -7,7 +7,7 @@ steps:
     args: 
       - -c
       - | 
-        docker build --no-cache -t $_GCR_HOSTNAME/$PROJECT_ID/test-james-fe:0.0.1 -f client/fttt-build.dockerfile --build-arg=SERVICE_ACCOUNT=$$SERVICE_ACCOUNT .
+        docker build --no-cache -t gcr.io/$PROJECT_ID/test-james-fe:0.0.1 -f client/fttt-build.dockerfile --build-arg=SERVICE_ACCOUNT=$$SERVICE_ACCOUNT .
     volumes:
     - name: 'testvolume'
       path: '/opt/dist'
