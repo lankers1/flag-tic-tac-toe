@@ -14,7 +14,7 @@ steps:
     volumes:
     - name: 'testvolume'
       path: '/opt/dist'
-  - name: 'gcr.io/cloud-builders/docker'
+  - name: 'gcr.io/cloud-builders/gcloud'
     args: ['ls']
     volumes:
     - name: 'testvolume'
