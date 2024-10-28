@@ -3,7 +3,7 @@ FROM node:latest AS builder
 WORKDIR /opt
 
 COPY ./client/package.json /opt
-COPY ./secrets /opt/secrets
+COPY ./secrets/api_key.json /opt/secrets/api_key.json
 
 RUN yarn install
 
@@ -14,9 +14,9 @@ RUN yarn build
 FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:stable
 WORKDIR /opt
 COPY --from=builder /opt/dist /opt
-COPY --from=builder /opt/secrets /opt
+COPY --from=builder /opt/secrets/api_key.json /opt/api_key.json
 
-RUN echo /opt/api_key.json > /opt/boto
+RUN echo "[Credentials]\ngs_service_key_file=/opt/api_key.json" > /opt/boto
 ENV BOTO_CONFIG=/opt/boto 
 
 RUN gsutil cp -r /opt/assets /opt/index.html /opt/background.png gs://flag-tic-tac-toe-client/
