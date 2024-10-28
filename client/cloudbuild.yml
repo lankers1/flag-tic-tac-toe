@@ -6,7 +6,8 @@ steps:
     entrypoint: 'bash'
     args: 
       - -c
-      - docker build -f client/fttt-build.dockerfile -t gcr.io/$PROJECT_ID/test-james-fe:0.0.1 --build-arg SERVICE_ACCOUNT=$$SERVICE_ACCOUNT .
+      - |
+        docker build -f client/fttt-build.dockerfile -t gcr.io/$PROJECT_ID/test-james-fe:0.0.1 --build-arg SERVICE_ACCOUNT=$$SERVICE_ACCOUNT .
     volumes:
     - name: 'testvolume'
       path: '/opt/dist'
