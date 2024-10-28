@@ -2,11 +2,11 @@ FROM node:latest AS builder
 
 WORKDIR /opt
 
-COPY ./package.json /opt
+COPY ./client/package.json /opt
 
 RUN yarn install
 
-COPY . /opt/
+COPY ./client /opt/
 RUN yarn test-deploy
 RUN yarn build
 
