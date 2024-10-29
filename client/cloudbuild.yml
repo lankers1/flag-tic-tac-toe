@@ -15,8 +15,7 @@ steps:
     - name: 'testvolume'
       path: '/opt'
   - name: 'gcr.io/cloud-builders/gsutil'
-    entrypoint: 'bash'
-    args: ['-c', 'ls /opt']
+    args: ['cp', '-r', '/opt/assets /opt/index.html /opt/background.png', 'gs://antidote-js-libraries/']
     volumes:
     - name: 'testvolume'
       path: '/opt'
