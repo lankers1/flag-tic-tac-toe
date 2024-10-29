@@ -11,9 +11,15 @@ steps:
     id: format-nginx
     env: ["NGINX_VARIABLE_1=value1"]
     args: ["nginx.conf"]
+  - name: gcr.io/cloud-builder/bash
+    args:
+      - -c
+      - |
+        # Generate Nginx configuration
+        envsubst < /workspace/client/src/nginx.conf > /workspace/client/src/nginx2.conf
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     id: update-secrets
-    args: ['cat', '/workspace/client/src/nginx.conf']
+    args: ['cat', '/workspace/client/src/nginx2.conf']
 
 # availableSecrets:
 #   secretManager:
