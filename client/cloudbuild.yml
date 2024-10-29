@@ -13,13 +13,13 @@ steps:
         docker build -f client/fttt-build.dockerfile -t gcr.io/$PROJECT_ID/test-james-fe:0.0.1 .
     volumes:
     - name: 'testvolume'
-      path: '/opt/dist'
+      path: '/opt'
   - name: 'gcr.io/cloud-builders/gsutil'
     entrypoint: 'bash'
-    args: ['-c', 'ls /workspace']
+    args: ['-c', 'ls /opt']
     volumes:
     - name: 'testvolume'
-      path: '/opt/dist'
+      path: '/opt'
 availableSecrets:
   secretManager:
   - versionName: projects/$PROJECT_ID/secrets/SERVICE_ACCOUNT/versions/latest
