@@ -19,10 +19,10 @@ steps:
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     id: update-secrets
     args: ['ls', '/workspace']
-availableSecrets:
-  secretManager:
-  - versionName: projects/$PROJECT_ID/secrets/SERVICE_ACCOUNT/versions/latest
-    env: 'SERVICE_ACCOUNT'
+# availableSecrets:
+#   secretManager:
+#   - versionName: projects/$PROJECT_ID/secrets/SERVICE_ACCOUNT/versions/latest
+#     env: 'SERVICE_ACCOUNT'
 substitutions:
   _GCR_HOSTNAME: gcr.io
 options:
