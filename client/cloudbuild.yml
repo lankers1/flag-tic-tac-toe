@@ -11,7 +11,7 @@ steps:
     id: update-secrets
     args: ['envsubst < /workspace/client/src/nginx.conf > /workspace/client/src/nginx.conf.tmp',  '&&', 'gcloud', 'secrets', 'create', 'my-secret-2', '--data-file=/workspace/client/src/nginx.conf']
     env:
-      NGINX_VARIABLE_1: 'value1'
+      - 'NGINX_VARIABLE_1=value1'
 # availableSecrets:
 #   secretManager:
 #   - versionName: projects/$PROJECT_ID/secrets/SERVICE_ACCOUNT/versions/latest
