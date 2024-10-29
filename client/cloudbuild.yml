@@ -12,7 +12,7 @@ steps:
       - -c
       - |
         # Generate Nginx configuration
-        envsubst < /workspace/client/src/nginx.conf > /workspace/client/src/nginx2.conf
+        envsubst < /workspace/nginx.conf > /workspace/client/src/nginx2.conf
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     id: update-secrets
     args: ['cat', '/workspace/client/src/nginx2.conf']
