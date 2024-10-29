@@ -1,5 +1,8 @@
 FROM node:latest AS builder
 
+ARG TAG_NAME
+
+
 WORKDIR /opt
 
 COPY ./client/package.json /opt
