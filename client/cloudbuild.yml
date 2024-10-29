@@ -1,11 +1,7 @@
 
 steps: 
   - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: 'bash'
-    args:
-    - '-c'
-    - |
-          'echo /workspace/client/src/nginx.conf > /workspace/nginx.conf'
+    args: ['echo /workspace/client/src/nginx.conf > /workspace/nginx.conf']
     env:
     - 'NGINX_VARIABLE_1=value1'
 
