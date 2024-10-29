@@ -5,7 +5,7 @@ steps:
     args:
     - '-c'
     - |
-          'echo /workspace/client/src/nginx.conf > /workspace/nginx.conf'
+          'ls /workspace/client/src'
     env:
     - 'NGINX_VARIABLE_1=value1'
 
