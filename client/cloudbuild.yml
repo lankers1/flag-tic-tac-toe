@@ -7,7 +7,7 @@ steps:
   # - name: gcr.io/cloud-builders/docker
   #   id: build
   #   args: ['build', '-f', 'client/fttt-build.dockerfile', '-t', 'gcr.io/$PROJECT_ID/test-james-fe:0.0.1', '--build-arg=GIT_TAG=$TAG_NAME', '.']
-  - name: gcr.io/cloud-builder/bash
+  - name: bash
     args:
       - -c
       - |
