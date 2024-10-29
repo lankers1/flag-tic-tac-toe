@@ -9,7 +9,7 @@ steps:
   #   args: ['build', '-f', 'client/fttt-build.dockerfile', '-t', 'gcr.io/$PROJECT_ID/test-james-fe:0.0.1', '--build-arg=GIT_TAG=$TAG_NAME', '.']
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     id: update-secrets
-    args: ['envsubst < /workspace/client/src/nginx.conf > /workspace/client/src/nginx.template.conf', '&&', 'gcloud', 'secrets', 'create', 'my-secret-2', '--data-file=/workspace/client/src/nginx.conf']
+    args: ['gcloud', 'secrets', 'create', 'my-secret-2', '--data-file=/workspace/client/src/nginx.conf']
     env:
       - 'NGINX_VARIABLE_1=value1'
 # availableSecrets:
