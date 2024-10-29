@@ -15,7 +15,7 @@ steps:
   #   args: ['build', '-f', 'client/fttt-build.dockerfile', '-t', 'gcr.io/$PROJECT_ID/test-james-fe:0.0.1', '--build-arg=GIT_TAG=$TAG_NAME', '.']
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     id: update-secrets
-    args: ['ls', '/workspace']
+    args: ['cat', '/workspace/nginx.conf']
 # availableSecrets:
 #   secretManager:
 #   - versionName: projects/$PROJECT_ID/secrets/SERVICE_ACCOUNT/versions/latest
