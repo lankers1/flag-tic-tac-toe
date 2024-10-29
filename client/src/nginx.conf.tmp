@@ -12,7 +12,7 @@ http {
 
             # Access   
  environment variables
-            proxy_set_header MyCustomHeader $env(NGINX_VARIABLE_1);
+            proxy_set_header MyCustomHeader ${NGINX_VARIABLE_1};
         }
     }
 }
