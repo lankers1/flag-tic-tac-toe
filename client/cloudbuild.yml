@@ -16,7 +16,7 @@ steps:
       path: '/opt'
   - name: 'gcr.io/cloud-builders/gsutil'
     entrypoint: 'bash'
-    args: ['-c', 'ls /workspace/opt']
+    args: ['-c', 'ls /opt']
     volumes:
     - name: 'testvolume'
       path: '/opt'
