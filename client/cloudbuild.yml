@@ -14,12 +14,6 @@ steps:
     volumes:
     - name: 'testvolume'
       path: '/opt'
-  - name: 'gcr.io/cloud-builders/gsutil'
-    entrypoint: 'bash'
-    args: ['-c', 'ls /workspace/client']
-    volumes:
-    - name: 'testvolume'
-      path: '/opt'
 availableSecrets:
   secretManager:
   - versionName: projects/$PROJECT_ID/secrets/SERVICE_ACCOUNT/versions/latest
