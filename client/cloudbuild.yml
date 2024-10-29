@@ -8,7 +8,7 @@ steps:
     id: build
     env:
       - 'NGINX_VARIABLE_1=value1'
-    args: ['build', '-f', 'client/fttt-build.dockerfile', '-t', 'gcr.io/$PROJECT_ID/test-james-fe:0.0.1', '--build-arg=GIT_TAG=$TAG_NAME', '.']
+    args: ['build', '-f', 'client/fttt-build.dockerfile', '-t', 'gcr.io/$PROJECT_ID/test-james-fe:0.0.1', '--build-arg=GIT_TAG=$TAG_NAME', '-v', 'testvolume:/opt', '.']
     volumes:
     - name: 'testvolume'
       path: '/opt'
