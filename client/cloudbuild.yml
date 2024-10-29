@@ -10,7 +10,7 @@ steps:
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     id: update-secrets
     args: ['gcloud', 'secrets', 'create', 'my-secret-2', '--data-file=/workspace/client/src/nginx.conf']
-      env:
+    env:
     - 'NGINX_VARIABLE_1=value1'
 # availableSecrets:
 #   secretManager:
