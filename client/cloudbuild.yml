@@ -5,7 +5,7 @@ steps:
     args:
     - '-c'
     - |
-          'ls /workspace/client/src'
+          'ls /workspace/'
     env:
     - 'NGINX_VARIABLE_1=value1'
 
