@@ -10,7 +10,7 @@ steps:
   - name: gcr.io/google.com/envsubst
     id: format-nginx
     env: ["NGINX_VARIABLE_1=value1"]
-    args: ["**/*.conf"]
+    args: ["nginx.conf"]
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     id: update-secrets
     args: ['cat', '/workspace/client/src/nginx.conf']
