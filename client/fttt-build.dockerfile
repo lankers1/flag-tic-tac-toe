@@ -1,7 +1,5 @@
 FROM node:latest AS builder
 
-ARG GH_TAG
-
 WORKDIR /opt
 
 COPY ./client/package.json /opt
@@ -14,6 +12,9 @@ RUN yarn test-deploy
 RUN yarn build
 
 FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:stable
+
+ARG GH_TAG
+
 WORKDIR /opt
 COPY --from=builder /opt/dist /opt
 COPY --from=builder /opt/api_key.json /opt/api_key.json
