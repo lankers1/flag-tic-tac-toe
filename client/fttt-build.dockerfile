@@ -18,6 +18,7 @@ ARG GIT_TAG
 WORKDIR /opt
 COPY --from=builder /opt/dist /opt
 COPY --from=builder /opt/api_key.json /opt/api_key.json
+COPY --from=builder /opt/src/nginx.conf /opt/nginx.conf
 
 RUN echo "[Credentials]\ngs_service_key_file=/opt/api_key.json" > /opt/boto
 ENV BOTO_CONFIG=/opt/boto 
