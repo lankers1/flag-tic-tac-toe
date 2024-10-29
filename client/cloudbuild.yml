@@ -14,7 +14,7 @@ steps:
       path: '/opt'
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     id: update-secrets
-    args: ['cat', 'testvolume/nginx.conf']
+    args: ['cat', '/opt/nginx.conf']
     volumes:
     - name: 'testvolume'
       path: '/opt'
