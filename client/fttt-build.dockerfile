@@ -15,12 +15,12 @@ FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:stable
 
 ARG GIT_TAG
 
-WORKDIR /opt
-COPY --from=builder /opt/dist /opt
-COPY --from=builder /opt/api_key.json /opt/api_key.json
+WORKDIR /workspace
+COPY --from=builder /opt/dist /workspace
+COPY --from=builder /opt/api_key.json /workspace/api_key.json
 COPY --from=builder /opt/src/nginx.conf /workspace/nginx.conf
 
-RUN echo "[Credentials]\ngs_service_key_file=/opt/api_key.json" > /opt/boto
-ENV BOTO_CONFIG=/opt/boto 
+RUN echo "[Credentials]\ngs_service_key_file=/opt/api_key.json" > /workspace/boto
+ENV BOTO_CONFIG=/workspace/boto 
 
-RUN gsutil cp -r /opt/assets /opt/index.html /opt/background.png gs://flag-tic-tac-toe-client/$GIT_TAG
+RUN gsutil cp -r /workspace/assets /workspace/index.html /workspace/background.png gs://flag-tic-tac-toe-client/$GIT_TAG
