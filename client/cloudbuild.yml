@@ -7,8 +7,11 @@ steps:
   # - name: gcr.io/cloud-builders/docker
   #   id: build
   #   args: ['build', '-f', 'client/fttt-build.dockerfile', '-t', 'gcr.io/$PROJECT_ID/test-james-fe:0.0.1', '--build-arg=GIT_TAG=$TAG_NAME', '.']
-  - id: format-nginx
-    name: gcr.io/${PROJECT_ID}/envsubst
+  - name: 'gcr.io/cloud-builders/docker'
+    dir: './'
+    args: ['build', '--tag=gcr.io/${PROJECT_ID}/envsubst', '.']
+  - name: 'gcr.io/${PROJECT_ID}/envsubst'
+    id: format-nginx
     env: ["NGINX_VARIABLE_1=value1"]
     args: ["nginx.conf"]
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
