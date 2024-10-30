@@ -3,21 +3,21 @@ steps:
   - name: 'gcr.io/cloud-builders/gcloud'
     secretEnv: ["SERVICE_ACCOUNT"]
     entrypoint: 'bash'
-    args: ['-c', 'mkdir -p /workspace/secrets && echo $$SERVICE_ACCOUNT > /workspace/secrets/api_key.json']
-  - name: gcr.io/cloud-builders/docker
-    id: build
-    args: ['build', '-f', 'client/fttt-build.dockerfile', '-t', 'gcr.io/$PROJECT_ID/test-james-fe:0.0.1', '--build-arg=GIT_TAG=$TAG_NAME', '.']
-  - name: gcr.io/$PROJECT_ID/envsubst
-    id: format-nginx
-    env: ["NGINX_VARIABLE_1=$TAG_NAME"]
-    args: ["nginx.conf"]
-  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
-    id: update-secrets
-    args: ['gcloud', 'secrets', 'versions', 'add', 'my-secret', '--data-file=/workspace/nginx.conf']
-availableSecrets:
-  secretManager:
-  - versionName: projects/$PROJECT_ID/secrets/SERVICE_ACCOUNT/versions/latest
-    env: 'SERVICE_ACCOUNT'
+    args: ['-c', 'ls /workspace']
+#   - name: gcr.io/cloud-builders/docker
+#     id: build
+#     args: ['build', '-f', 'client/fttt-build.dockerfile', '-t', 'gcr.io/$PROJECT_ID/test-james-fe:0.0.1', '--build-arg=GIT_TAG=$TAG_NAME', '.']
+#   - name: gcr.io/$PROJECT_ID/envsubst
+#     id: format-nginx
+#     env: ["NGINX_VARIABLE_1=$TAG_NAME"]
+#     args: ["nginx.conf"]
+#   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+#     id: update-secrets
+#     args: ['gcloud', 'secrets', 'versions', 'add', 'my-secret', '--data-file=/workspace/nginx.conf']
+# availableSecrets:
+#   secretManager:
+#   - versionName: projects/$PROJECT_ID/secrets/SERVICE_ACCOUNT/versions/latest
+#     env: 'SERVICE_ACCOUNT'
 substitutions:
   _GCR_HOSTNAME: gcr.io
 options:
