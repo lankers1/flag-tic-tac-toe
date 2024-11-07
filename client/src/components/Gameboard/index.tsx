@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import { capitaliseFirst } from '../../utils/capitaliseFirst';
 import { removeSnakeCase } from '../../utils/removeSnakeCase';
 import { GameboardButton } from '../GameboardButton';
