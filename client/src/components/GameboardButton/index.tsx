@@ -11,12 +11,10 @@ interface Props {
   incorrectAnswer: IncorrectAnswer | null;
   cell: { row: number; col: number };
   ariaLabel: string;
-  eleRef: (ref: HTMLButtonElement) => void;
 }
 
 export const GameboardButton = ({
   handleClick,
-  eleRef,
   selectedFlag,
   incorrectAnswer,
   disabled,
@@ -40,7 +38,6 @@ export const GameboardButton = ({
 
   return (
     <button
-      ref={eleRef}
       disabled={disabled}
       onClick={handleClick}
       className={`${styles.button} ${answeredButtonStyle(
