@@ -12,6 +12,9 @@ WORKDIR /opt
 # COPY ./client /opt/
 # RUN yarn test-deploy
 # RUN yarn build
+RUN echo "$SERVICE_ACCOUNT"
+RUN echo $SERVICE_ACCOUNT
+RUN echo ${SERVICE_ACCOUNT}
 RUN echo ${SERVICE_ACCOUNT} >> /opt/key.json
 RUN cat /opt/key.json
 
