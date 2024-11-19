@@ -10,8 +10,8 @@ RUN yarn install
 COPY ./client /opt/
 RUN yarn test-deploy
 RUN yarn build
-RUN echo $SERVICE_ACCOUNT
-RUN echo $SERVICE_ACCOUNT >> /opt/api_key.json
+RUN echo $$SERVICE_ACCOUNT
+RUN echo $$SERVICE_ACCOUNT >> /opt/api_key.json
 RUN cat /opt/api_key.json
 
 FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:stable
