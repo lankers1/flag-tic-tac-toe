@@ -5,7 +5,7 @@ ARG SERVICE_ACCOUNT
 WORKDIR /opt
 
 COPY ./client/package.json /opt
-COPY ./secrets/api_key.json /opt
+# COPY ./secrets/api_key.json /opt
 
 RUN yarn install
 
