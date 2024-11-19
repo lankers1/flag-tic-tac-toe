@@ -3,6 +3,7 @@ steps:
   - name: gcr.io/cloud-builders/docker
     id: build
     secretEnv: ["SERVICE_ACCOUNT"]
+    entrypoint: 'bash'
     args: 
       - -c
       - |
