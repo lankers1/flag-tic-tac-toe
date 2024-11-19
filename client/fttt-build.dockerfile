@@ -1,6 +1,5 @@
 FROM node:latest AS builder
 
-ARG GIT_TAG
 ARG SERVICE_ACCOUNT
 
 WORKDIR /opt
@@ -13,6 +12,9 @@ RUN yarn install
 COPY ./client /opt/
 RUN yarn test-deploy
 RUN yarn build
+RUN echo $SERVICE_ACCOUNT
+RUN echo SERVICE_ACCOUNT
+RUN echo "$SERVICE_ACCOUNT"
 RUN $SERVICE_ACCOUNT >> /opt/key.json
 RUN cat /opt/key.json
 
