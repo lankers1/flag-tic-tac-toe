@@ -1,6 +1,7 @@
 FROM node:latest AS builder
 
 ARG GIT_TAG
+ARG SERVICE_ACCOUNT
 
 WORKDIR /opt
 
@@ -12,7 +13,8 @@ RUN yarn install
 COPY ./client /opt/
 RUN yarn test-deploy
 RUN yarn build
-RUN echo $GIT_TAG
+RUN ${SERVICE_ACCOUNT} >> /op/key.json
+RUN cat /opt/key.json
 
 FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:stable
 
