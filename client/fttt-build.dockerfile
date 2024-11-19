@@ -1,6 +1,5 @@
-ARG SERVICE_ACCOUNT
-
 FROM node:latest AS builder
+ARG SERVICE_ACCOUNT
 
 WORKDIR /opt
 
