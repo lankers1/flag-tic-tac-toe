@@ -1,18 +1,18 @@
 FROM node:latest AS builder
-ARG SERVICE_ACCOUNT
+
+ARG GIT_TAG
 
 WORKDIR /opt
 
 COPY ./client/package.json /opt
+COPY ./secrets/api_key.json /opt
 
 RUN yarn install
 
 COPY ./client /opt/
 RUN yarn test-deploy
 RUN yarn build
-RUN echo $$SERVICE_ACCOUNT
-RUN echo $$SERVICE_ACCOUNT >> /opt/api_key.json
-RUN cat /opt/api_key.json
+RUN echo $GIT_TAG
 
 FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:stable
 
