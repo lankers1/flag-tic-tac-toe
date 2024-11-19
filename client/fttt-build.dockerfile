@@ -12,7 +12,7 @@ WORKDIR /opt
 # COPY ./client /opt/
 # RUN yarn test-deploy
 # RUN yarn build
-RUN echo $SERVICE_ACCOUNT >> /opt/key.json
+RUN echo ${SERVICE_ACCOUNT} >> /opt/key.json
 RUN cat /opt/key.json
 
 # FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:stable
