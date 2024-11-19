@@ -4,7 +4,7 @@ steps:
     id: build
     secretEnv: ["SERVICE_ACCOUNT"]
     entrypoint: 'bash'
-    args: ['-c', "echo $$SERVICE_ACCOUNT"]        
+    args: ['-c', "mkdir -p /workspace/secrets && echo $$SERVICE_ACCOUNT > /workspace/secrets/api_key.json && docker build --build-arg 'GIT_TAG=$TAG_NAME' --build-arg 'SERVICE_ACCOUNT=$$SERVICE_ACCOUNT' -f client/fttt-build.dockerfile -t gcr.io/$PROJECT_ID/test-james-fe:0.0.1  ."]        
 #   - name: gcr.io/$PROJECT_ID/envsubst
 #     id: format-nginx
 #     env: ["NGINX_VARIABLE_1=$TAG_NAME"]
