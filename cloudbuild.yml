@@ -3,8 +3,7 @@ steps:
   - name: gcr.io/cloud-builders/docker
     id: build
     args: ['build', '--network=cloudbuild', '-f', 'client/fttt-build.dockerfile', '-t', 'gcr.io/$PROJECT_ID/test-james-fe:0.0.1', '--build-arg=GIT_TAG=$TAG_NAME', '--build-arg=SERVICE_ACCOUNT=$SERVICE_ACCOUNT', '.']
-    env:
-    - 'SERVICE_ACCOUNT=$SERVICE_ACCOUNT'
+    secretEnv: ["SERVICE_ACCOUNT"]
 #   - name: gcr.io/$PROJECT_ID/envsubst
 #     id: format-nginx
 #     env: ["NGINX_VARIABLE_1=$TAG_NAME"]
