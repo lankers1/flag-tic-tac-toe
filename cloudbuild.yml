@@ -1,36 +1,36 @@
 
 steps: 
-  # - name: node
-  #   id: install
-  #   entrypoint: 'yarn'
-  #   args: ['install']
-  #   dir: './client'
-  # - name: node
-  #   id: test
-  #   entrypoint: 'yarn'
-  #   args: ['test-deploy']
-  #   dir: './client'    
-  # - name: node
-  #   id: build
-  #   entrypoint: 'yarn'
-  #   args: ['build']
-  #   dir: './client'
-  # - name: node
-  #   id: build-ls
-  #   entrypoint: 'bash'
-  #   args: ['-c', 'ls']
-  #   dir: './client' 
-  # - name: gcr.io/cloud-builders/gsutil
-  #   args: ['cp', '-r', 'dist/assets', 'index.html', 'dist/background.png', 'gs://flag-tic-tac-toe-client/$TAG_NAME']
-  #   dir: './client' 
+  - name: node
+    id: install
+    entrypoint: 'yarn'
+    args: ['install']
+    dir: './client'
+  - name: node
+    id: test
+    entrypoint: 'yarn'
+    args: ['test-deploy']
+    dir: './client'    
+  - name: node
+    id: build
+    entrypoint: 'yarn'
+    args: ['build']
+    dir: './client'
+  - name: node
+    id: build-ls
+    entrypoint: 'bash'
+    args: ['-c', 'ls']
+    dir: './client' 
+  - name: gcr.io/cloud-builders/gsutil
+    args: ['cp', '-r', 'dist/assets', 'dist/index.html', 'dist/background.png', 'gs://flag-tic-tac-toe-client/$TAG_NAME']
+    dir: './client' 
 #   - name: gcr.io/$PROJECT_ID/envsubst
 #     id: format-nginx
 #     env: ["NGINX_VARIABLE_1=$TAG_NAME"]
 #     args: ["nginx.conf"]
-  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
-    id: update-secrets
-    entrypoint: 'bash'
-    args: ['-c', 'echo -n "$TAG_NAME" | gcloud secrets versions add GIT_TAG --data-file=-']
+  # - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+  #   id: update-secrets
+  #   entrypoint: 'bash'
+  #   args: ['-c', 'echo -n "$TAG_NAME" | gcloud secrets versions add GIT_TAG --data-file=-']
 substitutions:
   _GCR_HOSTNAME: gcr.io
 options:
