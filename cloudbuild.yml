@@ -21,8 +21,8 @@ steps:
     args: ['-c', 'ls']
     dir: './client' 
   - name: gcr.io/cloud-builders/gsutil
-    entrypoint: 'gsutil'
-    args: ['cp', '-r', '/dist/assets', '/index.html', '/dist/background.png', 'gs://flag-tic-tac-toe-client/$TAG_NAME']
+    entrypoint: 'bash'
+    args: ['gsutil', 'cp', '-r', '/dist/assets', '/index.html', '/dist/background.png', 'gs://flag-tic-tac-toe-client/$TAG_NAME']
     dir: './client' 
 #   - name: gcr.io/$PROJECT_ID/envsubst
 #     id: format-nginx
