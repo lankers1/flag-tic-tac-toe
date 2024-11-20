@@ -20,6 +20,10 @@ steps:
     entrypoint: 'bash'
     args: ['-c', 'ls']
     dir: './client' 
+  - name: gcr.io/cloud-builders/gsutil
+    entrypoint: 'gsutil'
+    args: ['cp', '-r', '/assets', '/index.html', '/background.png', 'gs://flag-tic-tac-toe-client/$GIT_TAG']
+    dir: './client' 
 #   - name: gcr.io/$PROJECT_ID/envsubst
 #     id: format-nginx
 #     env: ["NGINX_VARIABLE_1=$TAG_NAME"]
