@@ -4,7 +4,12 @@ steps:
     id: build
     entrypoint: 'yarn'
     args: ['install']
-    dir: './client'        
+    dir: './client'
+  - name: node
+    id: test
+    entrypoint: 'yarn'
+    args: ['test-deploy']
+    dir: './client'    
 #   - name: gcr.io/$PROJECT_ID/envsubst
 #     id: format-nginx
 #     env: ["NGINX_VARIABLE_1=$TAG_NAME"]
