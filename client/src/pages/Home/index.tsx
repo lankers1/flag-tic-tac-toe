@@ -14,9 +14,9 @@ export const Home = () => {
           <div className={styles.subheading}>
             <Heading variant="h2">Play!</Heading>
             <Heading variant="h3">
-              NEW VERSION Aim to beat your opponent by guessing the flags based
-              on categories. The first to complete three in a row, column or
-              diagonally wins.
+              NEW VERSION v.210 Aim to beat your opponent by guessing the flags
+              based on categories. The first to complete three in a row, column
+              or diagonally wins.
             </Heading>
           </div>
           <div className={styles.buttons}>
