@@ -29,7 +29,8 @@ steps:
 #     args: ["nginx.conf"]
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     id: update-secrets
-    args: ['echo -n "$TAG_NAME" | gcloud secrets versions add GIT_TAG --data-file=-']
+    entrypoint: 'bash'
+    args: ['-c', 'echo -n "$TAG_NAME" | gcloud secrets versions add GIT_TAG --data-file=-']
 substitutions:
   _GCR_HOSTNAME: gcr.io
 options:
