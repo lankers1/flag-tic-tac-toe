@@ -29,7 +29,7 @@ steps:
 #     args: ["nginx.conf"]
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     id: update-secrets
-    args: ['printf $TAG_NAME', '|', 'gcloud', 'secrets', 'versions', 'add', 'GIT_TAG', '--data-file=-']
+    args: ['echo -n $TAG_NAME', '|', 'gcloud', 'secrets', 'versions', 'add', 'GIT_TAG', '--data-file=-']
 substitutions:
   _GCR_HOSTNAME: gcr.io
 options:
