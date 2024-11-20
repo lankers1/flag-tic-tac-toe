@@ -1,10 +1,10 @@
 
 steps: 
-  - name: gcr.io/cloud-builders/docker
+  - name: node
     id: build
-    secretEnv: ["SERVICE_ACCOUNT"]
-    entrypoint: 'bash'
-    args: ['-c', "mkdir -p /workspace/secrets && echo $$SERVICE_ACCOUNT > /workspace/secrets/api_key.json && docker build --build-arg 'GIT_TAG=$TAG_NAME' -f client/fttt-build.dockerfile -t gcr.io/$PROJECT_ID/test-james-fe:0.0.1  ."]        
+    entrypoint: 'yarn'
+    args: ['install']
+    dir: './client'        
 #   - name: gcr.io/$PROJECT_ID/envsubst
 #     id: format-nginx
 #     env: ["NGINX_VARIABLE_1=$TAG_NAME"]
@@ -12,10 +12,10 @@ steps:
 #   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
 #     id: update-secrets
 #     args: ['gcloud', 'secrets', 'versions', 'add', 'my-secret', '--data-file=/workspace/nginx.conf']
-availableSecrets:
-  secretManager:
-  - versionName: projects/$PROJECT_ID/secrets/SERVICE_ACCOUNT/versions/latest
-    env: 'SERVICE_ACCOUNT'
+# availableSecrets:
+#   secretManager:
+#   - versionName: projects/$PROJECT_ID/secrets/SERVICE_ACCOUNT/versions/latest
+#     env: 'SERVICE_ACCOUNT'
 substitutions:
   _GCR_HOSTNAME: gcr.io
 options:
