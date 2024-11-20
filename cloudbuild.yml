@@ -30,7 +30,7 @@ steps:
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     id: update-secrets
     entrypoint: 'gcloud'
-    args: ['run', 'deploy', 'nginx', '--image=gcr.io/$PROJECT_ID/nginx', '--set-env-vars=GIT_TAG=$TAG_NAME']
+    args: ['run', 'deploy', 'nginx', '--region=europe-west1', '--image=gcr.io/$PROJECT_ID/nginx', '--set-env-vars=GIT_TAG=$TAG_NAME']
 substitutions:
   _GCR_HOSTNAME: gcr.io
 options:
