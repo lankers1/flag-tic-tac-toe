@@ -21,7 +21,7 @@ steps:
     args: ['-c', 'ls']
     dir: './client' 
   - name: gcr.io/cloud-builders/gsutil
-    args: ['ls']
+    args: ['cp', '-r', 'dist/assets', 'index.html', 'dist/background.png', 'gs://flag-tic-tac-toe-client/$TAG_NAME']
     dir: './client' 
 #   - name: gcr.io/$PROJECT_ID/envsubst
 #     id: format-nginx
