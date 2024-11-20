@@ -22,7 +22,7 @@ steps:
     dir: './client' 
   - name: gcr.io/cloud-builders/gsutil
     entrypoint: 'bash'
-    args: ['ls']
+    args: ['-c','ls']
     dir: './client' 
 #   - name: gcr.io/$PROJECT_ID/envsubst
 #     id: format-nginx
