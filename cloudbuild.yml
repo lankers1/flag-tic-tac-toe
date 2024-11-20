@@ -22,7 +22,7 @@ steps:
     dir: './client' 
   - name: gcr.io/cloud-builders/gsutil
     entrypoint: 'bash'
-    args: ['-c', ls]
+    args: ['-c', 'ls client']
 #   - name: gcr.io/$PROJECT_ID/envsubst
 #     id: format-nginx
 #     env: ["NGINX_VARIABLE_1=$TAG_NAME"]
