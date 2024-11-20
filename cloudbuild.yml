@@ -23,14 +23,14 @@ steps:
   - name: gcr.io/cloud-builders/gsutil
     args: ['cp', '-r', 'dist/assets', 'dist/index.html', 'dist/background.png', 'gs://flag-tic-tac-toe-client/$TAG_NAME']
     dir: './client' 
-#   - name: gcr.io/$PROJECT_ID/envsubst
-#     id: format-nginx
-#     env: ["NGINX_VARIABLE_1=$TAG_NAME"]
-#     args: ["nginx.conf"]
   # - name: gcr.io/google.com/cloudsdktool/cloud-sdk
   #   id: update-secrets
   #   entrypoint: 'bash'
   #   args: ['-c', 'echo -n "$TAG_NAME" | gcloud secrets versions add GIT_TAG --data-file=-']
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    id: update-secrets
+    entrypoint: 'gcloud'
+    args: ['run', 'deploy', 'nginx', '--set-env-vars=GIT_TAG=$TAG_NAME']
 substitutions:
   _GCR_HOSTNAME: gcr.io
 options:
