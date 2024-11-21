@@ -29,7 +29,7 @@ steps:
     args: ['-c', 'echo -n "$TAG_NAME" | gcloud secrets versions add GIT_TAG --data-file=-']
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
-    args: ['run', 'deploy', 'nginx', '--image', 'gcr.io/flag-tic-tac-toe/nginx', '--region', 'europe-west1', '--set-env-vars', 'GIT_TAG=Secret:GIT_TAG:latest']
+    args: ['run', 'deploy', 'nginx', '--image', 'gcr.io/flag-tic-tac-toe/nginx', '--region', 'europe-west1', '--set-env-vars', 'GIT_TAG=GIT_TAG:latest']
 substitutions:
   _GCR_HOSTNAME: gcr.io
 options:
