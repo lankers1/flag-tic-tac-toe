@@ -1,8 +1,11 @@
 
 steps: 
+  - name: bash
+    script: echo "blah blah" > .npmrc
   - name: node
     id: install
-    args: ['echo', '"blah blah" > .npmrc', '&&', 'yarn install']
+    entrypoint: 'yarn'
+    args: ['install']
     dir: './client'
   # - name: node
   #   id: test
