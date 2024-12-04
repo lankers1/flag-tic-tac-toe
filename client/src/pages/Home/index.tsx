@@ -12,11 +12,10 @@ export const Home = () => {
       <Card className={styles.card}>
         <div className={styles.cardContainer}>
           <div className={styles.subheading}>
-            <Heading variant="h2">Play!</Heading>
             <Heading variant="h3">
-              NEW VERSION v.213 Aim to beat your opponent by guessing the flags
-              based on categories. The first to complete three in a row, column
-              or diagonally wins.
+              Aim to beat your opponent by guessing the flags based on
+              categories. The first to complete three in a row, column or
+              diagonally wins.
             </Heading>
           </div>
           <div className={styles.buttons}>
