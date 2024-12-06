@@ -5,8 +5,12 @@ import { Card } from '../../components/Card';
 import { Heading } from '../../components/Heading';
 
 import styles from './styles.module.scss';
+import { Button } from '../../components/Buttons/Button';
+import { useWebsocket } from '../../query-hooks/useWebsocket';
 
 export const Home = () => {
+  const socket = useWebsocket();
+  console.log(socket);
   return (
     <div className={styles.container}>
       <Card className={styles.card}>
@@ -19,6 +23,16 @@ export const Home = () => {
             </Heading>
           </div>
           <div className={styles.buttons}>
+            <Button
+              label="Play online"
+              handleClick={() => {
+                socket.send(
+                  JSON.stringify({
+                    type: 'message'
+                  })
+                );
+              }}
+            />
             <LinkButton
               size="xlarge"
               to="/game/local"

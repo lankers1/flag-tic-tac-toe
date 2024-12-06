@@ -26,3 +26,8 @@ type Answer struct {
 	R2c3 []string `json:"r2c3"` 
 	R3c3 []string `json:"r3c3"`
 }
+
+type OnlineGame struct {
+	GameId int `json:"gameId"`  
+}
+

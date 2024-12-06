@@ -30,3 +30,10 @@ func (gameHandler *GameHandler) CreateGame(ctx *gin.Context) {
 		
 		ctx.JSON(http.StatusOK, res)
 }
+
+func (gameHandler *GameHandler) OnlineGame() *models.OnlineGame {
+	gameId := gameHandler.GameRepository.OnlineGame();
+	
+	return gameId
+}
+

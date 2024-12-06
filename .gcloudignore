@@ -1,6 +1,3 @@
 /client/dist
 /client/public
 /client/node_modules
-nginx/**  
-pgdata/** 
-server/** 

@@ -12,6 +12,7 @@ import (
 type GameInterface interface {
 	Create(*models.Game) error
 	GetAnswers(*models.Answer) error
+	OnlineGame(*models.OnlineGame) error
 }
 
 type GameRepository struct {
@@ -93,4 +94,27 @@ func (gameRepo *GameRepository) GetAnswers(game *models.Game) *models.Answer {
 	}
 
 	return &answers
+}
+
+func (gameRepo *GameRepository) OnlineGame() *models.OnlineGame {
+	onlineGame := generateOnlineGame(gameRepo.conn)
+
+	return onlineGame
+}
+
+func generateOnlineGame(conn *pgxpool.Pool) *models.OnlineGame {	
+	query := "INSERT INTO game(game_id, time_played) VALUES(floor(random() * 100000000 + 1)::int, current_timestamp) RETURNING game_id"
+	rows, queryErr := conn.Query(context.Background(), query)
+
+	if queryErr != nil {
+		log.Printf("Query error: %v", queryErr)
+	 }
+
+	game, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.OnlineGame])
+
+	if err != nil {
+		log.Printf("CollectRows error: %v", err)
+	}
+
+	 return &game
 }
