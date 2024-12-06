@@ -31,3 +31,6 @@ type OnlineGame struct {
 	GameId int `json:"gameId"`  
 }
 
+type OnlineGameBoard struct {
+	Board Game
+}

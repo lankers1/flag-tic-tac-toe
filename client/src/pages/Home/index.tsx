@@ -10,7 +10,6 @@ import { useWebsocket } from '../../query-hooks/useWebsocket';
 
 export const Home = () => {
   const socket = useWebsocket();
-  console.log(socket);
   return (
     <div className={styles.container}>
       <Card className={styles.card}>

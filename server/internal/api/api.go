@@ -21,6 +21,7 @@ func InitApi(httpHandlers *handlers.Handlers) *gin.Engine {
 	router.Use(c)
 
 	router.GET("/game", httpHandlers.GameHandler.CreateGame)
+	router.GET("/game/:gameId", httpHandlers.GameHandler.GetOnlineGame)
 	router.POST("/search_flags", httpHandlers.FlagHandler.SearchFlags)
 	router.GET("/ws/:userId", func(c *gin.Context) {
 		userId := c.Param("userId")

@@ -12,7 +12,7 @@ export const router = createBrowserRouter([
         element: <Home />
       },
       {
-        path: '/game/:gameId',
+        path: '/game/:player',
         element: <Game />
       },
       {

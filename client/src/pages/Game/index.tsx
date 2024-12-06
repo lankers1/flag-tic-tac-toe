@@ -16,7 +16,7 @@ import { AnswerModalContent } from './components/AnswerModalContent';
 import { ActionButtons } from './components/ActionButtons';
 
 export const Game = () => {
-  const { player } = useParams();
+  const { player, gameId } = useParams();
   const { data: flags } = useSearchFlags('');
   const [selectedSquare, setSelectedSquare] = useState<[number, number]>([
     0, 0
@@ -36,7 +36,13 @@ export const Game = () => {
 
   useEffect(() => {
     let timeout = null;
-    if (playersTurn === 2 && !winner && flags && player === 'computer') {
+    if (
+      playersTurn === 2 &&
+      !winner &&
+      flags &&
+      player === 'computer' &&
+      !gameId
+    ) {
       timeout = setTimeout(() => {
         const computerFlag = determineMove(easyComputer, {
           flags,
@@ -58,7 +64,7 @@ export const Game = () => {
         clearTimeout(timeout);
       }
     };
-  }, [playersTurn, winner, player]);
+  }, [playersTurn, winner, player, gameId]);
 
   if (isLoading || isPending) {
     return (

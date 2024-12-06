@@ -96,25 +96,49 @@ func (gameRepo *GameRepository) GetAnswers(game *models.Game) *models.Answer {
 	return &answers
 }
 
-func (gameRepo *GameRepository) OnlineGame() *models.OnlineGame {
-	onlineGame := generateOnlineGame(gameRepo.conn)
+func (gameRepo *GameRepository) OnlineGame(game *models.Game) *models.OnlineGame {
+	onlineGame := generateOnlineGame(gameRepo.conn, game)
 
 	return onlineGame
 }
 
-func generateOnlineGame(conn *pgxpool.Pool) *models.OnlineGame {	
-	query := "INSERT INTO game(game_id, time_played) VALUES(floor(random() * 100000000 + 1)::int, current_timestamp) RETURNING game_id"
-	rows, queryErr := conn.Query(context.Background(), query)
+func (gameRepo *GameRepository) GetOnlineGame(gameId string) *models.Game {
+	query := "SELECT board FROM game WHERE game_id = $1"
+
+	i, err := strconv.Atoi(gameId)
+	if err != nil {
+			// ... handle error
+			panic(err)
+	}
+
+	rows, queryErr := gameRepo.conn.Query(context.Background(), query, i)
 
 	if queryErr != nil {
 		log.Printf("Query error: %v", queryErr)
 	 }
 
-	game, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.OnlineGame])
+	res, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.OnlineGameBoard])
 
 	if err != nil {
 		log.Printf("CollectRows error: %v", err)
 	}
 
-	 return &game
+	 return &res.Board
+}
+
+func generateOnlineGame(conn *pgxpool.Pool, game *models.Game) *models.OnlineGame {	
+	query := "INSERT INTO game(game_id, time_played, board) VALUES(floor(random() * 100000000 + 1)::int, current_timestamp, $1) RETURNING game_id"
+	rows, queryErr := conn.Query(context.Background(), query, game)
+
+	if queryErr != nil {
+		log.Printf("Query error: %v", queryErr)
+	 }
+
+	res, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.OnlineGame])
+
+	if err != nil {
+		log.Printf("CollectRows error: %v", err)
+	}
+
+	 return &res
 }

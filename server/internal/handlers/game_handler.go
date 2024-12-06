@@ -32,8 +32,18 @@ func (gameHandler *GameHandler) CreateGame(ctx *gin.Context) {
 }
 
 func (gameHandler *GameHandler) OnlineGame() *models.OnlineGame {
-	gameId := gameHandler.GameRepository.OnlineGame();
+	game := gameHandler.GameRepository.Create();
+	gameId := gameHandler.GameRepository.OnlineGame(game);
 	
 	return gameId
 }
 
+func (gameHandler *GameHandler) GetOnlineGame(ctx *gin.Context) {
+	gameId := ctx.Param("gameId")
+
+	game := gameHandler.GameRepository.GetOnlineGame(gameId);
+	answers := gameHandler.GameRepository.GetAnswers(game)
+
+	res := CreateGameRes{Game: game, Answers: answers}
+	ctx.JSON(http.StatusOK, res)
+}

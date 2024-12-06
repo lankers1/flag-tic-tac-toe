@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const initSocket = () => {
   let socket = null;
   if (!socket) {
-    console.log(socket);
     return new WebSocket(
       `ws://localhost:8080/ws/${Math.floor(100000 + Math.random() * 900000)}`
     );
@@ -12,7 +12,9 @@ const initSocket = () => {
 };
 
 export const useWebsocket = () => {
-  const [websocket, setWebsocket] = useState(null);
+  const navigate = useNavigate();
+  const [websocket, setWebsocket] = useState<null | WebSocket>(null);
+
   useEffect(() => {
     let socket = null;
     if (!websocket) {
@@ -21,7 +23,7 @@ export const useWebsocket = () => {
     }
     if (socket) {
       socket?.addEventListener('message', (event) => {
-        console.log(JSON.parse(event.data).gameId);
+        navigate(`/game/111/${JSON.parse(event.data).gameId}`);
       });
     }
     return () => {
