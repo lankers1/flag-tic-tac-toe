@@ -1,35 +1,41 @@
+import { SetSelectedFlag } from '../../store/useGameStore';
+
+type Args = {
+  gameId: string;
+  setTurn: (turn: number) => void;
+  setSelectedFlags: SetSelectedFlag;
+  setIncorrectAnswer: (incorrectAnswer: IncorrectAnswer) => void;
+};
+
 class OnlineGame {
-  constructor(
-    gameId,
-    setTurn,
-    setSelectedFlags,
-    setIncorrectAnswer,
-    hasInitialized
-  ) {
-    this.socket = new WebSocket(`ws://localhost:8080/ws/game/${gameId}`);
-    this.isOnline = !!gameId;
-    this.hasInitialized = hasInitialized;
-    this.setTurn = setTurn;
-    this.setSelectedFlags = setSelectedFlags;
-    this.setIncorrectAnswer = setIncorrectAnswer;
+  setSelectedFlags;
+  setIncorrectAnswer;
+  setPlayerTurn;
+  socket;
+  constructor(args: Args) {
+    this.socket = new WebSocket(`ws://localhost:8080/ws/game/${args.gameId}`);
+    this.setPlayerTurn = args.setTurn;
+    this.setSelectedFlags = args.setSelectedFlags;
+    this.setIncorrectAnswer = args.setIncorrectAnswer;
   }
 
-  setTurn(playerTurn) {
-    this.setTurn(playerTurn);
+  setTurn(playerTurn: number) {
+    this.setPlayerTurn(playerTurn);
   }
 
   handleOpponentsAnswer() {}
 
-  handleCorrectAnswer(player, { name, iso_2 }, answerArr, cell) {
-    this.setSelectedFlags(player, { name, iso_2 }, answerArr, cell);
+  handleCorrectAnswer(
+    player: number,
+    { name, iso_2 }: Flag,
+    answers: string[],
+    cell: Cell
+  ) {
+    this.setSelectedFlags(player, { name, iso_2 }, answers, cell);
   }
 
-  handleIncorrectAnswer(player, flag, cell) {
-    this.setIncorrectAnswer({
-      player,
-      flag,
-      cell
-    });
+  handleIncorrectAnswer(player: number, flag: Flag, cell: Cell) {
+    this.setIncorrectAnswer({ player, flag, cell });
   }
 
   quitGame() {
@@ -37,17 +43,6 @@ class OnlineGame {
   }
 }
 
-export const initGame = (
-  gameId,
-  setTurn,
-  setSelectedFlags,
-  setIncorrectAnswer
-) => {
-  return new OnlineGame(
-    gameId,
-    setTurn,
-    setSelectedFlags,
-    setIncorrectAnswer,
-    true
-  );
+export const initGame = (args: Args) => {
+  return new OnlineGame(args);
 };

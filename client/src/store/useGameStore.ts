@@ -1,6 +1,13 @@
 import { create } from 'zustand';
 import { evaluateBoardForWinner } from '../utils/game-ai/minmax';
 
+export type SetSelectedFlag = (
+  player: number,
+  flag: { name: string; iso_2: string },
+  answerArr: string[],
+  cell: { row: number; col: number }
+) => void;
+
 interface GameState {
   turn: number;
   currentTurn: number;
@@ -8,12 +15,7 @@ interface GameState {
   winner: number | null;
   selectedFlags: SelectedFlags;
   reset: () => void;
-  setSelectedFlags: (
-    player: number,
-    flag: { name: string; iso_2: string },
-    answerArr: string[],
-    cell: { row: number; col: number }
-  ) => void;
+  setSelectedFlags: SetSelectedFlag;
   setTurn: (turn: number) => void;
   incorrectAnswer: IncorrectAnswer | null;
   setIncorrectAnswer: (incorrectAnswer: IncorrectAnswer) => void;

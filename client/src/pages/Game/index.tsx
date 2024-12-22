@@ -14,7 +14,6 @@ import styles from './styles.module.scss';
 
 import { answerMap, AnswerModalContent } from './components/AnswerModalContent';
 import { ActionButtons } from './components/ActionButtons';
-import { useGameWebsocket } from '../../query-hooks/useGameWebsocket';
 import { initGame } from './InitGame';
 
 export let game;
@@ -38,17 +37,15 @@ export const Game = () => {
     winnerDirection,
     reset
   } = useGameStore((state) => state);
-  // const [socket, turn] = useGameWebsocket(
-  //   setSelectedFlags,
-  //   togglePlayerTurn,
-  //   setIncorrectAnswer,
-  //   data?.answers,
-  //   playersTurn
-  // );
-  console.log({ incorrectAnswer });
+
   useEffect(() => {
-    if (data?.answers) {
-      game = initGame(gameId, setTurn, setSelectedFlags, setIncorrectAnswer);
+    if (gameId && data?.answers) {
+      game = initGame({
+        gameId,
+        setTurn,
+        setSelectedFlags,
+        setIncorrectAnswer
+      });
 
       if (game) {
         game.socket?.addEventListener('message', (event) => {
@@ -57,7 +54,6 @@ export const Game = () => {
             if (!turn) {
               game.setTurn(message.playerTurn);
             } else if (message.type === 'turn') {
-              console.log(message);
               const { name, flagIso: iso_2, player, cell } = message;
               if (message.isCorrect) {
                 const answerKey = answerMap[message.cell.row][message.cell.col];
@@ -185,12 +181,9 @@ export const Game = () => {
       </div>
       <Modal isOpen={!!selectedSquare[0]}>
         <AnswerModalContent
-          setIncorrectAnswer={setIncorrectAnswer}
           answers={data?.answers}
           selectedSquareIndex={selectedSquare}
           closeModal={() => setSelectedSquare([0, 0])}
-          onSelect={setSelectedFlags}
-          selectedFlags={selectedFlags}
         />
       </Modal>
     </>

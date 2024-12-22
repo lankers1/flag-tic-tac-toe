@@ -4,7 +4,8 @@ type SelectedFlag = Flag & {
   playersMove: number;
 };
 
-type IncorrectAnswer = Flag & {
+type IncorrectAnswer = {
   player: number;
+  flag: Flag;
   cell: { row: number; col: number };
 };

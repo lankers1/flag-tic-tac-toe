@@ -3,6 +3,11 @@ type Flag = {
   name: string;
 };
 
+type Cell = {
+  row: number;
+  col: number;
+};
+
 type Game = {
   first_column: string;
   first_column_id: number;

@@ -15,10 +15,7 @@ import { game } from '../../index';
 interface Props {
   closeModal: () => void;
   selectedSquareIndex: [number, number];
-  onSelect: (flags: SelectedFlags) => void;
-  selectedFlags: SelectedFlags;
   answers: Answers;
-  setIncorrectAnswer: (incorrectAnswer: IncorrectAnswer) => void;
 }
 
 export const answerMap = [
@@ -30,13 +27,11 @@ export const answerMap = [
 export const AnswerModalContent = ({
   closeModal,
   answers,
-  onSelect,
-  selectedSquareIndex,
-  selectedFlags,
-  setIncorrectAnswer
+  selectedSquareIndex
 }: Props) => {
   const { gameId } = useParams();
-  const { currentTurn } = useGameStore((state) => state);
+  const { currentTurn, setIncorrectAnswer, setSelectedFlags, selectedFlags } =
+    useGameStore((state) => state);
   const [searchTerm, setSearchTerm] = useState('');
   const { data: flags } = useSearchFlags(searchTerm);
 
@@ -102,7 +97,7 @@ export const AnswerModalContent = ({
         return;
       }
 
-      // onSelect(
+      // setSelectedFlags(
       //   selectedSquareIndex[0] - 1,
       //   selectedSquareIndex[1] - 1,
       //   flag.name,
