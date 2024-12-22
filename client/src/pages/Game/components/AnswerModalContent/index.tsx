@@ -10,6 +10,7 @@ import { useSearchFlags } from '../../../../query-hooks/searchFlags';
 import styles from './styles.module.scss';
 import { useGameStore } from '../../../../store/useGameStore';
 import { useParams } from 'react-router-dom';
+import { game } from '../../index';
 
 interface Props {
   closeModal: () => void;
@@ -30,13 +31,12 @@ export const AnswerModalContent = ({
   closeModal,
   answers,
   onSelect,
-  socket,
   selectedSquareIndex,
   selectedFlags,
   setIncorrectAnswer
 }: Props) => {
   const { gameId } = useParams();
-  const { togglePlayerTurn, playersTurn } = useGameStore((state) => state);
+  const { currentTurn } = useGameStore((state) => state);
   const [searchTerm, setSearchTerm] = useState('');
   const { data: flags } = useSearchFlags(searchTerm);
 
@@ -54,12 +54,12 @@ export const AnswerModalContent = ({
 
     if (!answerArr.includes(flag.iso_2)) {
       if (gameId) {
-        socket.send(
+        game?.socket.send(
           JSON.stringify({
             type: 'turn',
             gameId: gameId,
             isCorrect: false,
-            player: playersTurn,
+            player: currentTurn,
             flagIso: flag.iso_2,
             name: flag.name,
             cell: {
@@ -71,11 +71,11 @@ export const AnswerModalContent = ({
         closeModal();
         return;
       }
-      if (playersTurn === 1) {
+      if (currentTurn === 1) {
         setIncorrectAnswer({
           ...flag,
 
-          player: playersTurn,
+          player: currentTurn,
           cell: {
             row: selectedSquareIndex[0] - 1,
             col: selectedSquareIndex[1] - 1
@@ -84,11 +84,11 @@ export const AnswerModalContent = ({
       }
     } else {
       if (gameId) {
-        socket.send(
+        game?.socket.send(
           JSON.stringify({
             type: 'turn',
             gameId: gameId,
-            player: playersTurn,
+            player: currentTurn,
             isCorrect: true,
             flagIso: flag.iso_2,
             name: flag.name,
@@ -101,17 +101,16 @@ export const AnswerModalContent = ({
         closeModal();
         return;
       }
-      onSelect(
-        selectedSquareIndex[0] - 1,
-        selectedSquareIndex[1] - 1,
-        flag.name,
-        flag.iso_2,
-        answerArr,
-        playersTurn
-      );
-    }
 
-    togglePlayerTurn();
+      // onSelect(
+      //   selectedSquareIndex[0] - 1,
+      //   selectedSquareIndex[1] - 1,
+      //   flag.name,
+      //   flag.iso_2,
+      //   answerArr,
+      //   currentTurn
+      // );
+    }
     closeModal();
   };
 

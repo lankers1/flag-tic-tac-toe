@@ -23,7 +23,7 @@ export const useGameWebsocket = (
   togglePlayerTurn,
   setIncorrectAnswer,
   answers,
-  playersTurn
+  currentTurn
 ) => {
   const { player, gameId } = useParams();
   const [websocket, setWebsocket] = useState<null | WebSocket>(null);
@@ -44,7 +44,7 @@ export const useGameWebsocket = (
             setIncorrectAnswer({
               name: message.name,
               iso_2: message.flagIso,
-              player: playersTurn,
+              player: currentTurn,
               cell: {
                 row: message?.cell?.row,
                 col: message?.cell?.col

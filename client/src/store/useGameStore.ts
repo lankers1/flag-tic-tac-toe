@@ -2,13 +2,19 @@ import { create } from 'zustand';
 import { evaluateBoardForWinner } from '../utils/game-ai/minmax';
 
 interface GameState {
-  playersTurn: number;
+  turn: number;
+  currentTurn: number;
   moveCounter: number;
   winner: number | null;
   selectedFlags: SelectedFlags;
-  togglePlayerTurn: () => void;
   reset: () => void;
-  setSelectedFlags: (selectedFlags: SelectedFlags) => void;
+  setSelectedFlags: (
+    player: number,
+    flag: { name: string; iso_2: string },
+    answerArr: string[],
+    cell: { row: number; col: number }
+  ) => void;
+  setTurn: (turn: number) => void;
   incorrectAnswer: IncorrectAnswer | null;
   setIncorrectAnswer: (incorrectAnswer: IncorrectAnswer) => void;
   winnerDirection: null | { from: [number, number]; direction: string };
@@ -22,7 +28,7 @@ function setSelectedFlags(selectedFlags: SelectedFlags) {
   if (winnerDirection) {
     return (state: GameState) => ({
       selectedFlags,
-      winner: state.playersTurn,
+      winner: state.currentTurn,
       winnerDirection
     });
   }
@@ -31,7 +37,8 @@ function setSelectedFlags(selectedFlags: SelectedFlags) {
 }
 
 const initialState = {
-  playersTurn: 1,
+  turn: 0,
+  currentTurn: 1,
   moveCounter: 0,
   incorrectAnswer: null,
   winnerDirection: null,
@@ -46,24 +53,21 @@ const initialState = {
 export const useGameStore = create<GameState>((set) => ({
   ...initialState,
   setIncorrectAnswer: (incorrectAnswer: IncorrectAnswer) => {
-    return set({
-      incorrectAnswer
-    });
+    return set((state) => ({
+      incorrectAnswer,
+      currentTurn: state.currentTurn === 1 ? 2 : 1
+    }));
   },
-  togglePlayerTurn: () =>
+  setSelectedFlags: (player, { name, iso_2 }, answerArr, { row, col }) =>
     set((state) => {
-      return { playersTurn: state.playersTurn === 1 ? 2 : 1 };
-    }),
-  setSelectedFlags: (row, col, flagName, flagIso, answerArr, playersTurn) => {
-    return set((state) => {
       const f = state.selectedFlags.map((outerArr, outerIndex) => {
         return outerArr.map((innerArray, index) => {
           if (outerIndex === row && index === col) {
-            return answerArr.includes(flagIso)
+            return answerArr.includes(iso_2)
               ? {
-                  name: flagName,
-                  iso_2: flagIso,
-                  playersMove: playersTurn
+                  name,
+                  iso_2,
+                  playersMove: player
                 }
               : null;
           }
@@ -71,8 +75,8 @@ export const useGameStore = create<GameState>((set) => ({
         });
       });
       const flags = setSelectedFlags(f);
-      return flags;
-    });
-  },
+      return { ...flags, currentTurn: state.currentTurn === 1 ? 2 : 1 };
+    }),
+  setTurn: (turn: number) => set({ turn }),
   reset: () => set(initialState)
 }));

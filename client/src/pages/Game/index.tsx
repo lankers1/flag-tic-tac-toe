@@ -12,11 +12,12 @@ import { Loader } from '../../components/Loader';
 
 import styles from './styles.module.scss';
 
-import { AnswerModalContent } from './components/AnswerModalContent';
+import { answerMap, AnswerModalContent } from './components/AnswerModalContent';
 import { ActionButtons } from './components/ActionButtons';
 import { useGameWebsocket } from '../../query-hooks/useGameWebsocket';
+import { initGame } from './InitGame';
 
-function determineNotificationColor() {}
+export let game;
 
 export const Game = () => {
   const { player, gameId } = useParams();
@@ -27,56 +28,95 @@ export const Game = () => {
   const { data, isLoading, isPending, error, refetch } = useGetGameQuery();
   const {
     selectedFlags,
-    playersTurn,
+    currentTurn,
     winner,
     setSelectedFlags,
-    togglePlayerTurn,
     incorrectAnswer,
+    turn,
+    setTurn,
     setIncorrectAnswer,
     winnerDirection,
     reset
   } = useGameStore((state) => state);
-  const [socket, turn] = useGameWebsocket(
-    setSelectedFlags,
-    togglePlayerTurn,
-    setIncorrectAnswer,
-    data?.answers,
-    playersTurn
-  );
-
+  // const [socket, turn] = useGameWebsocket(
+  //   setSelectedFlags,
+  //   togglePlayerTurn,
+  //   setIncorrectAnswer,
+  //   data?.answers,
+  //   playersTurn
+  // );
+  console.log({ incorrectAnswer });
   useEffect(() => {
-    let timeout = null;
-    if (
-      playersTurn === 2 &&
-      !winner &&
-      flags &&
-      player === 'computer' &&
-      !gameId
-    ) {
-      timeout = setTimeout(() => {
-        const computerFlag = determineMove(easyComputer, {
-          flags,
-          selectedFlags,
-          answers: data.answers,
-          setIncorrectAnswer
+    if (data?.answers) {
+      game = initGame(gameId, setTurn, setSelectedFlags, setIncorrectAnswer);
+
+      if (game) {
+        game.socket?.addEventListener('message', (event) => {
+          try {
+            const message = JSON.parse(event.data);
+            if (!turn) {
+              game.setTurn(message.playerTurn);
+            } else if (message.type === 'turn') {
+              console.log(message);
+              const { name, flagIso: iso_2, player, cell } = message;
+              if (message.isCorrect) {
+                const answerKey = answerMap[message.cell.row][message.cell.col];
+                const answerArr = data?.answers[answerKey];
+                game.handleCorrectAnswer(
+                  player,
+                  { name, iso_2 },
+                  answerArr,
+                  cell
+                );
+              } else {
+                game.handleIncorrectAnswer(player, { name, iso_2 }, cell);
+              }
+            }
+          } catch (e) {
+            console.error(e);
+          }
         });
-
-        if (computerFlag) {
-          const { row, col, name, iso_2, answerArr, playersTurn } =
-            computerFlag;
-          setSelectedFlags(row, col, name, iso_2, answerArr, playersTurn);
-        }
-
-        togglePlayerTurn();
-      }, 2000);
-    }
-
-    return () => {
-      if (timeout) {
-        clearTimeout(timeout);
       }
-    };
-  }, [playersTurn, winner, player, gameId]);
+
+      return () => {
+        game.quitGame();
+      };
+    }
+  }, [gameId, turn, JSON.stringify(data?.answers)]);
+
+  // useEffect(() => {
+  //   let timeout = null;
+  //   if (
+  //     playersTurn === 2 &&
+  //     !winner &&
+  //     flags &&
+  //     player === 'computer' &&
+  //     !gameId
+  //   ) {
+  //     timeout = setTimeout(() => {
+  //       const computerFlag = determineMove(easyComputer, {
+  //         flags,
+  //         selectedFlags,
+  //         answers: data.answers,
+  //         setIncorrectAnswer
+  //       });
+
+  //       if (computerFlag) {
+  //         const { row, col, name, iso_2, answerArr, playersTurn } =
+  //           computerFlag;
+  //         setSelectedFlags(row, col, name, iso_2, answerArr, playersTurn);
+  //       }
+
+  //       togglePlayerTurn();
+  //     }, 2000);
+  //   }
+
+  //   return () => {
+  //     if (timeout) {
+  //       clearTimeout(timeout);
+  //     }
+  //   };
+  // }, [playersTurn, winner, player, gameId]);
 
   if (isLoading || isPending) {
     return (
@@ -105,7 +145,7 @@ export const Game = () => {
         <div className={styles.container}>
           <Notification
             backgroundColor={
-              playersTurn === 1 || winner === 1 ? '#b0ddff' : '#C4FFBF'
+              currentTurn === 1 || winner === 1 ? '#b0ddff' : '#C4FFBF'
             }
           >
             {!!winner ? (
@@ -115,10 +155,10 @@ export const Game = () => {
             ) : (
               <p className={styles.notificationText}>
                 {gameId
-                  ? playersTurn === turn
+                  ? currentTurn === turn
                     ? `It's your turn!`
                     : "It's your opponents turn!"
-                  : playersTurn === 1
+                  : currentTurn === 1
                   ? `It's your turn!`
                   : "It's your opponents turn!"}
               </p>
@@ -132,7 +172,7 @@ export const Game = () => {
               data={data?.game}
               selectedFlags={selectedFlags}
               disabled={
-                !!winner || !!(player === 'computer' && playersTurn === 2)
+                !!winner || !!(player === 'computer' && currentTurn === 2)
               }
             />
           </div>
@@ -150,7 +190,6 @@ export const Game = () => {
           selectedSquareIndex={selectedSquare}
           closeModal={() => setSelectedSquare([0, 0])}
           onSelect={setSelectedFlags}
-          socket={socket}
           selectedFlags={selectedFlags}
         />
       </Modal>
