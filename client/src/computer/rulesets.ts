@@ -1,5 +1,5 @@
-import { answerMap } from "../pages/Game/components/AnswerModalContent";
-import { determineComputerMove } from "../utils/game-ai/minmax";
+import { answerMap } from '../pages/Game/components/AnswerModalContent';
+import { determineComputerMove } from '../utils/game-ai/minmax';
 
 interface Args {
   flags: Flag[];
@@ -39,7 +39,7 @@ function flagArray(
             .includes(flag.iso_2)
       )
       .filter((flag) => answers.includes(flag.iso_2)),
-    ...getRandomFlags(flags, answers),
+    ...getRandomFlags(flags, answers)
   ];
 }
 
@@ -47,7 +47,7 @@ export function easyComputer({
   flags,
   selectedFlags,
   answers,
-  setIncorrectAnswer,
+  setIncorrectAnswer
 }: Args): SelectedFlags | undefined {
   const { row, col } = determineComputerMove(
     selectedFlags.map((arr) => arr.map((r) => r?.playersMove || null))
@@ -62,23 +62,12 @@ export function easyComputer({
     setIncorrectAnswer({
       ...flagSelection[randomFlag],
       player: 2,
-      cell: { row, col },
+      cell: { row, col }
     });
     return;
   }
-
-  return selectedFlags.map((arr, index) =>
-    row === index
-      ? arr.map((item, idx) =>
-          idx === col
-            ? {
-                ...flagSelection[randomFlag],
-                playersMove: 2,
-              }
-            : item
-        )
-      : arr
-  );
+  const { iso_2, name } = flagSelection[randomFlag];
+  return { row, col, name, iso_2, answerArr, playersTurn: 2 };
 }
 
 export function determineMove(

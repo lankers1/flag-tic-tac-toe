@@ -1,35 +1,31 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const initSocket = () => {
-  let socket = null;
-  if (!socket) {
-    return new WebSocket(
-      `ws://localhost:8080/ws/${Math.floor(100000 + Math.random() * 900000)}`
-    );
-  }
-  return socket;
-};
+const userId = Math.floor(100000 + Math.random() * 900000);
 
 export const useWebsocket = () => {
   const navigate = useNavigate();
-  const [websocket, setWebsocket] = useState<null | WebSocket>(null);
+  const [socket, setSocket] = useState();
 
-  useEffect(() => {
-    let socket = null;
-    if (!websocket) {
-      socket = initSocket();
-      setWebsocket(socket);
-    }
-    if (socket) {
-      socket?.addEventListener('message', (event) => {
-        navigate(`/game/111/${JSON.parse(event.data).gameId}`);
-      });
-    }
-    return () => {
-      socket?.close();
-    };
-  }, []);
+  function searchForGame() {
+    const socket = new WebSocket(`ws://localhost:8080/ws`);
+    setSocket(socket);
 
-  return websocket;
+    socket?.addEventListener('message', (event) => {
+      navigate(`/game/${userId}/${JSON.parse(event.data).gameId}`);
+      socket.removeEventListener('message', () =>
+        console.log('removed socket')
+      );
+    });
+
+    socket.addEventListener('open', () => {
+      socket.send(
+        JSON.stringify({
+          type: 'message'
+        })
+      );
+    });
+  }
+
+  return [socket, searchForGame];
 };

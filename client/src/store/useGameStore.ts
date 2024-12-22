@@ -45,16 +45,34 @@ const initialState = {
 
 export const useGameStore = create<GameState>((set) => ({
   ...initialState,
-  setIncorrectAnswer: (incorrectAnswer: IncorrectAnswer) =>
-    set({
+  setIncorrectAnswer: (incorrectAnswer: IncorrectAnswer) => {
+    return set({
       incorrectAnswer
-    }),
+    });
+  },
   togglePlayerTurn: () =>
-    set((state) => ({ playersTurn: state.playersTurn === 1 ? 2 : 1 })),
-  setSelectedFlags: (selectedFlags: SelectedFlags) => {
-    const flags = setSelectedFlags(selectedFlags);
-
-    return set(flags);
+    set((state) => {
+      return { playersTurn: state.playersTurn === 1 ? 2 : 1 };
+    }),
+  setSelectedFlags: (row, col, flagName, flagIso, answerArr, playersTurn) => {
+    return set((state) => {
+      const f = state.selectedFlags.map((outerArr, outerIndex) => {
+        return outerArr.map((innerArray, index) => {
+          if (outerIndex === row && index === col) {
+            return answerArr.includes(flagIso)
+              ? {
+                  name: flagName,
+                  iso_2: flagIso,
+                  playersMove: playersTurn
+                }
+              : null;
+          }
+          return innerArray;
+        });
+      });
+      const flags = setSelectedFlags(f);
+      return flags;
+    });
   },
   reset: () => set(initialState)
 }));

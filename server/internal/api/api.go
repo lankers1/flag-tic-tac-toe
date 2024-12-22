@@ -23,11 +23,16 @@ func InitApi(httpHandlers *handlers.Handlers) *gin.Engine {
 	router.GET("/game", httpHandlers.GameHandler.CreateGame)
 	router.GET("/game/:gameId", httpHandlers.GameHandler.GetOnlineGame)
 	router.POST("/search_flags", httpHandlers.FlagHandler.SearchFlags)
-	router.GET("/ws/:userId", func(c *gin.Context) {
-		userId := c.Param("userId")
-
-		websockets.ServeWS(c, userId, hub, httpHandlers)
+	router.GET("/ws", func(c *gin.Context) {
+		websockets.ServeWS(c, hub, httpHandlers)
 	})
+
+	router.GET("/ws/game/:gameId", func(c *gin.Context) {
+		gameId := c.Param("gameId")
+
+		websockets.ServeGameWS(c, gameId, hub, httpHandlers)
+	})
+
 
 	return router
 }

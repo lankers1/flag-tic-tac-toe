@@ -37,35 +37,40 @@ var upgrader = websocket.Upgrader{
  }
 
  type Client struct {
-	UserId string
 	Conn *websocket.Conn
 	send chan *models.OnlineGame
+	sendAnswer chan Message
+	sendGameMetadata chan Metadata
 	hub  *Hub
+	Channel string
 }
 
-func NewClient(userId string, conn *websocket.Conn, hub *Hub) *Client {
-	return &Client{UserId: userId, Conn: conn, send: make(chan *models.OnlineGame, 256), hub: hub}
+type Metadata struct {
+	PlayerTurn int `json:"playerTurn"`
 }
+
+
+func NewClient(channel string, conn *websocket.Conn, hub *Hub) *Client {
+	return &Client{Conn: conn, Channel: channel, sendGameMetadata: make(chan Metadata, 256), sendAnswer: make(chan Message, 256), send: make(chan *models.OnlineGame, 256), hub: hub}
+}
+
 
 func (c *Client) Read() {
 	defer func() {
 		c.hub.unregister <- c
 		c.Conn.Close()
 	}()
-	fmt.Println("called Read")
-
 	c.Conn.SetReadLimit(maxMessageSize)
 	c.Conn.SetReadDeadline(time.Now().Add(pongWait))
 	c.Conn.SetPongHandler(func(string) error { c.Conn.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 	for {
 		var msg Message
-
 		err := c.Conn.ReadJSON(&msg)
 		if err != nil {
 			fmt.Println("Error: ", err)
 			break
 		}
-		c.hub.players = append(c.hub.players, M{Client: c, UserId: c.UserId})
+		c.hub.players = append(c.hub.players, M{Client: c})
 		c.hub.broadcast <- msg
 	}
 }
@@ -85,12 +90,37 @@ func (c *Client) Write(handlers *handlers.Handlers) {
 				return
 			} else {
 				err := c.Conn.WriteJSON(message)
+        delete(c.hub.clients["general"], c)
 				if err != nil {
 					fmt.Println("Error: ", err)
 					break
 				}
 			}
-		case <-ticker.C:
+		case message, ok := <-c.sendAnswer:
+			c.Conn.SetWriteDeadline(time.Now().Add(writeWait))
+			if !ok {
+				c.Conn.WriteMessage(websocket.CloseMessage, []byte{})
+				return
+			} else {
+				err := c.Conn.WriteJSON(message)
+				if err != nil {
+					fmt.Println("Error: ", err)
+					break
+				}
+			}
+		case message, ok := <-c.sendGameMetadata:
+			c.Conn.SetWriteDeadline(time.Now().Add(writeWait))
+			if !ok {
+				c.Conn.WriteMessage(websocket.CloseMessage, []byte{})
+				return
+			} else {
+				err := c.Conn.WriteJSON(message)
+				if err != nil {
+					fmt.Println("Error: ", err)
+					break
+				}
+			}
+		case <-ticker.C: 
 			c.Conn.SetWriteDeadline(time.Now().Add(writeWait))
 			if err := c.Conn.WriteMessage(websocket.PingMessage, nil); err != nil {
 				return
@@ -104,15 +134,29 @@ func (c *Client) Close() {
 	close(c.send)
 }
 
-func ServeWS(ctx *gin.Context, userId string, hub *Hub, handlers *handlers.Handlers) {
+func ServeWS(ctx *gin.Context, hub *Hub, handlers *handlers.Handlers) {
 	ws, err := upgrader.Upgrade(ctx.Writer, ctx.Request, nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return
 	}
-	client := NewClient(userId, ws, hub)
+	client := NewClient("general", ws, hub)
 
 	hub.register <- client
+	go client.Write(handlers)
+	go client.Read()
+}
+
+
+func ServeGameWS(ctx *gin.Context, gameId string, hub *Hub, handlers *handlers.Handlers) {
+	ws, err := upgrader.Upgrade(ctx.Writer, ctx.Request, nil)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	client := NewClient(gameId, ws, hub)
+
+	hub.registerNewGame <- client
 	go client.Write(handlers)
 	go client.Read()
 }

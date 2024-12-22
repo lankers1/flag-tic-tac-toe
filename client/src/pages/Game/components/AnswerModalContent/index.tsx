@@ -9,6 +9,7 @@ import { useSearchFlags } from '../../../../query-hooks/searchFlags';
 
 import styles from './styles.module.scss';
 import { useGameStore } from '../../../../store/useGameStore';
+import { useParams } from 'react-router-dom';
 
 interface Props {
   closeModal: () => void;
@@ -29,10 +30,12 @@ export const AnswerModalContent = ({
   closeModal,
   answers,
   onSelect,
+  socket,
   selectedSquareIndex,
   selectedFlags,
   setIncorrectAnswer
 }: Props) => {
+  const { gameId } = useParams();
   const { togglePlayerTurn, playersTurn } = useGameStore((state) => state);
   const [searchTerm, setSearchTerm] = useState('');
   const { data: flags } = useSearchFlags(searchTerm);
@@ -50,9 +53,28 @@ export const AnswerModalContent = ({
     const answerArr = answers[answerKey];
 
     if (!answerArr.includes(flag.iso_2)) {
+      if (gameId) {
+        socket.send(
+          JSON.stringify({
+            type: 'turn',
+            gameId: gameId,
+            isCorrect: false,
+            player: playersTurn,
+            flagIso: flag.iso_2,
+            name: flag.name,
+            cell: {
+              row: selectedSquareIndex[0] - 1,
+              col: selectedSquareIndex[1] - 1
+            }
+          })
+        );
+        closeModal();
+        return;
+      }
       if (playersTurn === 1) {
         setIncorrectAnswer({
           ...flag,
+
           player: playersTurn,
           cell: {
             row: selectedSquareIndex[0] - 1,
@@ -61,25 +83,34 @@ export const AnswerModalContent = ({
         });
       }
     } else {
-      onSelect(
-        selectedFlags.map((outerArr, outerIndex) => {
-          return outerArr.map((innerArray, index) => {
-            if (
-              outerIndex === selectedSquareIndex[0] - 1 &&
-              index === selectedSquareIndex[1] - 1
-            ) {
-              return answerArr.includes(flag.iso_2)
-                ? {
-                    ...flag,
-                    playersMove: playersTurn
-                  }
-                : null;
+      if (gameId) {
+        socket.send(
+          JSON.stringify({
+            type: 'turn',
+            gameId: gameId,
+            player: playersTurn,
+            isCorrect: true,
+            flagIso: flag.iso_2,
+            name: flag.name,
+            cell: {
+              row: selectedSquareIndex[0] - 1,
+              col: selectedSquareIndex[1] - 1
             }
-            return innerArray;
-          });
-        })
+          })
+        );
+        closeModal();
+        return;
+      }
+      onSelect(
+        selectedSquareIndex[0] - 1,
+        selectedSquareIndex[1] - 1,
+        flag.name,
+        flag.iso_2,
+        answerArr,
+        playersTurn
       );
     }
+
     togglePlayerTurn();
     closeModal();
   };

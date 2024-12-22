@@ -14,6 +14,9 @@ import styles from './styles.module.scss';
 
 import { AnswerModalContent } from './components/AnswerModalContent';
 import { ActionButtons } from './components/ActionButtons';
+import { useGameWebsocket } from '../../query-hooks/useGameWebsocket';
+
+function determineNotificationColor() {}
 
 export const Game = () => {
   const { player, gameId } = useParams();
@@ -33,6 +36,13 @@ export const Game = () => {
     winnerDirection,
     reset
   } = useGameStore((state) => state);
+  const [socket, turn] = useGameWebsocket(
+    setSelectedFlags,
+    togglePlayerTurn,
+    setIncorrectAnswer,
+    data?.answers,
+    playersTurn
+  );
 
   useEffect(() => {
     let timeout = null;
@@ -52,7 +62,9 @@ export const Game = () => {
         });
 
         if (computerFlag) {
-          setSelectedFlags(computerFlag);
+          const { row, col, name, iso_2, answerArr, playersTurn } =
+            computerFlag;
+          setSelectedFlags(row, col, name, iso_2, answerArr, playersTurn);
         }
 
         togglePlayerTurn();
@@ -102,7 +114,13 @@ export const Game = () => {
               </p>
             ) : (
               <p className={styles.notificationText}>
-                Player {playersTurn} it's your turn!
+                {gameId
+                  ? playersTurn === turn
+                    ? `It's your turn!`
+                    : "It's your opponents turn!"
+                  : playersTurn === 1
+                  ? `It's your turn!`
+                  : "It's your opponents turn!"}
               </p>
             )}
           </Notification>
@@ -132,6 +150,7 @@ export const Game = () => {
           selectedSquareIndex={selectedSquare}
           closeModal={() => setSelectedSquare([0, 0])}
           onSelect={setSelectedFlags}
+          socket={socket}
           selectedFlags={selectedFlags}
         />
       </Modal>

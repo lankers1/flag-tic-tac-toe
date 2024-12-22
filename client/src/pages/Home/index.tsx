@@ -9,7 +9,7 @@ import { Button } from '../../components/Buttons/Button';
 import { useWebsocket } from '../../query-hooks/useWebsocket';
 
 export const Home = () => {
-  const socket = useWebsocket();
+  const [socket, searchForGame] = useWebsocket();
   return (
     <div className={styles.container}>
       <Card className={styles.card}>
@@ -25,11 +25,7 @@ export const Home = () => {
             <Button
               label="Play online"
               handleClick={() => {
-                socket.send(
-                  JSON.stringify({
-                    type: 'message'
-                  })
-                );
+                searchForGame();
               }}
             />
             <LinkButton
