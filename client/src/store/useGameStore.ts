@@ -22,17 +22,17 @@ interface GameState {
   winnerDirection: null | { from: [number, number]; direction: string };
 }
 
-function setSelectedFlags(selectedFlags: SelectedFlags) {
+function setSelectedFlags(selectedFlags: SelectedFlags, state) {
   const winnerDirection = evaluateBoardForWinner(
     selectedFlags.map((arr) => arr.map((r) => r?.playersMove || null))
   );
 
   if (winnerDirection) {
-    return (state: GameState) => ({
+    return {
       selectedFlags,
       winner: state.currentTurn,
       winnerDirection
-    });
+    };
   }
 
   return { selectedFlags, incorrectAnswer: null };
@@ -76,7 +76,8 @@ export const useGameStore = create<GameState>((set) => ({
           return innerArray;
         });
       });
-      const flags = setSelectedFlags(f);
+      const flags = setSelectedFlags(f, state);
+
       return { ...flags, currentTurn: state.currentTurn === 1 ? 2 : 1 };
     }),
   setTurn: (turn: number) => set({ turn }),

@@ -48,11 +48,11 @@ export const Game = () => {
       });
 
       if (game) {
-        game.socket?.addEventListener('message', (event) => {
+        game?.socket?.addEventListener('message', (event) => {
           try {
             const message = JSON.parse(event.data);
             if (!turn) {
-              game.setTurn(message.playerTurn);
+              game?.setTurn(message.playerTurn);
             } else if (message.type === 'turn') {
               const { name, flagIso: iso_2, player, cell } = message;
               if (message.isCorrect) {
@@ -168,7 +168,9 @@ export const Game = () => {
               data={data?.game}
               selectedFlags={selectedFlags}
               disabled={
-                !!winner || !!(player === 'computer' && currentTurn === 2)
+                !!winner ||
+                !!(player === 'computer' && currentTurn === 2) ||
+                currentTurn !== turn
               }
             />
           </div>

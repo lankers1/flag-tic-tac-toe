@@ -7,7 +7,7 @@ type Args = {
   setIncorrectAnswer: (incorrectAnswer: IncorrectAnswer) => void;
 };
 
-class OnlineGame {
+export class OnlineGame {
   setSelectedFlags;
   setIncorrectAnswer;
   setPlayerTurn;
