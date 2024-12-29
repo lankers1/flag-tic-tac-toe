@@ -12,11 +12,9 @@ import { Loader } from '../../components/Loader';
 
 import styles from './styles.module.scss';
 
-import { answerMap, AnswerModalContent } from './components/AnswerModalContent';
+import { AnswerModalContent } from './components/AnswerModalContent';
 import { ActionButtons } from './components/ActionButtons';
-import { initGame } from './InitGame';
-
-export let game;
+import { useInitGame } from './InitGame';
 
 export const Game = () => {
   const { player, gameId } = useParams();
@@ -37,47 +35,13 @@ export const Game = () => {
     winnerDirection,
     reset
   } = useGameStore((state) => state);
-
-  useEffect(() => {
-    if (gameId && data?.answers) {
-      game = initGame({
-        gameId,
-        setTurn,
-        setCorrectAnswer,
-        setIncorrectAnswer
-      });
-      if (game) {
-        game?.socket?.addEventListener('message', (event) => {
-          try {
-            const message = JSON.parse(event.data);
-            if (message.type === 'metadata') {
-              game?.setTurn(message.playerTurn);
-            } else if (message.type === 'turn') {
-              const { name, flagIso: iso_2, player, cell } = message;
-              if (message.isCorrect) {
-                const answerKey = answerMap[message.cell.row][message.cell.col];
-                const answerArr = data?.answers[answerKey];
-                game.handleCorrectAnswer(
-                  player,
-                  { name, iso_2 },
-                  answerArr,
-                  cell
-                );
-              } else {
-                game.handleIncorrectAnswer(player, { name, iso_2 }, cell);
-              }
-            }
-          } catch (e) {
-            console.error(e);
-          }
-        });
-      }
-
-      return () => {
-        game.quitGame();
-      };
-    }
-  }, [gameId, turn, JSON.stringify(data?.answers)]);
+  useInitGame(
+    data?.answers,
+    turn,
+    setTurn,
+    setCorrectAnswer,
+    setIncorrectAnswer
+  );
 
   // useEffect(() => {
   //   let timeout = null;

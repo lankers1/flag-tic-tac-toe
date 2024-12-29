@@ -1,4 +1,7 @@
+import { useEffect } from 'react';
 import { SetSelectedFlag } from '../../store/useGameStore';
+import { answerMap } from './components/AnswerModalContent';
+import { useParams } from 'react-router-dom';
 
 type Args = {
   gameId: string;
@@ -69,4 +72,57 @@ export class OnlineGame {
 
 export const initGame = (args: Args) => {
   return new OnlineGame(args);
+};
+
+export let game;
+
+export const useInitGame = (
+  answers,
+  turn,
+  setTurn,
+  setCorrectAnswer,
+  setIncorrectAnswer
+) => {
+  const { gameId } = useParams();
+
+  useEffect(() => {
+    if (gameId && answers) {
+      game = initGame({
+        gameId,
+        setTurn,
+        setCorrectAnswer,
+        setIncorrectAnswer
+      });
+      if (game) {
+        game?.socket?.addEventListener('message', (event) => {
+          try {
+            const message = JSON.parse(event.data);
+            if (message.type === 'metadata') {
+              game?.setTurn(message.playerTurn);
+            } else if (message.type === 'turn') {
+              const { name, flagIso: iso_2, player, cell } = message;
+              if (message.isCorrect) {
+                const answerKey = answerMap[message.cell.row][message.cell.col];
+                const answerArr = answers[answerKey];
+                game.handleCorrectAnswer(
+                  player,
+                  { name, iso_2 },
+                  answerArr,
+                  cell
+                );
+              } else {
+                game.handleIncorrectAnswer(player, { name, iso_2 }, cell);
+              }
+            }
+          } catch (e) {
+            console.error(e);
+          }
+        });
+      }
+
+      return () => {
+        game.quitGame();
+      };
+    }
+  }, [gameId, turn, JSON.stringify(answers)]);
 };

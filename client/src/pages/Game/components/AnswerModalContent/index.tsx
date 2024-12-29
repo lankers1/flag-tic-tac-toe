@@ -10,7 +10,7 @@ import { useSearchFlags } from '../../../../query-hooks/searchFlags';
 import styles from './styles.module.scss';
 import { useGameStore } from '../../../../store/useGameStore';
 import { useParams } from 'react-router-dom';
-import { game } from '../../index';
+import { game } from '../../InitGame';
 
 interface Props {
   closeModal: () => void;
