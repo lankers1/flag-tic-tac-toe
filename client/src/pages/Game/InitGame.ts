@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { SetSelectedFlag } from '../../store/useGameStore';
+import { SetSelectedFlag, useGameStore } from '../../store/useGameStore';
 import { answerMap } from './components/AnswerModalContent';
 import { useParams } from 'react-router-dom';
 
@@ -76,13 +76,10 @@ export const initGame = (args: Args) => {
 
 export let game;
 
-export const useInitGame = (
-  answers,
-  turn,
-  setTurn,
-  setCorrectAnswer,
-  setIncorrectAnswer
-) => {
+export const useInitGame = (answers) => {
+  const { turn, setTurn, setCorrectAnswer, setIncorrectAnswer } = useGameStore(
+    (state) => state
+  );
   const { gameId } = useParams();
 
   useEffect(() => {

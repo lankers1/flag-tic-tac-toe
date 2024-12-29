@@ -1,25 +1,24 @@
+import { useGameStore } from 'src/store/useGameStore';
 import { capitaliseFirst } from '../../utils/capitaliseFirst';
 import { removeSnakeCase } from '../../utils/removeSnakeCase';
 import { GameboardButton } from '../GameboardButton';
 
 import styles from './styles.module.scss';
+import { useParams } from 'react-router-dom';
 
 interface Props {
   data: Game;
   handleClick: (outerIndex: number, innerIndex: number) => void;
-  selectedFlags: SelectedFlags;
-  disabled: boolean;
-  incorrectAnswer: IncorrectAnswer | null;
-  winnerDirection: null | { from: [number, number]; direction: string };
 }
 
-export const Gameboard = ({
-  data,
-  handleClick,
-  selectedFlags,
-  disabled,
-  incorrectAnswer
-}: Props) => {
+export const Gameboard = ({ data, handleClick }: Props) => {
+  const { player } = useParams();
+  const { incorrectAnswer, selectedFlags, winner, currentTurn, turn } =
+    useGameStore((state) => state);
+  const isVersusComputer = !!(player === 'computer' && currentTurn === 2);
+  const isOpponentsTurn = currentTurn !== turn;
+  const isGameboardDisabled = !!winner || isVersusComputer || isOpponentsTurn;
+
   return (
     <div className={styles.boardContainer}>
       <div className={styles.innerContainer}>
@@ -34,7 +33,7 @@ export const Gameboard = ({
                     ariaLabel={`Row ${outerIndex + 1} Col ${innerIndex + 1}`}
                     cell={{ row: outerIndex, col: innerIndex }}
                     incorrectAnswer={incorrectAnswer}
-                    disabled={disabled}
+                    disabled={isGameboardDisabled}
                     selectedFlag={selectedFlags[outerIndex][innerIndex]}
                     key={'gameboard-button' + outerIndex + innerIndex}
                     handleClick={() => handleClick(outerIndex, innerIndex)}

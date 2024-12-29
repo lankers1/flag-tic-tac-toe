@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Gameboard } from '../../components/Gameboard';
@@ -17,31 +17,14 @@ import { ActionButtons } from './components/ActionButtons';
 import { useInitGame } from './InitGame';
 
 export const Game = () => {
-  const { player, gameId } = useParams();
+  const { gameId } = useParams();
   const { data: flags } = useSearchFlags('');
   const [selectedSquare, setSelectedSquare] = useState<[number, number]>([
     0, 0
   ]);
   const { data, isLoading, isPending, error, refetch } = useGetGameQuery();
-  const {
-    selectedFlags,
-    currentTurn,
-    winner,
-    setCorrectAnswer,
-    incorrectAnswer,
-    turn,
-    setTurn,
-    setIncorrectAnswer,
-    winnerDirection,
-    reset
-  } = useGameStore((state) => state);
-  useInitGame(
-    data?.answers,
-    turn,
-    setTurn,
-    setCorrectAnswer,
-    setIncorrectAnswer
-  );
+  useInitGame(data?.answers);
+  const { turn, winner, currentTurn, reset } = useGameStore((state) => state);
 
   // useEffect(() => {
   //   let timeout = null;
@@ -124,18 +107,7 @@ export const Game = () => {
             )}
           </Notification>
           <div className={styles.gameboardContainer}>
-            <Gameboard
-              winnerDirection={winnerDirection}
-              incorrectAnswer={incorrectAnswer}
-              handleClick={handleClick}
-              data={data?.game}
-              selectedFlags={selectedFlags}
-              disabled={
-                !!winner ||
-                !!(player === 'computer' && currentTurn === 2) ||
-                currentTurn !== turn
-              }
-            />
+            <Gameboard handleClick={handleClick} data={data?.game} />
           </div>
         </div>
         <ActionButtons
