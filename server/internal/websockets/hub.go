@@ -11,16 +11,11 @@ type M struct {
 
 //Hub is a struct that holds all the clients and the messages that are sent to them
 type Hub struct {
-	// Registered clients.
 	clients map[string]map[*Client]bool
   gameClients map[string]map[*Client]bool
-	//Unregistered clients.
 	unregister chan *Client
-	// Register requests from the clients.
 	register chan *Client
-
   registerNewGame chan *Client
-	// Inbound messages from the clients.
 	broadcast chan Message
 	players []M
 }
@@ -95,7 +90,7 @@ func (h *Hub) RegisterNewGameClient(client *Client) {
 	}
 	h.gameClients[client.Channel][client] = true
 
-  message := Metadata{PlayerTurn: len(h.gameClients[client.Channel])}
+  message := Metadata{PlayerTurn: len(h.gameClients[client.Channel]), Type: "metadata"}
   sendGameMetadata := client.sendGameMetadata
   select {
     case sendGameMetadata <- message:

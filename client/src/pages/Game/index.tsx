@@ -29,7 +29,7 @@ export const Game = () => {
     selectedFlags,
     currentTurn,
     winner,
-    setSelectedFlags,
+    setCorrectAnswer,
     incorrectAnswer,
     turn,
     setTurn,
@@ -43,15 +43,14 @@ export const Game = () => {
       game = initGame({
         gameId,
         setTurn,
-        setSelectedFlags,
+        setCorrectAnswer,
         setIncorrectAnswer
       });
-
       if (game) {
         game?.socket?.addEventListener('message', (event) => {
           try {
             const message = JSON.parse(event.data);
-            if (!turn) {
+            if (message.type === 'metadata') {
               game?.setTurn(message.playerTurn);
             } else if (message.type === 'turn') {
               const { name, flagIso: iso_2, player, cell } = message;

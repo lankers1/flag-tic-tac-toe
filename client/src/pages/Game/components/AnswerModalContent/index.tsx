@@ -30,8 +30,7 @@ export const AnswerModalContent = ({
   selectedSquareIndex
 }: Props) => {
   const { gameId } = useParams();
-  const { currentTurn, setIncorrectAnswer, setSelectedFlags, selectedFlags } =
-    useGameStore((state) => state);
+  const { currentTurn, selectedFlags } = useGameStore((state) => state);
   const [searchTerm, setSearchTerm] = useState('');
   const { data: flags } = useSearchFlags(searchTerm);
 
@@ -46,68 +45,40 @@ export const AnswerModalContent = ({
       answerMap[selectedSquareIndex[0] - 1][selectedSquareIndex[1] - 1];
 
     const answerArr = answers[answerKey];
-
-    if (!answerArr.includes(flag.iso_2)) {
-      if (gameId) {
-        game?.socket.send(
-          JSON.stringify({
-            type: 'turn',
-            gameId: gameId,
-            isCorrect: false,
-            player: currentTurn,
-            flagIso: flag.iso_2,
-            name: flag.name,
-            cell: {
-              row: selectedSquareIndex[0] - 1,
-              col: selectedSquareIndex[1] - 1
-            }
-          })
-        );
-        closeModal();
-        return;
-      }
-      if (currentTurn === 1) {
-        setIncorrectAnswer({
-          ...flag,
-
-          player: currentTurn,
-          cell: {
-            row: selectedSquareIndex[0] - 1,
-            col: selectedSquareIndex[1] - 1
-          }
-        });
-      }
-    } else {
-      if (gameId) {
-        game?.socket.send(
-          JSON.stringify({
-            type: 'turn',
-            gameId: gameId,
-            player: currentTurn,
-            isCorrect: true,
-            flagIso: flag.iso_2,
-            name: flag.name,
-            cell: {
-              row: selectedSquareIndex[0] - 1,
-              col: selectedSquareIndex[1] - 1
-            }
-          })
-        );
-        closeModal();
-        return;
-      }
-
-      // setSelectedFlags(
-      //   selectedSquareIndex[0] - 1,
-      //   selectedSquareIndex[1] - 1,
-      //   flag.name,
-      //   flag.iso_2,
-      //   answerArr,
-      //   currentTurn
-      // );
+    const isCorrectAnswer = answerArr.includes(flag.iso_2);
+    if (gameId) {
+      game.handleAnswer(
+        closeModal,
+        gameId,
+        currentTurn,
+        flag.iso_2,
+        flag.name,
+        selectedSquareIndex,
+        isCorrectAnswer
+      );
+      return;
     }
-    closeModal();
+    // if (currentTurn === 1) {
+    //   setIncorrectAnswer({
+    //     ...flag,
+
+    //     player: currentTurn,
+    //     cell: {
+    //       row: selectedSquareIndex[0] - 1,
+    //       col: selectedSquareIndex[1] - 1
+    //     }
+    //   });
+    // }
   };
+
+  // setSelectedFlags(
+  //   selectedSquareIndex[0] - 1,
+  //   selectedSquareIndex[1] - 1,
+  //   flag.name,
+  //   flag.iso_2,
+  //   answerArr,
+  //   currentTurn
+  // );
 
   return (
     <div className={styles.container}>

@@ -15,14 +15,14 @@ interface GameState {
   winner: number | null;
   selectedFlags: SelectedFlags;
   reset: () => void;
-  setSelectedFlags: SetSelectedFlag;
+  setCorrectAnswer: SetSelectedFlag;
   setTurn: (turn: number) => void;
   incorrectAnswer: IncorrectAnswer | null;
   setIncorrectAnswer: (incorrectAnswer: IncorrectAnswer) => void;
-  winnerDirection: null | { from: [number, number]; direction: string };
+  winnerDirection: null | { from: [number, number]; to: [number, number] };
 }
 
-function setSelectedFlags(selectedFlags: SelectedFlags, state) {
+function setSelectedFlags(selectedFlags: SelectedFlags, state: GameState) {
   const winnerDirection = evaluateBoardForWinner(
     selectedFlags.map((arr) => arr.map((r) => r?.playersMove || null))
   );
@@ -60,7 +60,7 @@ export const useGameStore = create<GameState>((set) => ({
       currentTurn: state.currentTurn === 1 ? 2 : 1
     }));
   },
-  setSelectedFlags: (player, { name, iso_2 }, answerArr, { row, col }) =>
+  setCorrectAnswer: (player, { name, iso_2 }, answerArr, { row, col }) =>
     set((state) => {
       const f = state.selectedFlags.map((outerArr, outerIndex) => {
         return outerArr.map((innerArray, index) => {
@@ -78,7 +78,10 @@ export const useGameStore = create<GameState>((set) => ({
       });
       const flags = setSelectedFlags(f, state);
 
-      return { ...flags, currentTurn: state.currentTurn === 1 ? 2 : 1 };
+      return {
+        ...flags,
+        currentTurn: state.currentTurn === 1 ? 2 : 1
+      };
     }),
   setTurn: (turn: number) => set({ turn }),
   reset: () => set(initialState)

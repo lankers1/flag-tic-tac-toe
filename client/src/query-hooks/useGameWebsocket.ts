@@ -19,7 +19,7 @@ export const useIsMount = () => {
 };
 
 export const useGameWebsocket = (
-  setSelectedFlags,
+  setCorrectAnswer,
   togglePlayerTurn,
   setIncorrectAnswer,
   answers,
@@ -56,7 +56,7 @@ export const useGameWebsocket = (
 
             const answerArr = answers[answerKey];
 
-            setSelectedFlags(
+            setCorrectAnswer(
               message?.cell?.row,
               message?.cell?.col,
               message.name,

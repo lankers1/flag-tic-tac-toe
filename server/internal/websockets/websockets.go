@@ -46,6 +46,7 @@ var upgrader = websocket.Upgrader{
 }
 
 type Metadata struct {
+	Type string `json:"type"`
 	PlayerTurn int `json:"playerTurn"`
 }
 
@@ -109,7 +110,6 @@ func (c *Client) Write(handlers *handlers.Handlers) {
 				}
 			}
 		case message, ok := <-c.sendGameMetadata:
-			fmt.Println("called")
 			c.Conn.SetWriteDeadline(time.Now().Add(writeWait))
 			if !ok {
 				c.Conn.WriteMessage(websocket.CloseMessage, []byte{})

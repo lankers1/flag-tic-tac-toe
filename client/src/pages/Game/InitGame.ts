@@ -3,19 +3,19 @@ import { SetSelectedFlag } from '../../store/useGameStore';
 type Args = {
   gameId: string;
   setTurn: (turn: number) => void;
-  setSelectedFlags: SetSelectedFlag;
+  setCorrectAnswer: SetSelectedFlag;
   setIncorrectAnswer: (incorrectAnswer: IncorrectAnswer) => void;
 };
 
 export class OnlineGame {
-  setSelectedFlags;
+  setCorrectAnswer;
   setIncorrectAnswer;
   setPlayerTurn;
   socket;
   constructor(args: Args) {
     this.socket = new WebSocket(`ws://localhost:8080/ws/game/${args.gameId}`);
     this.setPlayerTurn = args.setTurn;
-    this.setSelectedFlags = args.setSelectedFlags;
+    this.setCorrectAnswer = args.setCorrectAnswer;
     this.setIncorrectAnswer = args.setIncorrectAnswer;
   }
 
@@ -23,7 +23,31 @@ export class OnlineGame {
     this.setPlayerTurn(playerTurn);
   }
 
-  handleOpponentsAnswer() {}
+  handleAnswer(
+    cb: () => void,
+    gameId,
+    player,
+    flagIso,
+    name,
+    selectedSquareIndex,
+    isCorrect
+  ) {
+    this.socket.send(
+      JSON.stringify({
+        type: 'turn',
+        gameId: gameId,
+        player,
+        isCorrect,
+        flagIso,
+        name,
+        cell: {
+          row: selectedSquareIndex[0] - 1,
+          col: selectedSquareIndex[1] - 1
+        }
+      })
+    );
+    cb();
+  }
 
   handleCorrectAnswer(
     player: number,
@@ -31,7 +55,7 @@ export class OnlineGame {
     answers: string[],
     cell: Cell
   ) {
-    this.setSelectedFlags(player, { name, iso_2 }, answers, cell);
+    this.setCorrectAnswer(player, { name, iso_2 }, answers, cell);
   }
 
   handleIncorrectAnswer(player: number, flag: Flag, cell: Cell) {
