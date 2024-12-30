@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { SetSelectedFlag, useGameStore } from '../../store/useGameStore';
 import { answerMap } from './components/AnswerModalContent';
-import { useParams } from 'react-router-dom';
 
 type Args = {
   gameId: string;
