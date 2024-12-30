@@ -14,7 +14,7 @@ export class OnlineGame {
   setCorrectAnswer;
   setIncorrectAnswer;
   setPlayerTurn;
-  socket;
+  socket: WebSocket;
   constructor(args: Args) {
     this.socket = new WebSocket(`ws://localhost:8080/ws/game/${args.gameId}`);
     this.setPlayerTurn = args.setTurn;
@@ -91,30 +91,14 @@ export const useInitGame = (answers) => {
         setIncorrectAnswer
       });
       if (game) {
-        game?.socket?.addEventListener('message', (event) => {
+        game.socket.onmessage = (event) => {
           try {
             const message = JSON.parse(event.data);
-            if (message.type === 'metadata') {
-              game?.setTurn(message.playerTurn);
-            } else if (message.type === 'turn') {
-              const { name, flagIso: iso_2, player, cell } = message;
-              if (message.isCorrect) {
-                const answerKey = answerMap[message.cell.row][message.cell.col];
-                const answerArr = answers[answerKey];
-                game.handleCorrectAnswer(
-                  player,
-                  { name, iso_2 },
-                  answerArr,
-                  cell
-                );
-              } else {
-                game.handleIncorrectAnswer(player, { name, iso_2 }, cell);
-              }
-            }
+            handleWsMessage(message, answers);
           } catch (e) {
             console.error(e);
           }
-        });
+        };
       }
 
       return () => {
@@ -123,3 +107,23 @@ export const useInitGame = (answers) => {
     }
   }, [gameId, turn, JSON.stringify(answers)]);
 };
+
+function handleWsMessage(message, answers) {
+  switch (message.type) {
+    case 'metadata':
+      game?.setTurn(message.playerTurn);
+      break;
+    case 'turn':
+      const { name, flagIso: iso_2, player, cell } = message;
+      if (message.isCorrect) {
+        const answerKey = answerMap[message.cell.row][message.cell.col];
+        const answerArr = answers[answerKey];
+        game.handleCorrectAnswer(player, { name, iso_2 }, answerArr, cell);
+      } else {
+        game.handleIncorrectAnswer(player, { name, iso_2 }, cell);
+      }
+      break;
+    default:
+      return;
+  }
+}
