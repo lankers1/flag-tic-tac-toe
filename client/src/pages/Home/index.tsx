@@ -12,10 +12,8 @@ import { useState } from 'react';
 
 export const Home = () => {
   const [displayModal, setDisplayModal] = useState(false);
-  const toggleDisplayModal = () =>
-    setDisplayModal((displayModal) => !displayModal);
-  const [socket, searchForGame, cancelSearch] =
-    useWebsocket(toggleDisplayModal);
+  const toggleDisplayModal = () => setDisplayModal((state) => !state);
+  const { searchForGame, cancelSearch } = useWebsocket(toggleDisplayModal);
   return (
     <>
       <div className={styles.container}>

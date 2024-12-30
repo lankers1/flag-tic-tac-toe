@@ -35,5 +35,5 @@ export const useWebsocket = (toggleDisplayModal: () => void) => {
     toggleDisplayModal();
   }
 
-  return [searchForGame, cancelSearch];
+  return { searchForGame, cancelSearch };
 };
