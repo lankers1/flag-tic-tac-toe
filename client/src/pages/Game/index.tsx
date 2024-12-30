@@ -37,7 +37,6 @@ export const Game = () => {
 
   useEffect(() => {
     let timeout = null;
-    console.log(turn);
     if (
       currentTurn === 2 &&
       !winner &&
