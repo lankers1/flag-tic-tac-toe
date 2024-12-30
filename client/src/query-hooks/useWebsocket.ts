@@ -1,31 +1,39 @@
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const userId = Math.floor(100000 + Math.random() * 900000);
 
-export const useWebsocket = () => {
+let socket: WebSocket;
+
+export const useWebsocket = (toggleDisplayModal: () => void) => {
   const navigate = useNavigate();
-  const [socket, setSocket] = useState();
 
   function searchForGame() {
-    const socket = new WebSocket(`ws://localhost:8080/ws`);
-    setSocket(socket);
+    socket = new WebSocket(`ws://localhost:8080/ws`);
 
-    socket?.addEventListener('message', (event) => {
-      navigate(`/game/${userId}/${JSON.parse(event.data).gameId}`);
-      socket.removeEventListener('message', () =>
-        console.log('removed socket')
-      );
-    });
+    socket.onclose = () => {
+      console.log('connection closed');
+    };
 
-    socket.addEventListener('open', () => {
-      socket.send(
+    socket.onmessage = (event) => {
+      const gameId = JSON.parse(event.data).gameId;
+      navigate(`/game/${userId}/${gameId}`);
+      socket?.close();
+    };
+
+    socket.onopen = () => {
+      socket?.send(
         JSON.stringify({
-          type: 'message'
+          type: 'search'
         })
       );
-    });
+      toggleDisplayModal();
+    };
   }
 
-  return [socket, searchForGame];
+  function cancelSearch() {
+    socket?.close();
+    toggleDisplayModal();
+  }
+
+  return [socket, searchForGame, cancelSearch];
 };
