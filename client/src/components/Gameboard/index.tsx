@@ -1,4 +1,4 @@
-import { useGameStore } from 'src/store/useGameStore';
+import { useGameStore } from '../../store/useGameStore';
 import { capitaliseFirst } from '../../utils/capitaliseFirst';
 import { removeSnakeCase } from '../../utils/removeSnakeCase';
 import { GameboardButton } from '../GameboardButton';
