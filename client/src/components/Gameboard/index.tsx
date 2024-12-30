@@ -12,11 +12,11 @@ interface Props {
 }
 
 export const Gameboard = ({ data, handleClick }: Props) => {
-  const { player } = useParams();
+  const { player, gameId } = useParams();
   const { incorrectAnswer, selectedFlags, winner, currentTurn, turn } =
     useGameStore((state) => state);
   const isVersusComputer = !!(player === 'computer' && currentTurn === 2);
-  const isOpponentsTurn = currentTurn !== turn;
+  const isOpponentsTurn = currentTurn !== turn && gameId;
   const isGameboardDisabled = !!winner || isVersusComputer || isOpponentsTurn;
 
   return (

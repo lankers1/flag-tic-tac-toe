@@ -23,7 +23,7 @@ export const Game = () => {
     0, 0
   ]);
   const { data, isLoading, isPending, error, refetch } = useGetGameQuery();
-  useInitGame(data?.answers);
+  useInitGame();
   const { turn, winner, currentTurn, reset } = useGameStore((state) => state);
 
   // useEffect(() => {
@@ -101,8 +101,8 @@ export const Game = () => {
                     ? `It's your turn!`
                     : "It's your opponents turn!"
                   : currentTurn === 1
-                  ? `It's your turn!`
-                  : "It's your opponents turn!"}
+                  ? `It's player ones turn!`
+                  : "It's player twos turn!"}
               </p>
             )}
           </Notification>

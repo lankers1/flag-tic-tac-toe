@@ -1,8 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 
-async function getGame(gameId) {
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/game/${gameId}`);
+async function getGame(gameId: string | undefined) {
+  if (gameId) {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/game/${gameId}`);
+    return await res.json();
+  }
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/game`);
   return await res.json();
 }
 
@@ -11,7 +15,7 @@ export const useGetGameQuery = () => {
   return useQuery({
     queryKey: ['game'],
     gcTime: 0,
-    queryFn: () => getGame(params.gameId),
+    queryFn: () => getGame(params?.gameId),
     refetchOnWindowFocus: false
   });
 };

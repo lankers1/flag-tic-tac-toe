@@ -46,39 +46,17 @@ export const AnswerModalContent = ({
 
     const answerArr = answers[answerKey];
     const isCorrectAnswer = answerArr.includes(flag.iso_2);
-    if (gameId) {
-      game.handleAnswer(
-        closeModal,
-        gameId,
-        currentTurn,
-        flag.iso_2,
-        flag.name,
-        selectedSquareIndex,
-        isCorrectAnswer
-      );
-      return;
-    }
-    // if (currentTurn === 1) {
-    //   setIncorrectAnswer({
-    //     ...flag,
 
-    //     player: currentTurn,
-    //     cell: {
-    //       row: selectedSquareIndex[0] - 1,
-    //       col: selectedSquareIndex[1] - 1
-    //     }
-    //   });
-    // }
+    game.handleAnswer(
+      closeModal,
+      gameId,
+      currentTurn,
+      flag.iso_2,
+      flag.name,
+      selectedSquareIndex,
+      isCorrectAnswer
+    );
   };
-
-  // setSelectedFlags(
-  //   selectedSquareIndex[0] - 1,
-  //   selectedSquareIndex[1] - 1,
-  //   flag.name,
-  //   flag.iso_2,
-  //   answerArr,
-  //   currentTurn
-  // );
 
   return (
     <div className={styles.container}>

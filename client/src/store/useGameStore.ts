@@ -4,7 +4,6 @@ import { evaluateBoardForWinner } from '../utils/game-ai/minmax';
 export type SetSelectedFlag = (
   player: number,
   flag: { name: string; iso_2: string },
-  answerArr: string[],
   cell: { row: number; col: number }
 ) => void;
 
@@ -39,7 +38,7 @@ function setSelectedFlags(selectedFlags: SelectedFlags, state: GameState) {
 }
 
 const initialState = {
-  turn: 0,
+  turn: 1,
   currentTurn: 1,
   moveCounter: 0,
   incorrectAnswer: null,
@@ -60,18 +59,16 @@ export const useGameStore = create<GameState>((set) => ({
       currentTurn: state.currentTurn === 1 ? 2 : 1
     }));
   },
-  setCorrectAnswer: (player, { name, iso_2 }, answerArr, { row, col }) =>
+  setCorrectAnswer: (player, { name, iso_2 }, { row, col }) =>
     set((state) => {
       const f = state.selectedFlags.map((outerArr, outerIndex) => {
         return outerArr.map((innerArray, index) => {
           if (outerIndex === row && index === col) {
-            return answerArr.includes(iso_2)
-              ? {
-                  name,
-                  iso_2,
-                  playersMove: player
-                }
-              : null;
+            return {
+              name,
+              iso_2,
+              playersMove: player
+            };
           }
           return innerArray;
         });
