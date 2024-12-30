@@ -116,7 +116,7 @@ export class LocalGame {
 }
 
 export const initGame = (args: Args) => {
-  if (args.player === 'local') {
+  if (args.player === 'local' || args.player === 'computer') {
     return new LocalGame(args);
   }
   return new OnlineGame(args);
@@ -139,7 +139,7 @@ export const useInitGame = () => {
         setCorrectAnswer,
         setIncorrectAnswer
       });
-      if (game && player !== 'local') {
+      if (game && player !== 'local' && player !== 'computer') {
         game.socket.onmessage = (event) => {
           try {
             const message = JSON.parse(event.data);

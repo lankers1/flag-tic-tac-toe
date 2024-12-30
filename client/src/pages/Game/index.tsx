@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Gameboard } from '../../components/Gameboard';
@@ -17,48 +17,57 @@ import { ActionButtons } from './components/ActionButtons';
 import { useInitGame } from './InitGame';
 
 export const Game = () => {
-  const { gameId } = useParams();
+  const { gameId, player } = useParams();
   const { data: flags } = useSearchFlags('');
   const [selectedSquare, setSelectedSquare] = useState<[number, number]>([
     0, 0
   ]);
   const { data, isLoading, isPending, error, refetch } = useGetGameQuery();
   useInitGame();
-  const { turn, winner, currentTurn, reset } = useGameStore((state) => state);
+  const {
+    turn,
+    setTurn,
+    winner,
+    currentTurn,
+    reset,
+    selectedFlags,
+    setIncorrectAnswer,
+    setCorrectAnswer
+  } = useGameStore((state) => state);
 
-  // useEffect(() => {
-  //   let timeout = null;
-  //   if (
-  //     playersTurn === 2 &&
-  //     !winner &&
-  //     flags &&
-  //     player === 'computer' &&
-  //     !gameId
-  //   ) {
-  //     timeout = setTimeout(() => {
-  //       const computerFlag = determineMove(easyComputer, {
-  //         flags,
-  //         selectedFlags,
-  //         answers: data.answers,
-  //         setIncorrectAnswer
-  //       });
+  useEffect(() => {
+    let timeout = null;
+    console.log(turn);
+    if (
+      currentTurn === 2 &&
+      !winner &&
+      flags &&
+      player === 'computer' &&
+      !gameId
+    ) {
+      timeout = setTimeout(() => {
+        const computerFlag = determineMove(easyComputer, {
+          flags,
+          selectedFlags,
+          answers: data.answers,
+          setIncorrectAnswer
+        });
 
-  //       if (computerFlag) {
-  //         const { row, col, name, iso_2, answerArr, playersTurn } =
-  //           computerFlag;
-  //         setSelectedFlags(row, col, name, iso_2, answerArr, playersTurn);
-  //       }
+        if (computerFlag) {
+          const { row, col, name, iso_2 } = computerFlag;
+          setCorrectAnswer(2, { name, iso_2 }, { row, col });
+        }
 
-  //       togglePlayerTurn();
-  //     }, 2000);
-  //   }
+        setTurn(1);
+      }, 2000);
+    }
 
-  //   return () => {
-  //     if (timeout) {
-  //       clearTimeout(timeout);
-  //     }
-  //   };
-  // }, [playersTurn, winner, player, gameId]);
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
+  }, [currentTurn, winner, player, gameId]);
 
   if (isLoading || isPending) {
     return (
