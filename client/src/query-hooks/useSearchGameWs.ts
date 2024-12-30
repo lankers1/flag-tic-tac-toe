@@ -4,7 +4,7 @@ const userId = Math.floor(100000 + Math.random() * 900000);
 
 let socket: WebSocket;
 
-export const useWebsocket = (toggleDisplayModal: () => void) => {
+export const useSearchGameWs = (toggleDisplayModal: () => void) => {
   const navigate = useNavigate();
 
   function searchForGame() {

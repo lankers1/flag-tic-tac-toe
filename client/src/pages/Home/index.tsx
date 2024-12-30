@@ -6,14 +6,14 @@ import { Heading } from '../../components/Heading';
 
 import styles from './styles.module.scss';
 import { Button } from '../../components/Buttons/Button';
-import { useWebsocket } from '../../query-hooks/useWebsocket';
+import { useSearchGameWs } from '../../query-hooks/useSearchGameWs';
 import { Modal } from '../../components/Modal';
 import { useState } from 'react';
 
 export const Home = () => {
   const [displayModal, setDisplayModal] = useState(false);
   const toggleDisplayModal = () => setDisplayModal((state) => !state);
-  const { searchForGame, cancelSearch } = useWebsocket(toggleDisplayModal);
+  const { searchForGame, cancelSearch } = useSearchGameWs(toggleDisplayModal);
   return (
     <>
       <div className={styles.container}>
