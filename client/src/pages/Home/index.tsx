@@ -1,4 +1,4 @@
-import { FaRobot, FaUserFriends } from 'react-icons/fa';
+import { FaRobot, FaUserFriends, FaArrowLeft } from 'react-icons/fa';
 
 import { LinkButton } from '../../components/Buttons/LinkButton';
 import { Card } from '../../components/Card';
@@ -53,8 +53,15 @@ export const Home = () => {
         </Card>
       </div>
       <Modal isOpen={displayModal}>
-        <h5>Searching for game</h5>
-        <Button handleClick={cancelSearch} label="Cancel" />
+        <h3>Searching for game</h3>
+        <Button
+          handleClick={cancelSearch}
+          label={
+            <p style={{ gap: '6px', alignItems: 'center', display: 'flex' }}>
+              <FaArrowLeft /> Back
+            </p>
+          }
+        />
       </Modal>
     </>
   );
