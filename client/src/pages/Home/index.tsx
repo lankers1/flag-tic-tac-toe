@@ -1,4 +1,9 @@
-import { FaRobot, FaUserFriends, FaArrowLeft } from 'react-icons/fa';
+import {
+  FaRobot,
+  FaUserFriends,
+  FaArrowLeft,
+  FaGlobeAmericas
+} from 'react-icons/fa';
 
 import { LinkButton } from '../../components/Buttons/LinkButton';
 import { Card } from '../../components/Card';
@@ -27,7 +32,16 @@ export const Home = () => {
               </Heading>
             </div>
             <div className={styles.buttons}>
-              <Button label="Play online" handleClick={searchForGame} />
+              <Button
+                size="xlarge"
+                label={
+                  <>
+                    <FaGlobeAmericas className={styles.buttonIcons} />
+                    {'Play Online'}
+                  </>
+                }
+                handleClick={searchForGame}
+              />
               <LinkButton
                 size="xlarge"
                 to="/game/local"

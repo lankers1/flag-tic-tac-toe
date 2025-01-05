@@ -30,12 +30,13 @@
         flex: 1;
         width: 100%;
 
+        button {
+          flex: 1;
+          background-color: $background-blue;
+        }
+
         a {
           flex: 1;
-
-          &:first-child {
-            background-color: $background-blue;
-          }
 
           &:nth-child(2) {
             background-color: $background-green;
