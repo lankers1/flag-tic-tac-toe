@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { TextInput } from '@components/Inputs/TextInput';
 import { Button } from '@components/Buttons/Button';
 import styles from './styles.module.scss';
+import { AuthContext } from '../../context/AuthContext';
 
 const initialState = {
   username: '',
@@ -11,7 +12,9 @@ const initialState = {
 };
 
 export const LoginForm = () => {
+  const navigate = useNavigate();
   const [form, setForm] = useState(initialState);
+  const { setUser } = useContext(AuthContext);
 
   function handleChange(key: string) {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,8 +22,19 @@ export const LoginForm = () => {
     };
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function login() {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
+      method: 'POST',
+      body: JSON.stringify(form)
+    });
+    return await res.json();
+  }
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event?.preventDefault();
+    const user = await login();
+    setUser(user);
+    navigate('../..');
   }
 
   return (
