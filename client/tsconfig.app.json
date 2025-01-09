@@ -16,6 +16,14 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
+    "paths": {
+      "@components/*": ["src/components/*"],
+      "@computer/*": ["src/computer/*"],
+      "@query-hooks/*": ["src/query-hooks/*"],
+      "@store/*": ["src/store/*"],
+      "@utils/*": ["src/utils/*"],
+      "@pages/*": ["src/pages/*"],
+    },
   },
   "include": ["src"]
 }
