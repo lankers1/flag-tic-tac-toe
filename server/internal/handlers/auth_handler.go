@@ -28,3 +28,15 @@ func (authHandler *AuthHandler) Register(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, countries)
 }
+
+func (authHandler *AuthHandler) Login(ctx *gin.Context) {
+	var body models.Login
+
+	if err := ctx.BindJSON(&body); err != nil {
+			return
+	}
+	
+	countries := authHandler.AuthRepository.Login(body);
+
+	ctx.JSON(http.StatusOK, countries)
+}
