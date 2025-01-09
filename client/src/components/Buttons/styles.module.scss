@@ -1,3 +1,5 @@
+@use 'src/sass/theme' as *;
+
 .iconButton {
   display: inline-flex;
   border-radius: 28px;
@@ -74,5 +76,13 @@
 
 .xlarge {
   font-size: 1.5rem;
-  padding: 0.5rem 0rem;
+  // padding: 0.5rem 0rem;
+}
+
+.blue {
+  background-color: $background-blue;
+}
+
+.green {
+  background-color: $background-green;
 }

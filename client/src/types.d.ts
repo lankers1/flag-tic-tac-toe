@@ -9,3 +9,10 @@ type IncorrectAnswer = {
   flag: Flag;
   cell: { row: number; col: number };
 };
+
+type User = {
+  favouriteFlag: string;
+  email: string;
+  username: string;
+  password: string;
+};

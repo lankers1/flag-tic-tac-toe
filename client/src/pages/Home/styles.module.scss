@@ -6,9 +6,11 @@
 
 .container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
+
+  gap: 10rem;
 
   .card {
     max-width: 700px;
@@ -32,7 +34,10 @@
 
         button {
           flex: 1;
-          background-color: $background-blue;
+
+          &:nth-child(1) {
+            background-color: $background-blue;
+          }
         }
 
         a {
