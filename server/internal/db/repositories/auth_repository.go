@@ -23,9 +23,9 @@ func NewAuthRepository(conn *pgxpool.Pool) *AuthRepository {
 }
 
 func (authRepo *AuthRepository) Register(body models.Registration) *models.User {
-	query := "INSERT INTO users(username, password, rank, email, favourite_flag) VALUES($1, $2, 1000, $3, $4) RETURNING username, rank, favourite_flag"
+	query := "INSERT INTO users(username, password, rank, email, favourite_flag, token) VALUES($1, $2, 1000, $3, (SELECT iso_2 FROM flags ORDER BY random() limit 1), gen_random_uuid()) RETURNING username, rank, favourite_flag, token"
 
-	rows, queryErr := authRepo.conn.Query(context.Background(), query, body.Username, body.Password, body.Email, body.FavouriteFlag)
+	rows, queryErr := authRepo.conn.Query(context.Background(), query, body.Username, body.Password, body.Email)
 
 	if queryErr != nil {
 		log.Printf("Query error: %v", queryErr)
