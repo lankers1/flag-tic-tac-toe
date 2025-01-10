@@ -65,7 +65,7 @@ function answeredButtonStyle(selectedFlag: SelectedFlag | null) {
 }
 
 function currentPlayerStyle(selectedFlag: SelectedFlag | null) {
-  if (selectedFlag?.playersMove === 1) return styles.playerOne;
-  if (selectedFlag?.playersMove === 2) return styles.playerTwo;
+  if (selectedFlag?.playersTurn === 1) return styles.playerOne;
+  if (selectedFlag?.playersTurn === 2) return styles.playerTwo;
   return '';
 }

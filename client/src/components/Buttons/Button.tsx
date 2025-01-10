@@ -5,7 +5,7 @@ type Color = 'blue' | 'green' | 'default';
 interface Props {
   label: ReactNode;
   size?: string;
-  type?: string;
+  type?: 'reset' | 'button' | 'submit' | undefined;
   handleClick?: () => void;
   color?: Color;
 }

@@ -17,7 +17,7 @@ const initialState = {
 export const RegisterForm = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState(initialState);
-  const { setUser } = useContext(AuthContext);
+  const user = useContext(AuthContext);
 
   async function register() {
     const res = await fetch(`${import.meta.env.VITE_API_URL}/register`, {
@@ -35,8 +35,8 @@ export const RegisterForm = () => {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event?.preventDefault();
-    const user = await register();
-    setUser(user);
+    const userRes = await register();
+    user?.setUser(userRes);
     navigate('../..');
   }
 

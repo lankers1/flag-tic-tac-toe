@@ -8,7 +8,7 @@ export const useSearchGameWs = (toggleDisplayModal: () => void) => {
   const navigate = useNavigate();
 
   function searchForGame() {
-    socket = new WebSocket(`ws://localhost:8080/ws`);
+    socket = new WebSocket(`${import.meta.env.VITE_WEBSOCKET_PORT}/ws`);
 
     socket.onclose = () => {
       console.log('connection closed');

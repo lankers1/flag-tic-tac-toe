@@ -1,8 +1,8 @@
 package websockets
 
 import (
-	"fmt"
 	"github.com/lankers1/fttt/internal/handlers"
+	"fmt"
 )
 
 type M struct {
@@ -77,7 +77,6 @@ func (h *Hub) RegisterNewClient(client *Client) {
 		connections = make(map[*Client]bool)
 		h.clients["general"] = connections
 	} 
-	fmt.Println(h.clients["general"])
 	h.clients["general"][client] = true
 }
 
@@ -103,7 +102,6 @@ func (h *Hub) RegisterNewGameClient(client *Client) {
 func (h *Hub) RemoveClient(client *Client) {
 	if _, ok := h.clients["general"]; ok {
 		delete(h.clients["general"], client)
-		fmt.Println("removedClient",h.clients["general"])
 	}
 	if _, ok := h.gameClients[client.Channel]; ok {
 		delete(h.gameClients[client.Channel], client)
@@ -113,7 +111,8 @@ func (h *Hub) RemoveClient(client *Client) {
 
 //function to handle message based on type of message
 func (h *Hub) HandleMessage(message Message, handlers *handlers.Handlers) {
-	if message.Type == "message" {
+	fmt.Println(message)
+	if message.Type == "search" {
 		if len(h.players) > 1 {
 			gameId := handlers.GameHandler.OnlineGame()
 

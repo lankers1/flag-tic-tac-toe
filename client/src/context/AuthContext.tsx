@@ -1,6 +1,15 @@
 import { createContext, useState } from 'react';
 
-export const AuthContext = createContext(null);
+interface AuthContextType {
+  loggedIn: boolean;
+  setUser: (user: User) => void;
+  logout: () => void;
+  favouriteFlag: string;
+  username: string;
+  rank: number;
+}
+
+export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthContextProvider = ({
   children

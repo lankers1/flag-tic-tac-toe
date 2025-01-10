@@ -48,9 +48,11 @@ export function easyComputer({
   selectedFlags,
   answers,
   setIncorrectAnswer
-}: Args): SelectedFlags | undefined {
+}: Args):
+  | (SelectedFlag & { row: number; col: number; answerArr: string[] })
+  | undefined {
   const { row, col } = determineComputerMove(
-    selectedFlags.map((arr) => arr.map((r) => r?.playersMove || null))
+    selectedFlags.map((arr) => arr.map((r) => r?.playersTurn || null))
   );
 
   const answerKey = answerMap[row][col];
@@ -60,7 +62,7 @@ export function easyComputer({
   const guess = answerArr.includes(flagSelection[randomFlag].iso_2);
   if (!guess) {
     setIncorrectAnswer({
-      ...flagSelection[randomFlag],
+      flag: flagSelection[randomFlag],
       player: 2,
       cell: { row, col }
     });
@@ -71,7 +73,11 @@ export function easyComputer({
 }
 
 export function determineMove(
-  rules: (args: Args) => SelectedFlags | undefined,
+  rules: (
+    args: Args
+  ) =>
+    | (SelectedFlag & { row: number; col: number; answerArr: string[] })
+    | undefined,
   args: Args
 ) {
   return rules(args);

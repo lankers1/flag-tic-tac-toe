@@ -10,13 +10,25 @@ type Args = {
   setIncorrectAnswer: (incorrectAnswer: IncorrectAnswer) => void;
 };
 
+type Message = {
+  playerTurn: number;
+  isCorrect: boolean;
+  type: string;
+  name: string;
+  flagIso: string;
+  player: number;
+  cell: { col: number; row: number };
+};
+
 export class OnlineGame {
   setCorrectAnswer;
   setIncorrectAnswer;
   setPlayerTurn;
   socket: WebSocket;
   constructor(args: Args) {
-    this.socket = new WebSocket(`ws://localhost:8080/ws/game/${args.gameId}`);
+    this.socket = new WebSocket(
+      `${import.meta.env.VITE_WEBSOCKET_PORT}/ws/game/${args.gameId}`
+    );
     this.setPlayerTurn = args.setTurn;
     this.setCorrectAnswer = args.setCorrectAnswer;
     this.setIncorrectAnswer = args.setIncorrectAnswer;
@@ -28,12 +40,12 @@ export class OnlineGame {
 
   handleAnswer(
     cb: () => void,
-    gameId,
-    player,
-    flagIso,
-    name,
-    selectedSquareIndex,
-    isCorrect
+    gameId: string | undefined,
+    player: number,
+    flagIso: string,
+    name: string,
+    selectedSquareIndex: number[],
+    isCorrect: boolean
   ) {
     this.socket.send(
       JSON.stringify({
@@ -69,10 +81,12 @@ export class LocalGame {
   setCorrectAnswer;
   setIncorrectAnswer;
   setPlayerTurn;
+  socket: null;
   constructor(args: Args) {
     this.setPlayerTurn = args.setTurn;
     this.setCorrectAnswer = args.setCorrectAnswer;
     this.setIncorrectAnswer = args.setIncorrectAnswer;
+    this.socket = null;
   }
 
   setTurn(playerTurn: number) {
@@ -81,12 +95,12 @@ export class LocalGame {
 
   handleAnswer(
     cb: () => void,
-    _,
-    player,
-    flagIso,
-    name,
-    selectedSquareIndex,
-    isCorrect
+    _: string | undefined,
+    player: number,
+    flagIso: string,
+    name: string,
+    selectedSquareIndex: number[],
+    isCorrect: boolean
   ) {
     const flag = { name, iso_2: flagIso };
     const cell = {
@@ -122,7 +136,8 @@ export const initGame = (args: Args) => {
   return new OnlineGame(args);
 };
 
-export let game;
+export let game: InstanceType<typeof OnlineGame | typeof LocalGame>;
+// | InstanceType<typeof LocalGame>;
 
 export const useInitGame = () => {
   const { turn, setTurn, setCorrectAnswer, setIncorrectAnswer } = useGameStore(
@@ -139,10 +154,10 @@ export const useInitGame = () => {
         setCorrectAnswer,
         setIncorrectAnswer
       });
-      if (game && player !== 'local' && player !== 'computer') {
-        game.socket.onmessage = (event) => {
+      if (game && player !== 'local' && player !== 'computer' && game?.socket) {
+        game.socket.onmessage = (event: { data: string }) => {
           try {
-            const message = JSON.parse(event.data);
+            const message = JSON.parse(event?.data);
             handleWsMessage(message);
           } catch (e) {
             console.error(e);
@@ -157,7 +172,7 @@ export const useInitGame = () => {
   }, [gameId, turn, player]);
 };
 
-function handleWsMessage(message) {
+function handleWsMessage(message: Message) {
   switch (message.type) {
     case 'metadata':
       game?.setTurn(message.playerTurn);

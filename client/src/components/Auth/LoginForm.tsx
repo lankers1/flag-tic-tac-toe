@@ -14,7 +14,7 @@ const initialState = {
 export const LoginForm = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState(initialState);
-  const { setUser } = useContext(AuthContext);
+  const user = useContext(AuthContext);
 
   function handleChange(key: string) {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,8 +32,8 @@ export const LoginForm = () => {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event?.preventDefault();
-    const user = await login();
-    setUser(user);
+    const userRes = await login();
+    user?.setUser(userRes);
     navigate('../..');
   }
 

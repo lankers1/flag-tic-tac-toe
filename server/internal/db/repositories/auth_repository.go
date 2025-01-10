@@ -7,6 +7,7 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/lankers1/fttt/internal/models"
 	"golang.org/x/crypto/bcrypt"
+	"net/http"
 )
 
 type AuthInterface interface {
@@ -16,6 +17,11 @@ type AuthInterface interface {
 
 type AuthRepository struct {
 	conn *pgxpool.Pool
+}
+
+type appError struct {
+	Code     int    `json:"code"`
+	Message  string `json:"message"`
 }
 
 func NewAuthRepository(conn *pgxpool.Pool) *AuthRepository {
@@ -48,30 +54,40 @@ func (authRepo *AuthRepository) Register(body models.Registration) *models.User 
 	return &res
 }
 
-func (authRepo *AuthRepository) Login(body models.Login) *models.User {
+func (authRepo *AuthRepository) Login(body models.Login) (*models.User, *appError) {
 	query := "SELECT username, rank, favourite_flag, password, token FROM users;"
 
 	rows, queryErr := authRepo.conn.Query(context.Background(), query)
 
 	if queryErr != nil {
 		log.Printf("Query error: %v", queryErr)
+		return nil, &appError{ 
+			Code: http.StatusInsufficientStorage,
+			Message: "random error",
+		}
 	 }
 
 	 res, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.UserWithPassword])
 
 	 if err != nil {
 		log.Printf("CollectRows error: %v", err)
-		panic(err)
+		return nil, &appError{ 
+			Code: http.StatusInsufficientStorage,
+			Message: "random error",
+		}
 	}
 
 	 passwordComparisonErr := bcrypt.CompareHashAndPassword(res.Password, []byte(body.Password))
 
 	 if passwordComparisonErr !=nil {
-		log.Printf("Incorrect details: %v", err)
-		panic(err)
+		log.Printf("Incorrect details: %v", passwordComparisonErr)
+		return nil, &appError{ 
+			Code: http.StatusInsufficientStorage,
+			Message: "random error",
+		}
 	 }
 	 
 	response := models.User{Username: res.Username, Token: res.Token, Rank: res.Rank, FavouriteFlag: res.FavouriteFlag}
 
-	return &response
+	return &response, nil
 }

@@ -11,6 +11,8 @@ type AuthHandler struct {
 	AuthRepository *repositories.AuthRepository
 }
 
+
+
 func NewAuthHandler(authRepo *repositories.AuthRepository) *AuthHandler {
 	return &AuthHandler{
 		AuthRepository: authRepo,
@@ -36,7 +38,12 @@ func (authHandler *AuthHandler) Login(ctx *gin.Context) {
 			return
 	}
 	
-	countries := authHandler.AuthRepository.Login(body);
+	user, err := authHandler.AuthRepository.Login(body);
 
-	ctx.JSON(http.StatusOK, countries)
+  if err != nil {
+		ctx.AbortWithStatusJSON(err.Code, err.Message)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, user)
 }

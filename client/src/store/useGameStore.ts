@@ -23,7 +23,7 @@ interface GameState {
 
 function setSelectedFlags(selectedFlags: SelectedFlags, state: GameState) {
   const winnerDirection = evaluateBoardForWinner(
-    selectedFlags.map((arr) => arr.map((r) => r?.playersMove || null))
+    selectedFlags.map((arr) => arr.map((r) => r?.playersTurn || null))
   );
 
   if (winnerDirection) {
@@ -67,7 +67,7 @@ export const useGameStore = create<GameState>((set) => ({
             return {
               name,
               iso_2,
-              playersMove: player
+              playersTurn: player
             };
           }
           return innerArray;

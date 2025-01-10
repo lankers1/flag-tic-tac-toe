@@ -29,6 +29,11 @@ export const Home = () => {
   function handleToggleRegisterModal() {
     navigate('auth/register');
   }
+
+  function handleToggleLoginModal() {
+    navigate('auth/login');
+  }
+
   return (
     <>
       <div className={styles.container}>
@@ -43,7 +48,7 @@ export const Home = () => {
               </Heading>
             </div>
             <div className={styles.buttons}>
-              {!user.loggedIn ? (
+              {!user?.loggedIn ? (
                 <>
                   <Button
                     size="xlarge"
@@ -53,7 +58,7 @@ export const Home = () => {
                         {'Login'}
                       </>
                     }
-                    handleClick={searchForGame}
+                    handleClick={handleToggleLoginModal}
                   />
                   <Button
                     size="xlarge"
@@ -75,7 +80,7 @@ export const Home = () => {
                       {'Search for game'}
                     </>
                   }
-                  // handleClick={handleToggleRegisterModal}
+                  handleClick={searchForGame}
                 />
               )}
             </div>

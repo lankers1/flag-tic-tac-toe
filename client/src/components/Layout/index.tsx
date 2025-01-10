@@ -13,7 +13,7 @@ export const Layout = () => {
     <div className={styles.container}>
       <header className={styles.header}>
         <Heading variant="h1">Flag tic-tac-toe</Heading>
-        {user.loggedIn && <FlagAvatar />}
+        {user?.loggedIn && <FlagAvatar />}
       </header>
       <main className={styles.main}>
         <Outlet />
@@ -34,7 +34,7 @@ const FlagAvatar = () => {
         </div>
         <div className={styles.menuItems}>
           <a>Account</a>
-          <a onClick={user.logout}>Logout</a>
+          <a onClick={user?.logout}>Logout</a>
         </div>
       </div>
     </div>

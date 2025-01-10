@@ -33,7 +33,7 @@ export const Gameboard = ({ data, handleClick }: Props) => {
                     ariaLabel={`Row ${outerIndex + 1} Col ${innerIndex + 1}`}
                     cell={{ row: outerIndex, col: innerIndex }}
                     incorrectAnswer={incorrectAnswer}
-                    disabled={isGameboardDisabled}
+                    disabled={!!isGameboardDisabled}
                     selectedFlag={selectedFlags[outerIndex][innerIndex]}
                     key={'gameboard-button' + outerIndex + innerIndex}
                     handleClick={() => handleClick(outerIndex, innerIndex)}
