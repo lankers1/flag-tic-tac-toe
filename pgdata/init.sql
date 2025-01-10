@@ -220,3 +220,18 @@ CREATE TABLE restricted_characteristics(
   characteristic_id TEXT REFERENCES characteristics (characteristic_id),
   restricted_id INTEGER REFERENCES characteristics (characteristic_id)
 );
+CREATE TABLE game(
+  game_id integer,
+  player_one_id integer,
+  player_two_id integer,
+  time_played date,
+  board json
+);
+CREATE TABLE users(
+  username varchar(50),
+  password bytea,
+  rank integer,
+  email varchar(100),
+  favourite_flag varchar(2),
+  token uuid
+);
