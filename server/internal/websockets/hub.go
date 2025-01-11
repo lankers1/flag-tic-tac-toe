@@ -2,7 +2,6 @@ package websockets
 
 import (
 	"github.com/lankers1/fttt/internal/handlers"
-	"fmt"
 )
 
 type M struct {
@@ -100,7 +99,6 @@ func (h *Hub) RegisterNewGameClient(client *Client) {
 func (h *Hub) RemoveClient(client *Client) {
 	if _, ok := h.clients["general"]; ok {
 		delete(h.clients["general"], client)
-		fmt.Println(h.clients)
 	}
 	if _, ok := h.gameClients[client.Channel]; ok {
 		delete(h.gameClients[client.Channel], client)
@@ -110,7 +108,7 @@ func (h *Hub) RemoveClient(client *Client) {
 
 //function to handle message based on type of message
 func (h *Hub) HandleMessage(message Message, handlers *handlers.Handlers) {
-	fmt.Println(len(h.clients["general"]), "clients")
+
 	if message.Type == "search" {
 		if len(h.clients["general"]) > 1 {
 			gameId := handlers.GameHandler.OnlineGame()
@@ -131,6 +129,19 @@ func (h *Hub) HandleMessage(message Message, handlers *handlers.Handlers) {
 
 		for client := range clients {
 				sendAnswer := client.sendAnswer
+				select {
+					case sendAnswer <- message:
+					default:
+						close(sendAnswer)
+						delete(h.gameClients[message.GameId], client)
+					}
+			}
+	}
+
+	if message.Type == "quit" {
+		clients := h.gameClients[message.GameId]
+		for client := range clients {
+			sendAnswer := client.sendAnswer
 				select {
 					case sendAnswer <- message:
 					default:

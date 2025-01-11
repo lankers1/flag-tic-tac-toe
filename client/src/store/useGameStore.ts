@@ -13,7 +13,7 @@ interface GameState {
   moveCounter: number;
   winner: number | null;
   selectedFlags: SelectedFlags;
-  reset: () => void;
+  resetState: () => void;
   setCorrectAnswer: SetSelectedFlag;
   setTurn: (turn: number) => void;
   incorrectAnswer: IncorrectAnswer | null;
@@ -81,5 +81,5 @@ export const useGameStore = create<GameState>((set) => ({
       };
     }),
   setTurn: (turn: number) => set({ turn }),
-  reset: () => set(initialState)
+  resetState: () => set(initialState)
 }));

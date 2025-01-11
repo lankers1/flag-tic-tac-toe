@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Gameboard } from '../../components/Gameboard';
 import { useGetGameQuery } from '../../query-hooks/getGame';
@@ -14,22 +14,26 @@ import styles from './styles.module.scss';
 
 import { AnswerModalContent } from './components/AnswerModalContent';
 import { ActionButtons } from './components/ActionButtons';
-import { useInitGame } from './InitGame';
+import { game, useInitGame } from './InitGame';
+import { Heading } from '@components/Heading';
+import { Button } from '@components/Buttons/Button';
 
 export const Game = () => {
+  const navigate = useNavigate();
+  const [opponentQuit, setOpponentQuit] = useState(false);
   const { gameId, player } = useParams();
   const { data: flags } = useSearchFlags('');
   const [selectedSquare, setSelectedSquare] = useState<[number, number]>([
     0, 0
   ]);
   const { data, isLoading, isPending, error, refetch } = useGetGameQuery();
-  useInitGame();
+  useInitGame(setOpponentQuit);
   const {
     turn,
     setTurn,
     winner,
     currentTurn,
-    reset,
+    resetState,
     selectedFlags,
     setIncorrectAnswer,
     setCorrectAnswer
@@ -86,7 +90,7 @@ export const Game = () => {
 
   function handleReset() {
     refetch();
-    reset();
+    resetState();
   }
 
   return (
@@ -119,7 +123,7 @@ export const Game = () => {
           </div>
         </div>
         <ActionButtons
-          resetQuery={reset}
+          quitGame={game.quitGame}
           handleResetGame={handleReset}
           winner={winner}
         />
@@ -129,6 +133,13 @@ export const Game = () => {
           answers={data?.answers}
           selectedSquareIndex={selectedSquare}
           closeModal={() => setSelectedSquare([0, 0])}
+        />
+      </Modal>
+      <Modal isOpen={opponentQuit}>
+        <Heading variant="h2">It looks like your opponent quit!</Heading>
+        <Button
+          handleClick={() => game.quitGame(navigate, gameId)}
+          label="Back"
         />
       </Modal>
     </>

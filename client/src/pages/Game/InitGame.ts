@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { EffectCallback, useEffect, useRef } from 'react';
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import { SetSelectedFlag, useGameStore } from '../../store/useGameStore';
 
 type Args = {
@@ -8,6 +8,7 @@ type Args = {
   setTurn: (turn: number) => void;
   setCorrectAnswer: SetSelectedFlag;
   setIncorrectAnswer: (incorrectAnswer: IncorrectAnswer) => void;
+  resetState: () => void;
 };
 
 type Message = {
@@ -24,6 +25,7 @@ export class OnlineGame {
   setCorrectAnswer;
   setIncorrectAnswer;
   setPlayerTurn;
+  resetState;
   socket: WebSocket;
   constructor(args: Args) {
     this.socket = new WebSocket(
@@ -32,6 +34,8 @@ export class OnlineGame {
     this.setPlayerTurn = args.setTurn;
     this.setCorrectAnswer = args.setCorrectAnswer;
     this.setIncorrectAnswer = args.setIncorrectAnswer;
+    this.resetState = args.resetState;
+    this.quitGame = this.quitGame.bind(this);
   }
 
   setTurn(playerTurn: number) {
@@ -72,8 +76,11 @@ export class OnlineGame {
     this.setIncorrectAnswer({ player, flag, cell });
   }
 
-  quitGame() {
+  quitGame(navigate: NavigateFunction, gameId: string | undefined) {
+    this.socket?.send(JSON.stringify({ type: 'quit', gameId }));
     this.socket?.close();
+    this.resetState();
+    navigate('/');
   }
 }
 
@@ -82,11 +89,14 @@ export class LocalGame {
   setIncorrectAnswer;
   setPlayerTurn;
   socket: null;
+  resetState;
   constructor(args: Args) {
     this.setPlayerTurn = args.setTurn;
     this.setCorrectAnswer = args.setCorrectAnswer;
     this.setIncorrectAnswer = args.setIncorrectAnswer;
     this.socket = null;
+    this.resetState = args.resetState;
+    this.quitGame = this.quitGame.bind(this);
   }
 
   setTurn(playerTurn: number) {
@@ -124,8 +134,9 @@ export class LocalGame {
     this.setIncorrectAnswer({ player, flag, cell });
   }
 
-  quitGame() {
-    return () => null;
+  quitGame(navigate: NavigateFunction, _: string | undefined) {
+    this.resetState();
+    navigate('/');
   }
 }
 
@@ -139,26 +150,38 @@ export const initGame = (args: Args) => {
 export let game: InstanceType<typeof OnlineGame | typeof LocalGame>;
 // | InstanceType<typeof LocalGame>;
 
-export const useInitGame = () => {
-  const { turn, setTurn, setCorrectAnswer, setIncorrectAnswer } = useGameStore(
-    (state) => state
-  );
-  const { gameId, player } = useParams();
+export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
+  const initialized = useRef(false);
 
   useEffect(() => {
+    if (!initialized.current) {
+      initialized.current = true;
+      effect();
+    }
+  }, dependencies);
+}
+
+export const useInitGame = (opponentQuit: (arg: boolean) => void) => {
+  const navigate = useNavigate();
+  const { turn, setTurn, setCorrectAnswer, resetState, setIncorrectAnswer } =
+    useGameStore((state) => state);
+  const { gameId, player } = useParams();
+
+  useOnMountUnsafe(() => {
     if (player) {
       game = initGame({
         gameId,
         player,
         setTurn,
         setCorrectAnswer,
-        setIncorrectAnswer
+        setIncorrectAnswer,
+        resetState
       });
       if (game && player !== 'local' && player !== 'computer' && game?.socket) {
         game.socket.onmessage = (event: { data: string }) => {
           try {
             const message = JSON.parse(event?.data);
-            handleWsMessage(message);
+            handleWsMessage(message, opponentQuit);
           } catch (e) {
             console.error(e);
           }
@@ -166,13 +189,17 @@ export const useInitGame = () => {
       }
 
       return () => {
-        game.quitGame();
+        console.log('called 2');
+        game.quitGame(navigate, gameId);
       };
     }
   }, [gameId, turn, player]);
 };
 
-function handleWsMessage(message: Message) {
+function handleWsMessage(
+  message: Message,
+  opponentQuit: (arg: boolean) => void
+) {
   switch (message.type) {
     case 'metadata':
       game?.setTurn(message.playerTurn);
@@ -185,6 +212,8 @@ function handleWsMessage(message: Message) {
         game.handleIncorrectAnswer(player, { name, iso_2 }, cell);
       }
       break;
+    case 'quit':
+      return opponentQuit(true);
     default:
       return;
   }

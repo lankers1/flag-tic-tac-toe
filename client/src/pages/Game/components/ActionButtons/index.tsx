@@ -1,37 +1,33 @@
-import { useState } from "react";
-import { GrPowerReset } from "react-icons/gr";
+import { useState } from 'react';
+import { GrPowerReset } from 'react-icons/gr';
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 
-import { LinkButton } from "../../../../components/Buttons/LinkButton";
-import { Button } from "../../../../components/Buttons/Button";
-import { Heading } from "../../../../components/Heading";
-import { Modal } from "../../../../components/Modal";
+import { Button } from '../../../../components/Buttons/Button';
+import { Heading } from '../../../../components/Heading';
+import { Modal } from '../../../../components/Modal';
 
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
 interface Props {
   winner: number | null;
   handleResetGame: () => void;
-  resetQuery: () => void;
+  quitGame: (navigate: NavigateFunction, gameId: string | undefined) => void;
 }
 
-export const ActionButtons = ({
-  winner,
-  handleResetGame,
-  resetQuery,
-}: Props) => {
-  const [openModal, setOpenModal] = useState<"give_up" | "restart" | false>(
+export const ActionButtons = ({ winner, handleResetGame, quitGame }: Props) => {
+  const [openModal, setOpenModal] = useState<'give_up' | 'restart' | false>(
     false
   );
 
   return (
     <div className={styles.container}>
-      <Button handleClick={() => setOpenModal("give_up")} label="Give up" />
+      <Button handleClick={() => setOpenModal('give_up')} label="Give up" />
       <Button
-        handleClick={() => setOpenModal("restart")}
+        handleClick={() => setOpenModal('restart')}
         label={
           <>
             <GrPowerReset className={styles.buttonIcon} />
-            {winner ? "Play Again" : "Reset Game"}
+            {winner ? 'Play Again' : 'Reset Game'}
           </>
         }
       />
@@ -40,7 +36,7 @@ export const ActionButtons = ({
           type={openModal}
           closeModal={() => setOpenModal(false)}
           handleResetGame={handleResetGame}
-          resetQuery={resetQuery}
+          quitGame={quitGame}
         />
       </Modal>
     </div>
@@ -48,30 +44,36 @@ export const ActionButtons = ({
 };
 
 interface ModalContentProps {
-  type: "give_up" | "restart" | false;
+  type: 'give_up' | 'restart' | false;
   closeModal: () => void;
-  resetQuery: () => void;
+  quitGame: (navigate: NavigateFunction, gameId: string | undefined) => void;
   handleResetGame: () => void;
 }
 
 const ModalContent = ({
   type,
   closeModal,
-  resetQuery,
-  handleResetGame,
+  quitGame,
+  handleResetGame
 }: ModalContentProps) => {
+  const navigate = useNavigate();
+  const { gameId } = useParams();
+
   switch (type) {
-    case "give_up":
+    case 'give_up':
       return (
         <>
           <Heading variant="h3">Are you sure you want to give up?</Heading>
           <div className={styles.buttonContainer}>
             <Button handleClick={closeModal} label="No" />
-            <LinkButton handleClick={resetQuery} to="/" label="Yes" />
+            <Button
+              handleClick={() => quitGame(navigate, gameId)}
+              label="Yes"
+            />
           </div>
         </>
       );
-    case "restart":
+    case 'restart':
       return (
         <>
           <Heading variant="h3">
