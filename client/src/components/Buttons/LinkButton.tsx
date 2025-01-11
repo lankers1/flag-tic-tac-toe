@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-import styles from "./styles.module.scss";
-import { ReactNode } from "react";
+import styles from './styles.module.scss';
+import { ReactNode } from 'react';
 
 interface Props {
   to: string;
@@ -15,7 +15,7 @@ export const LinkButton = ({ to, label, size, handleClick }: Props) => {
     <Link
       onClick={handleClick}
       to={to}
-      className={`${styles.linkButton} ${size === "xlarge" && styles.xlarge}`}
+      className={`${styles.button} ${size === 'xlarge' && styles.xlarge}`}
     >
       {label}
     </Link>

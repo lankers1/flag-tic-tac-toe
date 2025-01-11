@@ -47,7 +47,7 @@ export const Home = () => {
                 diagonally wins.
               </Heading>
             </div>
-            <div className={styles.buttons}>
+            <div className={styles.localButtons}>
               {!user?.loggedIn ? (
                 <>
                   <Button
@@ -77,7 +77,7 @@ export const Home = () => {
                   label={
                     <>
                       <FaGlobeAmericas className={styles.buttonIcons} />
-                      {'Search for game'}
+                      <p>{'Search for game'}</p>
                     </>
                   }
                   handleClick={searchForGame}
@@ -96,18 +96,18 @@ export const Home = () => {
                 diagonally wins.
               </Heading>
             </div>
-            <div className={styles.buttons}>
+            <div className={styles.localButtons}>
               <LinkButton
                 size="xlarge"
                 to="/game/local"
                 label={
                   <>
                     <FaUserFriends className={styles.buttonIcons} />
-                    {'Local Play'}
+                    <p>{'Local Play'}</p>
                   </>
                 }
               />
-              <LinkButton
+              {/* <LinkButton
                 size="xlarge"
                 to="/game/computer"
                 label={
@@ -116,7 +116,7 @@ export const Home = () => {
                     {'Vs Computer'}
                   </>
                 }
-              />
+              /> */}
             </div>
           </div>
         </Card>

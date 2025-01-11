@@ -26,9 +26,10 @@
       flex: 1;
       width: 100%;
 
-      .buttons {
+      .localButtons {
         gap: 20px;
         display: flex;
+        flex-direction: column;
         flex: 1;
         width: 100%;
 
@@ -43,7 +44,7 @@
         a {
           flex: 1;
 
-          &:nth-child(2) {
+          &:nth-child(1) {
             background-color: $background-green;
           }
         }
