@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { EffectCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Gameboard } from '../../components/Gameboard';
@@ -17,6 +17,17 @@ import { ActionButtons } from './components/ActionButtons';
 import { game, useInitGame } from './InitGame';
 import { Heading } from '@components/Heading';
 import { Button } from '@components/Buttons/Button';
+
+export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
+  const initialized = useRef(false);
+
+  useEffect(() => {
+    if (initialized.current) {
+      return effect();
+    }
+    initialized.current = true;
+  }, dependencies);
+}
 
 export const Game = () => {
   const navigate = useNavigate();
@@ -71,6 +82,12 @@ export const Game = () => {
       }
     };
   }, [currentTurn, winner, player, gameId]);
+
+  useOnMountUnsafe(() => {
+    return () => {
+      game?.quitGame(navigate, gameId);
+    };
+  }, []);
 
   if (isLoading || isPending) {
     return (
