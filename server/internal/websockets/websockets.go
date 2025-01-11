@@ -71,7 +71,6 @@ func (c *Client) Read() {
 			fmt.Println("Error: ", err)
 			break
 		}
-		c.hub.players = append(c.hub.players, M{Client: c})
 		c.hub.broadcast <- msg
 	}
 }

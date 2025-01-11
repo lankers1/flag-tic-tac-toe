@@ -17,7 +17,6 @@ type Hub struct {
 	register chan *Client
   registerNewGame chan *Client
 	broadcast chan Message
-	players []M
 }
 
 type Cell struct {
@@ -45,7 +44,6 @@ func NewHub() *Hub {
 		register:   make(chan *Client),
     registerNewGame: make(chan *Client),
 		broadcast:  make(chan Message),
-		players: []M{},
 	}
 }
 
@@ -102,6 +100,7 @@ func (h *Hub) RegisterNewGameClient(client *Client) {
 func (h *Hub) RemoveClient(client *Client) {
 	if _, ok := h.clients["general"]; ok {
 		delete(h.clients["general"], client)
+		fmt.Println(h.clients)
 	}
 	if _, ok := h.gameClients[client.Channel]; ok {
 		delete(h.gameClients[client.Channel], client)
@@ -111,15 +110,13 @@ func (h *Hub) RemoveClient(client *Client) {
 
 //function to handle message based on type of message
 func (h *Hub) HandleMessage(message Message, handlers *handlers.Handlers) {
-	fmt.Println(message)
+	fmt.Println(len(h.clients["general"]), "clients")
 	if message.Type == "search" {
-		if len(h.players) > 1 {
+		if len(h.clients["general"]) > 1 {
 			gameId := handlers.GameHandler.OnlineGame()
 
-			for _, player := range h.players {
-				client := player.Client
+			for client, _ := range h.clients["general"] {
 				send := client.send
-				h.players = []M{}
 				select {
 					case send <- gameId:
 					default:
