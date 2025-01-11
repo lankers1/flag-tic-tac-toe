@@ -9,8 +9,11 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  gap: 5rem;
 
-  gap: 10rem;
+  @media screen and (max-width: $large) {
+    flex-direction: column;
+  }
 
   .card {
     max-width: 700px;
