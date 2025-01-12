@@ -1,4 +1,4 @@
-import { EffectCallback, useEffect, useRef, useState } from 'react';
+import { EffectCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Gameboard } from '../../components/Gameboard';
@@ -17,6 +17,7 @@ import { ActionButtons } from './components/ActionButtons';
 import { game, useInitGame } from './InitGame';
 import { Heading } from '@components/Heading';
 import { Button } from '@components/Buttons/Button';
+import { AuthContext } from '../../context/AuthContext';
 
 export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
   const initialized = useRef(false);
@@ -30,15 +31,17 @@ export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
 }
 
 export const Game = () => {
+  const user = useContext(AuthContext);
   const navigate = useNavigate();
   const [opponentQuit, setOpponentQuit] = useState(false);
+  const [opponentReplay, setOpponentReplay] = useState<boolean | null>(null);
   const { gameId, player } = useParams();
   const { data: flags } = useSearchFlags('');
   const [selectedSquare, setSelectedSquare] = useState<[number, number]>([
     0, 0
   ]);
   const { data, isLoading, isPending, error, refetch } = useGetGameQuery();
-  useInitGame(setOpponentQuit);
+  useInitGame(setOpponentQuit, setOpponentReplay);
   const {
     turn,
     setTurn,
@@ -89,6 +92,14 @@ export const Game = () => {
     };
   }, []);
 
+  // useEffect(() => {
+  //   if(opponentQuit === false) {
+  //     game?.quitGame(navigate, gameId);
+  //   } else {
+
+  //   }
+  // }, [])
+
   if (isLoading || isPending) {
     return (
       <div className={styles.loadingContainer}>
@@ -136,7 +147,10 @@ export const Game = () => {
             )}
           </Notification>
           <div className={styles.gameboardContainer}>
-            <Gameboard handleClick={handleClick} data={data?.game} />
+            <Gameboard
+              handleClick={handleClick}
+              data={gameId ? data?.game.board : data?.game}
+            />
           </div>
         </div>
         <ActionButtons
@@ -158,6 +172,17 @@ export const Game = () => {
           handleClick={() => game.quitGame(navigate, gameId)}
           label="Back"
         />
+      </Modal>
+      <Modal isOpen={!!(winner && gameId)}>
+        <Heading variant="h2">Player {winner} has won! Congrats!!</Heading>
+        <p>Do you want to play again?</p>
+        <div>
+          <Button
+            handleClick={() => game.quitGame(navigate, gameId)}
+            label="No"
+          />
+          <Button handleClick={() => game.playAgain(user)} label="Yes" />
+        </div>
       </Modal>
     </>
   );

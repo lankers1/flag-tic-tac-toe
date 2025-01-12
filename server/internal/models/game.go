@@ -32,5 +32,7 @@ type OnlineGame struct {
 }
 
 type OnlineGameBoard struct {
-	Board Game
+	Board *Game `json:"board"`  
+	PlayerOneId string `json:"playerOneId"`  
+	PlayerTwoId string `json:"playerTwoId"`  
 }

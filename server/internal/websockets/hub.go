@@ -108,10 +108,13 @@ func (h *Hub) RemoveClient(client *Client) {
 
 //function to handle message based on type of message
 func (h *Hub) HandleMessage(message Message, handlers *handlers.Handlers) {
-
 	if message.Type == "search" {
 		if len(h.clients["general"]) > 1 {
-			gameId := handlers.GameHandler.OnlineGame()
+			r := []string{}
+			for v, _ := range h.clients["general"] {
+					r = append(r, v.Username)
+			}
+			gameId := handlers.GameHandler.OnlineGame(r)
 
 			for client, _ := range h.clients["general"] {
 				send := client.send

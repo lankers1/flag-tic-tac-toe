@@ -34,7 +34,8 @@ export const GameboardButton = ({
         setDisplayIncorrectAnswer(false);
       }, 1500);
     }
-  }, [incorrectAnswer?.cell.row, incorrectAnswer?.cell.col]);
+  }, [incorrectAnswer]);
+
   return (
     <button
       disabled={disabled}

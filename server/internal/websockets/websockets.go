@@ -43,6 +43,7 @@ var upgrader = websocket.Upgrader{
 	sendGameMetadata chan Metadata
 	hub  *Hub
 	Channel string
+	Username string
 }
 
 type Metadata struct {
@@ -51,8 +52,8 @@ type Metadata struct {
 }
 
 
-func NewClient(channel string, conn *websocket.Conn, hub *Hub) *Client {
-	return &Client{Conn: conn, Channel: channel, sendGameMetadata: make(chan Metadata, 256), sendAnswer: make(chan Message, 256), send: make(chan *models.OnlineGame, 256), hub: hub}
+func NewClient(channel string, username string, conn *websocket.Conn, hub *Hub) *Client {
+	return &Client{Conn: conn, Username: username, Channel: channel, sendGameMetadata: make(chan Metadata, 256), sendAnswer: make(chan Message, 256), send: make(chan *models.OnlineGame, 256), hub: hub}
 }
 
 
@@ -134,13 +135,13 @@ func (c *Client) Close() {
 	close(c.send)
 }
 
-func ServeWS(ctx *gin.Context, hub *Hub, handlers *handlers.Handlers) {
+func ServeWS(ctx *gin.Context, username string, hub *Hub, handlers *handlers.Handlers) {
 	ws, err := upgrader.Upgrade(ctx.Writer, ctx.Request, nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return
 	}
-	client := NewClient("general", ws, hub)
+	client := NewClient("general", username, ws, hub)
 
 	hub.register <- client
 	go client.Write(handlers)
@@ -148,13 +149,13 @@ func ServeWS(ctx *gin.Context, hub *Hub, handlers *handlers.Handlers) {
 }
 
 
-func ServeGameWS(ctx *gin.Context, gameId string, hub *Hub, handlers *handlers.Handlers) {
+func ServeGameWS(ctx *gin.Context, gameId string, username string, hub *Hub, handlers *handlers.Handlers) {
 	ws, err := upgrader.Upgrade(ctx.Writer, ctx.Request, nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return
 	}
-	client := NewClient(gameId, ws, hub)
+	client := NewClient(gameId, username, ws, hub)
 
 	hub.registerNewGame <- client
 	go client.Write(handlers)

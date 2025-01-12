@@ -1,14 +1,17 @@
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-const userId = Math.floor(100000 + Math.random() * 900000);
+import { AuthContext } from '../context/AuthContext';
 
 let socket: WebSocket;
 
 export const useSearchGameWs = (toggleDisplayModal: () => void) => {
+  const user = useContext(AuthContext);
   const navigate = useNavigate();
 
   function searchForGame() {
-    socket = new WebSocket(`${import.meta.env.VITE_WEBSOCKET_PORT}/ws`);
+    socket = new WebSocket(
+      `${import.meta.env.VITE_WEBSOCKET_PORT}/ws/${user?.username}`
+    );
 
     socket.onclose = () => {
       console.log('connection closed');
@@ -16,14 +19,15 @@ export const useSearchGameWs = (toggleDisplayModal: () => void) => {
 
     socket.onmessage = (event) => {
       const gameId = JSON.parse(event.data).gameId;
-      navigate(`/game/${userId}/${gameId}`);
+      navigate(`/game/online/${gameId}`);
       socket?.close();
     };
 
     socket.onopen = () => {
       socket?.send(
         JSON.stringify({
-          type: 'search'
+          type: 'search',
+          user
         })
       );
       toggleDisplayModal();

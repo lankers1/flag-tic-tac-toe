@@ -15,6 +15,7 @@ interface Props {
 }
 
 export const ActionButtons = ({ winner, handleResetGame, quitGame }: Props) => {
+  const { gameId } = useParams();
   const [openModal, setOpenModal] = useState<'give_up' | 'restart' | false>(
     false
   );
@@ -22,15 +23,17 @@ export const ActionButtons = ({ winner, handleResetGame, quitGame }: Props) => {
   return (
     <div className={styles.container}>
       <Button handleClick={() => setOpenModal('give_up')} label="Give up" />
-      <Button
-        handleClick={() => setOpenModal('restart')}
-        label={
-          <>
-            <GrPowerReset className={styles.buttonIcon} />
-            {winner ? 'Play Again' : 'Reset Game'}
-          </>
-        }
-      />
+      {!gameId && (
+        <Button
+          handleClick={() => setOpenModal('restart')}
+          label={
+            <>
+              <GrPowerReset className={styles.buttonIcon} />
+              {winner ? 'Play Again' : 'Reset Game'}
+            </>
+          }
+        />
+      )}
       <Modal isOpen={!!openModal}>
         <ModalContent
           type={openModal}

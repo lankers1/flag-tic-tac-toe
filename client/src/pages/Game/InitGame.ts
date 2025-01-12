@@ -1,9 +1,11 @@
-import { EffectCallback, useEffect, useRef } from 'react';
+import { EffectCallback, useContext, useEffect, useRef } from 'react';
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import { SetSelectedFlag, useGameStore } from '../../store/useGameStore';
+import { AuthContext } from '../../context/AuthContext';
 
 type Args = {
   gameId: string | undefined;
+  username: string | undefined;
   player: string;
   setTurn: (turn: number) => void;
   setCorrectAnswer: SetSelectedFlag;
@@ -19,6 +21,7 @@ type Message = {
   flagIso: string;
   player: number;
   cell: { col: number; row: number };
+  playAgain: boolean;
 };
 
 export class OnlineGame {
@@ -29,13 +32,16 @@ export class OnlineGame {
   socket: WebSocket;
   constructor(args: Args) {
     this.socket = new WebSocket(
-      `${import.meta.env.VITE_WEBSOCKET_PORT}/ws/game/${args.gameId}`
+      `${import.meta.env.VITE_WEBSOCKET_PORT}/ws/game/${args.username}/${
+        args.gameId
+      }`
     );
     this.setPlayerTurn = args.setTurn;
     this.setCorrectAnswer = args.setCorrectAnswer;
     this.setIncorrectAnswer = args.setIncorrectAnswer;
     this.resetState = args.resetState;
     this.quitGame = this.quitGame.bind(this);
+    this.playAgain = this.playAgain.bind(this);
   }
 
   setTurn(playerTurn: number) {
@@ -81,6 +87,10 @@ export class OnlineGame {
     this.socket?.close();
     this.resetState();
     navigate('/');
+  }
+
+  playAgain() {
+    this.socket?.send(JSON.stringify({ type: 'play-again' }));
   }
 }
 
@@ -161,7 +171,11 @@ export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
   }, dependencies);
 }
 
-export const useInitGame = (opponentQuit: (arg: boolean) => void) => {
+export const useInitGame = (
+  opponentQuit: (arg: boolean) => void,
+  opponentReplay: (arg: boolean | null) => void
+) => {
+  const user = useContext(AuthContext);
   const navigate = useNavigate();
   const { turn, setTurn, setCorrectAnswer, resetState, setIncorrectAnswer } =
     useGameStore((state) => state);
@@ -175,13 +189,14 @@ export const useInitGame = (opponentQuit: (arg: boolean) => void) => {
         setTurn,
         setCorrectAnswer,
         setIncorrectAnswer,
-        resetState
+        resetState,
+        username: user?.username
       });
       if (game && player !== 'local' && player !== 'computer' && game?.socket) {
         game.socket.onmessage = (event: { data: string }) => {
           try {
             const message = JSON.parse(event?.data);
-            handleWsMessage(message, opponentQuit);
+            handleWsMessage(message, opponentQuit, opponentReplay);
           } catch (e) {
             console.error(e);
           }
@@ -193,12 +208,13 @@ export const useInitGame = (opponentQuit: (arg: boolean) => void) => {
         game.quitGame(navigate, gameId);
       };
     }
-  }, [gameId, turn, player]);
+  }, [gameId, turn, player, user?.username]);
 };
 
 function handleWsMessage(
   message: Message,
-  opponentQuit: (arg: boolean) => void
+  opponentQuit: (arg: boolean) => void,
+  opponentReplay: (arg: boolean | null) => void
 ) {
   switch (message.type) {
     case 'metadata':
@@ -214,6 +230,9 @@ function handleWsMessage(
       break;
     case 'quit':
       return opponentQuit(true);
+    case 'play-again':
+      const { playAgain } = message;
+      return opponentReplay(playAgain);
     default:
       return;
   }

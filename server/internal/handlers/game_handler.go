@@ -12,6 +12,12 @@ type CreateGameRes struct {
 	Answers *models.Answer `json:"answers"`
 }
 
+type CreateOnlineGameRes struct {
+	Game *models.OnlineGameBoard `json:"game"`
+	Answers *models.Answer `json:"answers"`
+}
+
+
 type GameHandler struct {
 	GameRepository *repositories.GameRepository
 }
@@ -31,9 +37,9 @@ func (gameHandler *GameHandler) CreateGame(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, res)
 }
 
-func (gameHandler *GameHandler) OnlineGame() *models.OnlineGame {
+func (gameHandler *GameHandler) OnlineGame(players []string) *models.OnlineGame {
 	game := gameHandler.GameRepository.Create();
-	gameId := gameHandler.GameRepository.OnlineGame(game);
+	gameId := gameHandler.GameRepository.OnlineGame(game, players);
 	
 	return gameId
 }
@@ -42,8 +48,8 @@ func (gameHandler *GameHandler) GetOnlineGame(ctx *gin.Context) {
 	gameId := ctx.Param("gameId")
 
 	game := gameHandler.GameRepository.GetOnlineGame(gameId);
-	answers := gameHandler.GameRepository.GetAnswers(game)
+	answers := gameHandler.GameRepository.GetAnswers(game.Board)
 
-	res := CreateGameRes{Game: game, Answers: answers}
+	res := CreateOnlineGameRes{Game: game, Answers: answers}
 	ctx.JSON(http.StatusOK, res)
 }
