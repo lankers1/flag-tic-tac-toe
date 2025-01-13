@@ -55,9 +55,9 @@ func (authRepo *AuthRepository) Register(body models.Registration) *models.User 
 }
 
 func (authRepo *AuthRepository) Login(body models.Login) (*models.User, *appError) {
-	query := "SELECT username, rank, favourite_flag, password, token FROM users;"
+	query := "SELECT username, rank, favourite_flag, password, token FROM users WHERE username = $1;"
 
-	rows, queryErr := authRepo.conn.Query(context.Background(), query)
+	rows, queryErr := authRepo.conn.Query(context.Background(), query, body.Username)
 
 	if queryErr != nil {
 		log.Printf("Query error: %v", queryErr)

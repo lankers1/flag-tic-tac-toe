@@ -1,6 +1,9 @@
 package websockets
 
 import (
+	"strconv"
+	"fmt"
+	"slices"
 	"github.com/lankers1/fttt/internal/handlers"
 )
 
@@ -12,6 +15,7 @@ type M struct {
 type Hub struct {
 	clients map[string]map[*Client]bool
   gameClients map[string]map[*Client]bool
+	playAgain map[string][]string
 	unregister chan *Client
 	register chan *Client
   registerNewGame chan *Client
@@ -33,10 +37,13 @@ type Message struct {
 	Player int `json:"player"`
 	Cell Cell `json:"cell"`
 	Answer string `json:"answer"`
+	Username string `json:"username"`
+	PlayerTurn int `json:"playerTurn"`
 }
 
 func NewHub() *Hub {
 	return &Hub{
+		playAgain: make(map[string][]string),
 		gameClients: make(map[string]map[*Client]bool),
 		clients:    make(map[string]map[*Client]bool),
 		unregister: make(chan *Client),
@@ -152,5 +159,26 @@ func (h *Hub) HandleMessage(message Message, handlers *handlers.Handlers) {
 						delete(h.gameClients[message.GameId], client)
 					}
 			}
+	}
+
+	if message.Type == "play-again" {
+		h.playAgain[message.GameId] = append(h.playAgain[message.GameId], message.Username)
+
+		if len(h.playAgain[message.GameId]) > 1 {
+			gameId := handlers.GameHandler.OnlineGame(h.playAgain[message.GameId])
+
+			clients := h.gameClients[message.GameId]
+			for client, _ := range clients {
+				sendAnswer := client.sendAnswer
+				message := Message{GameId: strconv.Itoa(gameId.GameId), PlayerTurn: slices.Index(h.playAgain[message.GameId], message.Username) + 1,  Type: "play-again"}
+				fmt.Println(message)
+				select {
+					case sendAnswer <- message:
+					default:
+						close(sendAnswer)
+						delete(clients, client)
+					}
+			}
+		}
 	}
 }

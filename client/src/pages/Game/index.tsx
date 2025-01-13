@@ -34,14 +34,12 @@ export const Game = () => {
   const user = useContext(AuthContext);
   const navigate = useNavigate();
   const [opponentQuit, setOpponentQuit] = useState(false);
-  const [opponentReplay, setOpponentReplay] = useState<boolean | null>(null);
   const { gameId, player } = useParams();
   const { data: flags } = useSearchFlags('');
   const [selectedSquare, setSelectedSquare] = useState<[number, number]>([
     0, 0
   ]);
   const { data, isLoading, isPending, error, refetch } = useGetGameQuery();
-  useInitGame(setOpponentQuit, setOpponentReplay);
   const {
     turn,
     setTurn,
@@ -52,6 +50,7 @@ export const Game = () => {
     setIncorrectAnswer,
     setCorrectAnswer
   } = useGameStore((state) => state);
+  useInitGame(setOpponentQuit);
 
   useEffect(() => {
     let timeout = null;
@@ -181,7 +180,12 @@ export const Game = () => {
             handleClick={() => game.quitGame(navigate, gameId)}
             label="No"
           />
-          <Button handleClick={() => game.playAgain(user)} label="Yes" />
+          <Button
+            handleClick={() => {
+              game.playAgain(user, gameId);
+            }}
+            label="Yes"
+          />
         </div>
       </Modal>
     </>

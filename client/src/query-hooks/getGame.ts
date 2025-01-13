@@ -13,7 +13,7 @@ async function getGame(gameId: string | undefined) {
 export const useGetGameQuery = () => {
   const params = useParams();
   return useQuery({
-    queryKey: ['game'],
+    queryKey: ['game', params?.gameId],
     gcTime: 0,
     queryFn: () => getGame(params?.gameId),
     refetchOnWindowFocus: false
