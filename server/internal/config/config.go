@@ -30,5 +30,5 @@ func InitRepositories(conn *pgxpool.Pool) *repositories.Repositories {
 }
 
 func InitHandlers(repo *repositories.Repositories) *handlers.Handlers {
-	return handlers.NewHandlers(repo.GameRepository, repo.FlagRepository, repo.AuthRepository)
+	return handlers.NewHandlers(repo.GameRepository, repo.FlagRepository, repo.AuthRepository, repo.UserRepository)
 }

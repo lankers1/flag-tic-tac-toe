@@ -6,6 +6,7 @@ type Repositories struct {
 	GameRepository *GameRepository
 	FlagRepository *FlagRepository
 	AuthRepository *AuthRepository
+	UserRepository *UserRepository
 }
 
 func NewRepositories(db *pgxpool.Pool) *Repositories {
@@ -13,5 +14,6 @@ func NewRepositories(db *pgxpool.Pool) *Repositories {
 		GameRepository: NewGameRepository(db),
 		FlagRepository: NewFlagRepository(db),
 		AuthRepository: NewAuthRepository(db),
+		UserRepository: NewUserRepository(db),
 	}
 }
