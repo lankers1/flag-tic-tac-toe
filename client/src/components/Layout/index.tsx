@@ -1,10 +1,10 @@
-import { Outlet } from 'react-router-dom';
-import styles from './styles.module.scss';
-import { Heading } from '../Heading';
 import { useContext } from 'react';
-import { AuthContext } from '../../context/AuthContext';
-import * as flags from 'country-flag-icons/react/1x1';
+import { Outlet } from 'react-router-dom';
 import { FaAngleUp } from 'react-icons/fa';
+import { FlagAvatar } from '@components/FlagAvatar';
+import { Heading } from '@components/Heading';
+import { AuthContext } from '../../context/AuthContext';
+import styles from './styles.module.scss';
 
 export const Layout = () => {
   const user = useContext(AuthContext);
@@ -13,7 +13,7 @@ export const Layout = () => {
     <div className={styles.container}>
       <header className={styles.header}>
         <Heading variant="h1">Flag tic-tac-toe</Heading>
-        {user?.loggedIn && <FlagAvatar />}
+        {user?.loggedIn && <UserMenu />}
       </header>
       <main className={styles.main}>
         <Outlet />
@@ -22,15 +22,14 @@ export const Layout = () => {
   );
 };
 
-const FlagAvatar = () => {
+const UserMenu = () => {
   const user = useContext(AuthContext);
-  const Flag = flags?.[user?.favouriteFlag as keyof typeof flags];
   return (
     <div className={styles.avatarWrapper}>
       <div className={styles.avatarContainer}>
         <div className={styles.innerContainer}>
           <FaAngleUp className={styles.icon} />
-          <Flag className={styles.flagAvatar} height="48" width="48" />
+          <FlagAvatar flagIso2={user?.favouriteFlag} />
         </div>
         <div className={styles.menuItems}>
           <a>Account</a>

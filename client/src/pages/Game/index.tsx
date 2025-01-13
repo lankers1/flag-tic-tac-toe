@@ -18,6 +18,8 @@ import { game, useInitGame } from './InitGame';
 import { Heading } from '@components/Heading';
 import { Button } from '@components/Buttons/Button';
 import { AuthContext } from '../../context/AuthContext';
+import { useGetUserQuery } from '@query-hooks/getUser';
+import { FlagAvatar } from '@components/FlagAvatar';
 
 export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
   const initialized = useRef(false);
@@ -30,7 +32,13 @@ export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
   }, dependencies);
 }
 
+const getOpponentUsername = (game, username) => {
+  if (game?.playerOneId !== username) return game?.playerOneId;
+  return game?.playerTwoId;
+};
+
 export const Game = () => {
+  const [opponent, setOpponent] = useState({});
   const user = useContext(AuthContext);
   const navigate = useNavigate();
   const [opponentQuit, setOpponentQuit] = useState(false);
@@ -40,6 +48,11 @@ export const Game = () => {
     0, 0
   ]);
   const { data, isLoading, isPending, error, refetch } = useGetGameQuery();
+  const {
+    data: opponentData,
+    isLoading: isOpponentDataLoading,
+    isPending: isOpponentDataPending
+  } = useGetUserQuery(getOpponentUsername(data?.game, user?.username));
   const {
     turn,
     setTurn,
@@ -91,15 +104,12 @@ export const Game = () => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   if(opponentQuit === false) {
-  //     game?.quitGame(navigate, gameId);
-  //   } else {
-
-  //   }
-  // }, [])
-
-  if (isLoading || isPending) {
+  if (
+    isLoading ||
+    isPending ||
+    isOpponentDataLoading ||
+    isOpponentDataPending
+  ) {
     return (
       <div className={styles.loadingContainer}>
         <div className={styles.loader}>
@@ -119,32 +129,24 @@ export const Game = () => {
     refetch();
     resetState();
   }
-
+  console.log(opponentQuit);
   return (
     <>
       <div className={styles.pageContainer}>
         <div className={styles.container}>
-          <Notification
-            backgroundColor={
-              currentTurn === 1 || winner === 1 ? '#b0ddff' : '#C4FFBF'
-            }
-          >
-            {!!winner ? (
-              <p className={styles.notificationText}>
-                Player {winner} has won! Congrats!!
-              </p>
-            ) : (
-              <p className={styles.notificationText}>
-                {gameId
-                  ? currentTurn === turn
-                    ? `It's your turn!`
-                    : "It's your opponents turn!"
-                  : currentTurn === 1
-                  ? `It's player ones turn!`
-                  : "It's player twos turn!"}
-              </p>
+          <div style={{ display: 'flex', gap: '2rem' }}>
+            {determineOrder(user, opponentData?.user, turn).map(
+              (user, index) => (
+                <PlayerNotification
+                  user={user}
+                  currentTurn={currentTurn}
+                  turn={turn}
+                  key={user?.username}
+                  index={index}
+                />
+              )
             )}
-          </Notification>
+          </div>
           <div className={styles.gameboardContainer}>
             <Gameboard
               handleClick={handleClick}
@@ -158,13 +160,6 @@ export const Game = () => {
           winner={winner}
         />
       </div>
-      <Modal isOpen={!!selectedSquare[0]}>
-        <AnswerModalContent
-          answers={data?.answers}
-          selectedSquareIndex={selectedSquare}
-          closeModal={() => setSelectedSquare([0, 0])}
-        />
-      </Modal>
       <Modal isOpen={opponentQuit}>
         <Heading variant="h2">It looks like your opponent quit!</Heading>
         <Button
@@ -172,7 +167,15 @@ export const Game = () => {
           label="Back"
         />
       </Modal>
-      <Modal isOpen={!!(winner && gameId)}>
+      <Modal isOpen={!!selectedSquare[0]}>
+        <AnswerModalContent
+          answers={data?.answers}
+          selectedSquareIndex={selectedSquare}
+          closeModal={() => setSelectedSquare([0, 0])}
+        />
+      </Modal>
+
+      <Modal isOpen={!!(winner && gameId) && !opponentQuit}>
         <Heading variant="h2">Player {winner} has won! Congrats!!</Heading>
         <p>Do you want to play again?</p>
         <div>
@@ -191,3 +194,56 @@ export const Game = () => {
     </>
   );
 };
+
+const PlayerNotification = ({ user, currentTurn, index, turn }) => {
+  return (
+    <Notification
+      active={currentTurn - 1 === index}
+      backgroundColor={index === 0 ? '#b0ddff' : '#C4FFBF'}
+    >
+      <div style={{ display: 'flex' }}>
+        <FlagAvatar flagIso2={user?.favouriteFlag} />
+        <div>
+          <p style={{ marginLeft: '0.5rem', fontSize: '1rem' }}>
+            {turn - 1 === index ? 'You' : 'Opponent'}
+          </p>
+          <p
+            style={{
+              marginLeft: '0.5rem',
+              fontSize: '1.3rem',
+              fontWeight: 500
+            }}
+          >
+            {user.username}
+          </p>
+          <p style={{ marginLeft: '0.5rem', fontSize: '1rem' }}>{user.rank}</p>
+        </div>
+      </div>
+    </Notification>
+  );
+};
+
+function determineOrder(user, opponentData, turn) {
+  if (turn === 1) {
+    return [user, opponentData];
+  }
+
+  return [opponentData, user];
+}
+{
+  /* {!!winner ? (
+                <p className={styles.notificationText}>
+                  Player {winner} has won! Congrats!!
+                </p>
+              ) : (
+                <p className={styles.notificationText}>
+                  {gameId
+                    ? currentTurn === turn
+                      ? `It's your turn!`
+                      : "It's your opponents turn!"
+                    : currentTurn === 1
+                    ? `It's player ones turn!`
+                    : "It's player twos turn!"}
+                </p>
+              )} */
+}
