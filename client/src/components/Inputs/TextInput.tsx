@@ -18,7 +18,7 @@ export const TextInput = ({
 }: Props) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
-      <p style={{ fontSize: '1.3rem', fontWeight: 500 }}>{label}</p>
+      <p style={{ fontSize: '1.2rem', fontWeight: 500 }}>{label}</p>
       <input
         name={name}
         className={styles.textInput}
