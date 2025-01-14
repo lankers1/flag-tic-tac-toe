@@ -225,13 +225,17 @@ CREATE TABLE game(
   player_one_id integer,
   player_two_id integer,
   time_played date,
-  board json
+  board json completed boolean
 );
 CREATE TABLE users(
-  username varchar(50),
-  password bytea,
-  rank integer,
-  email varchar(100),
-  favourite_flag varchar(2),
-  token uuid
+  username varchar(50) NOT NULL,
+  password bytea NOT NULL,
+  rank integer NOT NULL,
+  email varchar(100) NOT NULL,
+  favourite_flag varchar(2) NOT NULL,
+  token uuid NOT NULL
 );
+ALTER TABLE users
+ADD CONSTRAINT username_unq UNIQUE(username);
+ALTER TABLE users
+ADD CONSTRAINT username_length CHECK (char_length(username) > 2)
