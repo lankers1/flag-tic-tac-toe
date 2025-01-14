@@ -2,13 +2,18 @@ package repositories
 
 import (
 	"log"
+	"fmt"
 	"context"
+	"errors"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5"
 	"github.com/lankers1/fttt/internal/models"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
 )
+
+
 
 type AuthInterface interface {
 	Register(*models.Registration) error
@@ -30,28 +35,44 @@ func NewAuthRepository(conn *pgxpool.Pool) *AuthRepository {
 	}
 }
 
-func (authRepo *AuthRepository) Register(body models.Registration) *models.User {
+func (authRepo *AuthRepository) Register(body models.Registration) (*models.User, *appError) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(body.Password), bcrypt.DefaultCost)
+	user := models.User{}
+
 	if err != nil {
-			panic(err)
+		panic(err)
 	}
 
 	query := "INSERT INTO users(username, password, rank, email, favourite_flag, token) VALUES($1, $2, 1000, $3, (SELECT iso_2 FROM flags ORDER BY random() limit 1), gen_random_uuid()) RETURNING username, rank, favourite_flag, token"
 
-	rows, queryErr := authRepo.conn.Query(context.Background(), query, body.Username, hashedPassword, body.Email)
-
+	queryErr := authRepo.conn.QueryRow(context.Background(), query, body.Username, hashedPassword, body.Email).Scan(&user.Username, &user.Rank, &user.FavouriteFlag, &user.Token)
 	if queryErr != nil {
-		log.Printf("Query error: %v", queryErr)
-	 }
+		var pgErr *pgconn.PgError
 
-	 res, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.User])
+		if errors.As(queryErr, &pgErr) {
+			fmt.Println(pgErr.Message)
+			if pgErr.Message == "new row for relation \"users\" violates check constraint \"username_length\"" {
+				return nil, &appError{ 
+					Code: http.StatusBadRequest,
+					Message: "Username is too short, needs to be between 3 and 16 characters",
+				}
+			}
+
+			if pgErr.Message == "duplicate key value violates unique constraint \"username_unq\"" {
+				return nil, &appError{ 
+					Code: http.StatusBadRequest,
+					Message: "Username already taken, try a different username",
+				}
+			}
+		}
+	 }
 	
 	if err != nil {
 		log.Printf("CollectRows error: %v", err)
 		panic(err)
 	}
 
-	return &res
+	return &user, nil
 }
 
 func (authRepo *AuthRepository) Login(body models.Login) (*models.User, *appError) {
