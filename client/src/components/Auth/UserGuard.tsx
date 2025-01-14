@@ -13,7 +13,7 @@ const getOpponentUsername = (game, username) => {
 };
 
 export const UserGuard = ({ children }: PropsWithChildren) => {
-  const { data, isLoading, isPending, error } = useGetGameQuery();
+  const { data, isLoading, isPending, error, refetch } = useGetGameQuery();
   const user = useContext(AuthContext);
   const opponentData = useGetUserQuery(
     getOpponentUsername(data?.game, user?.username)
@@ -49,5 +49,5 @@ export const UserGuard = ({ children }: PropsWithChildren) => {
   if (error || opponentData?.error)
     return <p>Error... {error.message || opponentData?.error?.message}</p>;
 
-  return children(data, opponentData?.data);
+  return children(data, opponentData?.data, refetch);
 };
