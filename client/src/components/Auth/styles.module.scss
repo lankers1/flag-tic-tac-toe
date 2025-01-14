@@ -10,3 +10,17 @@
   flex-direction: column;
   gap: 1.5rem;
 }
+
+
+
+.loadingContainer {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  flex-direction: column;
+
+  .loader {
+    display: flex;
+    height: 8rem;
+  }
+}

@@ -2,13 +2,11 @@ import { EffectCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Gameboard } from '../../components/Gameboard';
-import { useGetGameQuery } from '../../query-hooks/getGame';
 import { Modal } from '../../components/Modal';
 import { useGameStore } from '../../store/useGameStore';
 import { Notification } from '../../components/Notification';
 import { determineMove, easyComputer } from '../../computer/rulesets';
 import { useSearchFlags } from '../../query-hooks/searchFlags';
-import { Loader } from '../../components/Loader';
 
 import styles from './styles.module.scss';
 
@@ -18,7 +16,6 @@ import { game, useInitGame } from './InitGame';
 import { Heading } from '@components/Heading';
 import { Button } from '@components/Buttons/Button';
 import { AuthContext } from '../../context/AuthContext';
-import { useGetUserQuery } from '@query-hooks/getUser';
 import { FlagAvatar } from '@components/FlagAvatar';
 
 export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
@@ -32,13 +29,7 @@ export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
   }, dependencies);
 }
 
-const getOpponentUsername = (game, username) => {
-  if (game?.playerOneId !== username) return game?.playerOneId;
-  return game?.playerTwoId;
-};
-
-export const Game = () => {
-  const [opponent, setOpponent] = useState({});
+export const Game = ({ gameData, opponent, refetch }) => {
   const user = useContext(AuthContext);
   const navigate = useNavigate();
   const [opponentQuit, setOpponentQuit] = useState(false);
@@ -47,12 +38,7 @@ export const Game = () => {
   const [selectedSquare, setSelectedSquare] = useState<[number, number]>([
     0, 0
   ]);
-  const { data, isLoading, isPending, error, refetch } = useGetGameQuery();
-  const {
-    data: opponentData,
-    isLoading: isOpponentDataLoading,
-    isPending: isOpponentDataPending
-  } = useGetUserQuery(getOpponentUsername(data?.game, user?.username));
+
   const {
     turn,
     setTurn,
@@ -78,7 +64,7 @@ export const Game = () => {
         const computerFlag = determineMove(easyComputer, {
           flags,
           selectedFlags,
-          answers: data.answers,
+          answers: gameData.answers,
           setIncorrectAnswer
         });
 
@@ -104,23 +90,6 @@ export const Game = () => {
     };
   }, []);
 
-  if (
-    isLoading ||
-    isPending ||
-    isOpponentDataLoading ||
-    isOpponentDataPending
-  ) {
-    return (
-      <div className={styles.loadingContainer}>
-        <div className={styles.loader}>
-          <Loader />
-        </div>
-      </div>
-    );
-  }
-
-  if (error) return <p>Error... {error.message}</p>;
-
   function handleClick(outerIndex: number, innerIndex: number) {
     setSelectedSquare([outerIndex + 1, innerIndex + 1]);
   }
@@ -129,33 +98,31 @@ export const Game = () => {
     refetch();
     resetState();
   }
-  console.log(opponentQuit);
+
   return (
     <>
       <div className={styles.pageContainer}>
         <div className={styles.container}>
           <div style={{ display: 'flex', gap: '2rem' }}>
-            {determineOrder(user, opponentData?.user, turn).map(
-              (user, index) => (
-                <PlayerNotification
-                  user={user}
-                  currentTurn={currentTurn}
-                  turn={turn}
-                  key={user?.username}
-                  index={index}
-                />
-              )
-            )}
+            {determineOrder(user, opponent?.user, turn).map((user, index) => (
+              <PlayerNotification
+                user={user}
+                currentTurn={currentTurn}
+                turn={turn}
+                key={user?.username}
+                index={index}
+              />
+            ))}
           </div>
           <div className={styles.gameboardContainer}>
             <Gameboard
               handleClick={handleClick}
-              data={gameId ? data?.game.board : data?.game}
+              data={gameId ? gameData?.game.board : gameData?.game}
             />
           </div>
         </div>
         <ActionButtons
-          quitGame={game.quitGame}
+          quitGame={game?.quitGame}
           handleResetGame={handleReset}
           winner={winner}
         />
@@ -169,7 +136,7 @@ export const Game = () => {
       </Modal>
       <Modal isOpen={!!selectedSquare[0]}>
         <AnswerModalContent
-          answers={data?.answers}
+          answers={gameData?.answers}
           selectedSquareIndex={selectedSquare}
           closeModal={() => setSelectedSquare([0, 0])}
         />
