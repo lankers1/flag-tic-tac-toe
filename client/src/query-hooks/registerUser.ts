@@ -14,5 +14,5 @@ async function handleRegisterUser(user) {
   return res.json();
 }
 
-export const registerUser = () =>
+export const useRegisterUser = () =>
   useMutation({ mutationFn: handleRegisterUser });

@@ -5,7 +5,7 @@ import { TextInput } from '@components/Inputs/TextInput';
 import { Button } from '@components/Buttons/Button';
 import styles from './styles.module.scss';
 import { AuthContext } from '../../context/AuthContext';
-import { registerUser } from '@query-hooks/registerUser';
+import { useRegisterUser } from '@query-hooks/registerUser';
 import { Notification } from '@components/Notification';
 
 const initialState = {
@@ -20,7 +20,7 @@ export const RegisterForm = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState(initialState);
   const [error, setError] = useState<null | { message: string }>(null);
-  const mutation = registerUser();
+  const mutation = useRegisterUser();
   const user = useContext(AuthContext);
 
   function handleChange(key: string) {
