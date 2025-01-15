@@ -10,12 +10,6 @@ import (
 	"github.com/lankers1/fttt/internal/models"
 )
 
-type GameInterface interface {
-	Create(*models.Game) error
-	GetAnswers(*models.Answer) error
-	OnlineGame(*models.OnlineGame) error
-}
-
 type GameRepository struct {
 	conn *pgxpool.Pool
 }

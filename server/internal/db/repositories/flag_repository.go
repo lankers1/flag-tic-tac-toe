@@ -8,10 +8,6 @@ import (
 	"github.com/lankers1/fttt/internal/models"
 )
 
-type FlagInterface interface {
-	SearchFlags(*models.Flag) error
-}
-
 type FlagRepository struct {
 	conn *pgxpool.Pool
 }

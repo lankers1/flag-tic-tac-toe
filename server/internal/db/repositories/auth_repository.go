@@ -13,13 +13,6 @@ import (
 	"net/http"
 )
 
-
-
-type AuthInterface interface {
-	Register(*models.Registration) error
-	Login(*models.Login) error
-}
-
 type AuthRepository struct {
 	conn *pgxpool.Pool
 }
@@ -35,9 +28,9 @@ func NewAuthRepository(conn *pgxpool.Pool) *AuthRepository {
 	}
 }
 
-func (authRepo *AuthRepository) Register(body models.Registration) (*models.User, *appError) {
+func (authRepo *AuthRepository) Register(body models.Registration) (*models.UserLogin, *appError) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(body.Password), bcrypt.DefaultCost)
-	user := models.User{}
+	user := models.UserLogin{}
 
 	if err != nil {
 		panic(err)
@@ -75,7 +68,7 @@ func (authRepo *AuthRepository) Register(body models.Registration) (*models.User
 	return &user, nil
 }
 
-func (authRepo *AuthRepository) Login(body models.Login) (*models.User, *appError) {
+func (authRepo *AuthRepository) Login(body models.Login) (*models.UserLogin, *appError) {
 	query := "SELECT username, rank, favourite_flag, password, token FROM users WHERE username = $1;"
 
 	rows, queryErr := authRepo.conn.Query(context.Background(), query, body.Username)
@@ -108,7 +101,7 @@ func (authRepo *AuthRepository) Login(body models.Login) (*models.User, *appErro
 		}
 	 }
 	 
-	response := models.User{Username: res.Username, Token: res.Token, Rank: res.Rank, FavouriteFlag: res.FavouriteFlag}
+	response := models.UserLogin{Username: res.Username, Token: res.Token, Rank: res.Rank, FavouriteFlag: res.FavouriteFlag}
 
 	return &response, nil
 }
