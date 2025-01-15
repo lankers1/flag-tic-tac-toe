@@ -18,6 +18,7 @@ import { Button } from '@components/Buttons/Button';
 import { AuthContext } from '../../context/AuthContext';
 import { FlagAvatar } from '@components/FlagAvatar';
 import { useUpdateGameWinner } from '@query-hooks/updateGameWinner';
+import { useUpdateUserRank } from '@query-hooks/useUpdateUserRank';
 
 export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
   const initialized = useRef(false);
@@ -32,6 +33,7 @@ export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
 
 export const Game = ({ gameData, opponent, refetch }) => {
   const mutation = useUpdateGameWinner();
+  const updateUserRank = useUpdateUserRank();
   const user = useContext(AuthContext);
   const navigate = useNavigate();
   const [opponentQuit, setOpponentQuit] = useState(false);
@@ -53,15 +55,51 @@ export const Game = ({ gameData, opponent, refetch }) => {
   } = useGameStore((state) => state);
   useInitGame(setOpponentQuit);
 
-  useEffect(() => {
+  async function completeGame() {
     if (winner === turn && gameId && user) {
-      return mutation.mutate({ gameId, username: user?.username });
+      const userResponse = await updateUserRank.mutateAsync({
+        username: user.username,
+        token: user.token,
+        result: 'win'
+      });
+      console.log({ userResponse });
+      user.setUser({
+        ...user,
+        rank: userResponse.rank
+      });
+      return await mutation.mutateAsync({ gameId, username: user?.username });
+    }
+
+    if (winner && winner !== turn && gameId && user) {
+      const userResponse = await updateUserRank.mutateAsync({
+        username: user.username,
+        token: user.token,
+        result: 'loss'
+      });
+      user.setUser({
+        ...user,
+        rank: userResponse.rank
+      });
+      return;
     }
 
     if (opponentQuit && gameId && user) {
-      return mutation.mutate({ gameId, username: user?.username });
+      const userResponse = await updateUserRank.mutateAsync({
+        username: user.username,
+        token: user.token,
+        result: 'win'
+      });
+      user.setUser({
+        ...user,
+        rank: userResponse.rank
+      });
+      return mutation.mutateAsync({ gameId, username: user?.username });
     }
-  }, [turn, winner, user?.username, opponentQuit]);
+  }
+
+  useEffect(() => {
+    completeGame();
+  }, [turn, winner, user.username, opponentQuit]);
 
   useEffect(() => {
     let timeout = null;
@@ -98,6 +136,20 @@ export const Game = ({ gameData, opponent, refetch }) => {
 
   useOnMountUnsafe(() => {
     return () => {
+      // if (!winner && user) {
+      //   (async () => {
+      //     const userResponse = await updateUserRank.mutateAsync({
+      //       username: user.username,
+      //       token: user.token,
+      //       result: 'loss'
+      //     });
+      //     user.setUser({
+      //       ...userResponse,
+      //       rank: userResponse.rank,
+      //       token: user.token
+      //     });
+      //   })();
+      // }
       game?.quitGame(navigate, gameId);
     };
   }, []);
