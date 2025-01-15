@@ -29,12 +29,12 @@ func NewGameHandler(gameRepo *repositories.GameRepository) *GameHandler {
 }
 
 func (gameHandler *GameHandler) CreateGame(ctx *gin.Context) {
-		game := gameHandler.GameRepository.Create();
-		answers := gameHandler.GameRepository.GetAnswers(game)
+	game := gameHandler.GameRepository.Create();
+	answers := gameHandler.GameRepository.GetAnswers(game)
 
-		res := CreateGameRes{Game: game, Answers: answers}
-		
-		ctx.JSON(http.StatusOK, res)
+	res := CreateGameRes{Game: game, Answers: answers}
+	
+	ctx.JSON(http.StatusOK, res)
 }
 
 func (gameHandler *GameHandler) OnlineGame(players []string) *models.OnlineGame {
@@ -52,4 +52,18 @@ func (gameHandler *GameHandler) GetOnlineGame(ctx *gin.Context) {
 
 	res := CreateOnlineGameRes{Game: game, Answers: answers}
 	ctx.JSON(http.StatusOK, res)
+}
+
+func (gameHandler *GameHandler) UpdateWinner(ctx *gin.Context) {
+	gameId := ctx.Param("gameId")
+	username := ctx.Param("username")
+
+	err := gameHandler.GameRepository.UpdateWinner(gameId, username)
+
+	if err != nil {
+		ctx.AbortWithStatusJSON(err.Code, err.Message)
+		return
+	}
+	
+	ctx.JSON(http.StatusOK, gin.H{})
 }

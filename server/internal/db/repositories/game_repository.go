@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"net/http"
 	"strconv"
 	"log"
 	"context"
@@ -103,7 +104,7 @@ func (gameRepo *GameRepository) OnlineGame(game *models.Game, players []string) 
 }
 
 func (gameRepo *GameRepository) GetOnlineGame(gameId string) *models.OnlineGameBoard {
-	query := "SELECT board, player_one_id, player_two_id FROM game WHERE game_id = $1"
+	query := "SELECT board, player_one_id, player_two_id, completed FROM game WHERE game_id = $1"
 
 	i, err := strconv.Atoi(gameId)
 	if err != nil {
@@ -141,4 +142,18 @@ func generateOnlineGame(conn *pgxpool.Pool, game *models.Game, players []string)
 	}
 
 	 return &res
+}
+
+func (gameRepo *GameRepository) UpdateWinner(gameId string, username string) *appError {
+	query := "UPDATE game SET winner = $1, completed = true WHERE game_id = $2 AND completed = false;"
+	_, queryErr := gameRepo.conn.Query(context.Background(), query, username, gameId)
+
+	if queryErr != nil {
+		return &appError{ 
+			Code: http.StatusInternalServerError,
+			Message: "Something went wrong updating the winner",
+		}
+	}
+
+	return nil
 }

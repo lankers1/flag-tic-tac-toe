@@ -35,4 +35,5 @@ type OnlineGameBoard struct {
 	Board *Game `json:"board"`  
 	PlayerOneId string `json:"playerOneId"`  
 	PlayerTwoId string `json:"playerTwoId"`  
+	Completed bool `json:"completed"`
 }
