@@ -2,7 +2,6 @@ package websockets
 
 import (
 	"strconv"
-	"fmt"
 	"slices"
 	"github.com/lankers1/fttt/internal/handlers"
 )
@@ -171,7 +170,7 @@ func (h *Hub) HandleMessage(message Message, handlers *handlers.Handlers) {
 			for client, _ := range clients {
 				sendAnswer := client.sendAnswer
 				message := Message{GameId: strconv.Itoa(gameId.GameId), PlayerTurn: slices.Index(h.playAgain[message.GameId], message.Username) + 1,  Type: "play-again"}
-				fmt.Println(message)
+
 				select {
 					case sendAnswer <- message:
 					default:
