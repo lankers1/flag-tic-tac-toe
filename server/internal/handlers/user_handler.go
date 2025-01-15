@@ -29,3 +29,23 @@ func (userHandler *UserHandler) GetUser(ctx *gin.Context) {
 	
 	ctx.JSON(http.StatusOK, res)
 }
+
+
+func (userHandler *UserHandler) UpdateScore(ctx *gin.Context) {
+	username := ctx.Param("username")
+
+	var body *models.UpdateScoreBody
+
+	if err := ctx.BindJSON(&body); err != nil {
+			return
+	}
+	
+	user, err := userHandler.UserRepository.UpdateScore(username, body);
+
+	if err != nil {
+		ctx.AbortWithStatusJSON(err.Code, err.Message)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, user)
+} 

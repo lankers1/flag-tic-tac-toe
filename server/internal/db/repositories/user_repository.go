@@ -1,16 +1,13 @@
 package repositories
 
 import (
+	"net/http"
 	"log"
 	"context"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jackc/pgx/v5"
 	"github.com/lankers1/fttt/internal/models"
 )
-
-type UserInterface interface {
-	GetUser(username string) error
-}
 
 type UserRepository struct {
 	conn *pgxpool.Pool
@@ -23,7 +20,7 @@ func NewUserRepository(conn *pgxpool.Pool) *UserRepository {
 }
 
 func (userRepo *UserRepository) GetUser(username string) *models.User {
-	query := "SELECT username, rank, favourite_flag, token FROM users WHERE username = $1"
+	query := "SELECT username, rank, favourite_flag FROM users WHERE username = $1"
 	rows, queryErr := userRepo.conn.Query(context.Background(), query, username)
 
 	if queryErr != nil {
@@ -37,4 +34,59 @@ func (userRepo *UserRepository) GetUser(username string) *models.User {
 	}
 
 	 return &user
+}
+
+func (userRepo *UserRepository) UpdateScore(username string, body *models.UpdateScoreBody) (*models.User, *appError) {
+	if body.Result == "loss" {
+		query := "UPDATE users SET rank = (SELECT rank - 10 FROM users WHERE username = $1) WHERE username = $1 AND token = $2 RETURNING username, rank, favourite_flag"
+		rows, queryErr := userRepo.conn.Query(context.Background(), query, username, body.Token)
+
+		if queryErr != nil {
+			log.Printf("Query error: %v", queryErr)
+		 }
+	
+		user, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.User])
+	
+		if (models.User{}) == user {
+			return nil, &appError{ 
+				Code: http.StatusInternalServerError,
+				Message: "You are not authorized to update this user",
+			}
+		}
+
+		if err != nil {
+			log.Printf("CollectRows error: %v", err)
+		}
+	
+		 return &user, nil
+	} 
+
+	if body.Result == "win" {
+		query := "UPDATE users SET rank = (SELECT rank + 10 FROM users WHERE username = $1) WHERE username = $1 AND token = $2 RETURNING username, rank, favourite_flag"
+		rows, queryErr := userRepo.conn.Query(context.Background(), query, username, body.Token)
+
+		if queryErr != nil {
+			log.Printf("Query error: %v", queryErr)
+		 }
+	
+		user, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.User])
+
+		if (models.User{}) == user {
+			return nil, &appError{ 
+				Code: http.StatusInternalServerError,
+				Message: "You are not authorized to update this user",
+			}
+		}
+
+		if err != nil {
+			log.Printf("CollectRows error: %v", err)
+		}
+	
+		return &user, nil
+	}
+
+	return nil, &appError{ 
+		Code: http.StatusInternalServerError,
+		Message: "Something went wrong",
+	}
 }

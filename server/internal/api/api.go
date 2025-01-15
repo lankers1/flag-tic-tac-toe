@@ -10,6 +10,7 @@ import (
 func InitApi(httpHandlers *handlers.Handlers) *gin.Engine {
 	router := gin.Default()
 	c := cors.New(cors.Options{
+		AllowedMethods: []string{"GET", "POST", "PATCH"},
     AllowedOrigins: []string{"http://localhost:8000", "https://flag-tic-tac-toe.it.com"},
     AllowCredentials: true,
 	})
@@ -30,6 +31,7 @@ func InitApi(httpHandlers *handlers.Handlers) *gin.Engine {
 	router.POST("/login", httpHandlers.AuthHandler.Login)
 
 	router.GET("/user/:username", httpHandlers.UserHandler.GetUser)
+	router.PATCH("/user/:username", httpHandlers.UserHandler.UpdateScore)
 
 	router.GET("/ws/:username", func(c *gin.Context) {
 		username := c.Param("username")

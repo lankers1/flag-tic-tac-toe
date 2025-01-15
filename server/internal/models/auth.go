@@ -10,7 +10,13 @@ type User struct {
 	Username string `json:"username"`
 	Rank int `json:"rank"`
 	FavouriteFlag string `json:"favouriteFlag"`
-  Token string `json:"token"`
+}
+
+type UserLogin struct {
+	Username string `json:"username"`
+	Rank int `json:"rank"`
+	FavouriteFlag string `json:"favouriteFlag"`
+	Token string `json:"token"`
 }
 
 type UserWithPassword struct {
