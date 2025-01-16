@@ -5,6 +5,7 @@ import { TextInput } from '@components/Inputs/TextInput';
 import { Button } from '@components/Buttons/Button';
 import styles from './styles.module.scss';
 import { AuthContext } from '../../context/AuthContext';
+import { useLoginQuery } from '@query-hooks/auth/useLogin';
 
 const initialState = {
   username: '',
@@ -12,8 +13,9 @@ const initialState = {
 };
 
 export const LoginForm = () => {
-  const navigate = useNavigate();
+  const mutation = useLoginQuery();
   const [form, setForm] = useState(initialState);
+  const navigate = useNavigate();
   const user = useContext(AuthContext);
 
   function handleChange(key: string) {
@@ -21,18 +23,9 @@ export const LoginForm = () => {
       setForm((state) => ({ ...state, [key]: event.target?.value }));
     };
   }
-
-  async function login() {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
-      method: 'POST',
-      body: JSON.stringify(form)
-    });
-    return await res.json();
-  }
-
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event?.preventDefault();
-    const userRes = await login();
+    const userRes = await mutation.mutate(form);
     user?.setUser(userRes);
     navigate('../..');
   }

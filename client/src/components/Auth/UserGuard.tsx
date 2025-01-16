@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGetGameQuery } from '@query-hooks/getGame';
-import { useGetUserQuery } from '@query-hooks/getUser';
+import { useGetGameQuery } from '@query-hooks/game/useGetGame';
+import { useGetUserQuery } from '@query-hooks/user/useGetUser';
 import { Loader } from '@components/Loader';
 
 import { AuthContext } from '../../context/AuthContext';

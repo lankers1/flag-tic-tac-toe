@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 
-async function handleRegisterUser(user) {
+async function handleRegisterUser(user: User) {
   const res = await fetch(`${import.meta.env.VITE_API_URL}/register`, {
     method: 'POST',
     body: JSON.stringify(user)
@@ -14,5 +14,5 @@ async function handleRegisterUser(user) {
   return res.json();
 }
 
-export const useRegisterUser = () =>
+export const useRegisterUserQuery = () =>
   useMutation({ mutationFn: handleRegisterUser });

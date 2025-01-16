@@ -5,7 +5,7 @@ import { debounce } from '../../../../utils/debounce';
 import { List } from '../../../../components/List';
 import { ListItem } from '../../../../components/List/ListItem';
 import { IconButton } from '../../../../components/Buttons/IconButton';
-import { useSearchFlags } from '../../../../query-hooks/searchFlags';
+import { useSearchFlagsQuery } from '../../../../query-hooks/flags/useSearchFlags';
 
 import styles from './styles.module.scss';
 import { useGameStore } from '../../../../store/useGameStore';
@@ -32,7 +32,7 @@ export const AnswerModalContent = ({
   const { gameId } = useParams();
   const { currentTurn, selectedFlags } = useGameStore((state) => state);
   const [searchTerm, setSearchTerm] = useState('');
-  const { data: flags } = useSearchFlags(searchTerm);
+  const { data: flags } = useSearchFlagsQuery(searchTerm);
 
   const handleSearch = debounce(
     (event: React.ChangeEvent<HTMLInputElement>) =>

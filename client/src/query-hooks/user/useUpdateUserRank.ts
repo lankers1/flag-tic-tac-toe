@@ -20,5 +20,5 @@ async function handleUpdateUserRank({ username, token, result }: Args) {
   return res.json();
 }
 
-export const useUpdateUserRank = () =>
+export const useUpdateUserRankQuery = () =>
   useMutation({ mutationFn: handleUpdateUserRank });

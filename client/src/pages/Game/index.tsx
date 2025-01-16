@@ -6,7 +6,7 @@ import { Modal } from '../../components/Modal';
 import { useGameStore } from '../../store/useGameStore';
 import { Notification } from '../../components/Notification';
 import { determineMove, easyComputer } from '../../computer/rulesets';
-import { useSearchFlags } from '../../query-hooks/searchFlags';
+import { useSearchFlagsQuery } from '../../query-hooks/flags/useSearchFlags';
 
 import styles from './styles.module.scss';
 
@@ -17,8 +17,8 @@ import { Heading } from '@components/Heading';
 import { Button } from '@components/Buttons/Button';
 import { AuthContext } from '../../context/AuthContext';
 import { FlagAvatar } from '@components/FlagAvatar';
-import { useUpdateGameWinner } from '@query-hooks/updateGameWinner';
-import { useUpdateUserRank } from '@query-hooks/useUpdateUserRank';
+import { useUpdateGameWinnerQuery } from '@query-hooks/game/useUpdateGameWinner';
+import { useUpdateUserRankQuery } from '@query-hooks/user/useUpdateUserRank';
 
 export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
   const initialized = useRef(false);
@@ -38,13 +38,13 @@ interface Props {
 }
 
 export const Game = ({ gameData, opponent, refetch }: Props) => {
-  const mutation = useUpdateGameWinner();
-  const updateUserRank = useUpdateUserRank();
+  const mutation = useUpdateGameWinnerQuery();
+  const updateUserRank = useUpdateUserRankQuery();
   const user = useContext(AuthContext);
   const navigate = useNavigate();
   const [opponentQuit, setOpponentQuit] = useState(false);
   const { gameId, player } = useParams();
-  const { data: flags } = useSearchFlags('');
+  const { data: flags } = useSearchFlagsQuery('');
   const [selectedSquare, setSelectedSquare] = useState<[number, number]>([
     0, 0
   ]);

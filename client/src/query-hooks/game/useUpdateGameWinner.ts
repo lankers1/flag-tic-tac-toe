@@ -21,5 +21,5 @@ async function handleUpdateGameWinner({ gameId, username }: Args) {
   return res.json();
 }
 
-export const useUpdateGameWinner = () =>
+export const useUpdateGameWinnerQuery = () =>
   useMutation({ mutationFn: handleUpdateGameWinner });
