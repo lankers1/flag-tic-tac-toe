@@ -7,7 +7,7 @@ import styles from './styles.module.scss';
 import { useParams } from 'react-router-dom';
 
 interface Props {
-  data: Game;
+  data: Board;
   handleClick: (outerIndex: number, innerIndex: number) => void;
 }
 
@@ -49,7 +49,7 @@ export const Gameboard = ({ data, handleClick }: Props) => {
 };
 
 interface LabelProps {
-  data: Game;
+  data: Board;
   labelKey: string;
 }
 

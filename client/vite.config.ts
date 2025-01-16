@@ -15,7 +15,8 @@ export default defineConfig({
       '@query-hooks': path.resolve(__dirname, './src/query-hooks'),
       '@store': path.resolve(__dirname, './src/store'),
       '@pages': path.resolve(__dirname, './src/pages'),
-      '@utils': path.resolve(__dirname, './src/utils')
+      '@utils': path.resolve(__dirname, './src/utils'),
+      '@types': path.resolve(__dirname, './src/types')
     }
   }
 });

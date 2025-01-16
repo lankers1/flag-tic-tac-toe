@@ -12,7 +12,7 @@ async function getGame(gameId: string | undefined) {
 
 export const useGetGameQuery = () => {
   const params = useParams();
-  return useQuery({
+  return useQuery<{ game: Game; answers: Answers }>({
     queryKey: ['game', params?.gameId],
     gcTime: 0,
     queryFn: () => getGame(params?.gameId),

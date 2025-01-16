@@ -136,20 +136,6 @@ export const Game = ({ gameData, opponent, refetch }) => {
 
   useOnMountUnsafe(() => {
     return () => {
-      // if (!winner && user) {
-      //   (async () => {
-      //     const userResponse = await updateUserRank.mutateAsync({
-      //       username: user.username,
-      //       token: user.token,
-      //       result: 'loss'
-      //     });
-      //     user.setUser({
-      //       ...userResponse,
-      //       rank: userResponse.rank,
-      //       token: user.token
-      //     });
-      //   })();
-      // }
       game?.quitGame(navigate, gameId);
     };
   }, []);

@@ -1,4 +1,4 @@
-import { PropsWithChildren, useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetGameQuery } from '@query-hooks/getGame';
 import { useGetUserQuery } from '@query-hooks/getUser';
@@ -7,12 +7,26 @@ import { Loader } from '@components/Loader';
 import { AuthContext } from '../../context/AuthContext';
 import styles from './styles.module.scss';
 
-const getOpponentUsername = (game, username) => {
-  if (game?.playerOneId !== username) return game?.playerOneId;
-  return game?.playerTwoId;
+const getOpponentUsername = (
+  game: Game | undefined,
+  username: string | undefined
+) => {
+  if (game) {
+    if (game?.playerOneId !== username) return game?.playerOneId;
+    return game?.playerTwoId;
+  }
+  return '';
 };
 
-export const UserGuard = ({ children }: PropsWithChildren) => {
+interface Props {
+  children: (
+    data: { game: Game; answers: Answers },
+    opponent: { user: User },
+    refetch: () => void
+  ) => JSX.Element;
+}
+
+export const UserGuard = ({ children }: Props) => {
   const { data, isLoading, isPending, error, refetch } = useGetGameQuery();
   const user = useContext(AuthContext);
   const opponentData = useGetUserQuery(
@@ -47,7 +61,7 @@ export const UserGuard = ({ children }: PropsWithChildren) => {
   }
 
   if (error || opponentData?.error)
-    return <p>Error... {error.message || opponentData?.error?.message}</p>;
+    return <p>Error... {error?.message || opponentData?.error?.message}</p>;
 
   return children(data, opponentData?.data, refetch);
 };
