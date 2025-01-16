@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 
 interface Args {
   gameId: string;
-  username: string;
+  username: string | undefined;
 }
 
 async function handleUpdateGameWinner({ gameId, username }: Args) {

@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 
 interface Args {
-  username: string;
-  token: string;
+  username: string | undefined;
+  token: string | undefined;
   result: 'win' | 'loss';
 }
 

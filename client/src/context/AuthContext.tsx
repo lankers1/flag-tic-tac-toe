@@ -5,7 +5,8 @@ interface AuthContextType {
   setUser: (user: User) => void;
   logout: () => void;
   favouriteFlag: string;
-  username: string;
+  username: string | undefined;
+  token: string | undefined;
   rank: number;
 }
 

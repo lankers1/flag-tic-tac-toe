@@ -31,7 +31,13 @@ export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
   }, dependencies);
 }
 
-export const Game = ({ gameData, opponent, refetch }) => {
+interface Props {
+  gameData: { game: Game; answers: Answers };
+  opponent: { user: User };
+  refetch: () => void;
+}
+
+export const Game = ({ gameData, opponent, refetch }: Props) => {
   const mutation = useUpdateGameWinner();
   const updateUserRank = useUpdateUserRank();
   const user = useContext(AuthContext);
@@ -58,8 +64,8 @@ export const Game = ({ gameData, opponent, refetch }) => {
   async function completeGame() {
     if (winner === turn && gameId && user) {
       const userResponse = await updateUserRank.mutateAsync({
-        username: user.username,
-        token: user.token,
+        username: user?.username,
+        token: user?.token,
         result: 'win'
       });
       console.log({ userResponse });
