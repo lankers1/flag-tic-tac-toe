@@ -8,9 +8,10 @@ interface Args {
 async function handleLogin(credentials: Args): Promise<User> {
   const res = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
     method: 'POST',
-    body: JSON.stringify({ credentials })
+    body: JSON.stringify({ ...credentials })
   });
-  return await res.json();
+  const r = await res.json();
+  return r;
 }
 
 export const useLoginQuery = () => useMutation({ mutationFn: handleLogin });

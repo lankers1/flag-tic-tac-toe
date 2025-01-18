@@ -10,12 +10,14 @@ import { useSearchFlagsQuery } from '../../../../query-hooks/flags/useSearchFlag
 import styles from './styles.module.scss';
 import { useGameStore } from '../../../../store/useGameStore';
 import { useParams } from 'react-router-dom';
-import { game } from '../../InitGame';
+import { LocalGame } from '@utils/game/LocalGame';
+import { OnlineGame } from '@utils/game/OnlineGame';
 
 interface Props {
   closeModal: () => void;
   selectedSquareIndex: [number, number];
   answers: Answers;
+  game: LocalGame | OnlineGame;
 }
 
 export const answerMap = [
@@ -27,7 +29,8 @@ export const answerMap = [
 export const AnswerModalContent = ({
   closeModal,
   answers,
-  selectedSquareIndex
+  selectedSquareIndex,
+  game
 }: Props) => {
   const { gameId } = useParams();
   const { currentTurn, selectedFlags } = useGameStore((state) => state);

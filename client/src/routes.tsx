@@ -3,6 +3,7 @@ import { Game } from './pages/Game';
 import { Home } from './pages/Home';
 import { Layout } from './components/Layout';
 import { UserGuard } from '@components/Auth/UserGuard';
+import { GameProvider } from '@components/Game/GameProvider';
 
 export const router = createBrowserRouter([
   {
@@ -14,7 +15,13 @@ export const router = createBrowserRouter([
       },
       {
         path: '/game/:player',
-        element: <Game />
+        element: (
+          <GameProvider>
+            {(gameData, refetch) => (
+              <Game gameData={gameData} refetch={refetch} />
+            )}
+          </GameProvider>
+        )
       },
       {
         path: '/game/:player/:gameId',

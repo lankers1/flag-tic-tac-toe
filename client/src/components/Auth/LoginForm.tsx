@@ -25,7 +25,7 @@ export const LoginForm = () => {
   }
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event?.preventDefault();
-    const userRes = await mutation.mutate(form);
+    const userRes = await mutation.mutateAsync(form);
     user?.setUser(userRes);
     navigate('../..');
   }

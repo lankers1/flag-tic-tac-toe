@@ -12,7 +12,7 @@ import { Heading } from '../../components/Heading';
 
 import styles from './styles.module.scss';
 import { Button } from '../../components/Buttons/Button';
-import { useSearchGameWs } from '../../query-hooks/useSearchGameWs';
+import { useSearchGameWs } from '../../query-hooks/websockets/useSearchGame';
 import { Modal } from '../../components/Modal';
 import { useContext, useState } from 'react';
 import { RegisterModal } from '@components/Auth/RegisterModal';

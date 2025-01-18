@@ -23,3 +23,15 @@ type Game = {
 type Answers = {
   string: string[];
 };
+
+type Message = {
+  playerTurn: number;
+  isCorrect: boolean;
+  type: string;
+  name: string;
+  flagIso: string;
+  player: number;
+  cell: { col: number; row: number };
+  playAgain: boolean;
+  gameId: string;
+};

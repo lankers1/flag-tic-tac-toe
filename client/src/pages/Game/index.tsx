@@ -1,24 +1,18 @@
 import { EffectCallback, useContext, useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
-import { Gameboard } from '../../components/Gameboard';
 import { Modal } from '../../components/Modal';
 import { useGameStore } from '../../store/useGameStore';
 import { Notification } from '../../components/Notification';
-import { determineMove, easyComputer } from '../../computer/rulesets';
-import { useSearchFlagsQuery } from '../../query-hooks/flags/useSearchFlags';
 
 import styles from './styles.module.scss';
 
 import { AnswerModalContent } from './components/AnswerModalContent';
 import { ActionButtons } from './components/ActionButtons';
-import { game, useInitGame } from './InitGame';
-import { Heading } from '@components/Heading';
-import { Button } from '@components/Buttons/Button';
-import { AuthContext } from '../../context/AuthContext';
 import { FlagAvatar } from '@components/FlagAvatar';
-import { useUpdateGameWinnerQuery } from '@query-hooks/game/useUpdateGameWinner';
-import { useUpdateUserRankQuery } from '@query-hooks/user/useUpdateUserRank';
+import { Gameboard } from '@components/Game/Gameboard';
+import { GenerateGame } from '@components/Game/GenerateGame';
+import { AuthContext } from '@context/AuthContext';
 
 export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
   const initialized = useRef(false);
@@ -33,118 +27,20 @@ export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
 
 interface Props {
   gameData: { game: Game; answers: Answers };
-  opponent: { user: User };
+  opponent?: { user: User };
   refetch: () => void;
 }
 
 export const Game = ({ gameData, opponent, refetch }: Props) => {
-  const mutation = useUpdateGameWinnerQuery();
-  const updateUserRank = useUpdateUserRankQuery();
   const user = useContext(AuthContext);
-  const navigate = useNavigate();
-  const [opponentQuit, setOpponentQuit] = useState(false);
-  const { gameId, player } = useParams();
-  const { data: flags } = useSearchFlagsQuery('');
+  const { gameId } = useParams();
   const [selectedSquare, setSelectedSquare] = useState<[number, number]>([
     0, 0
   ]);
 
-  const {
-    turn,
-    setTurn,
-    winner,
-    currentTurn,
-    resetState,
-    selectedFlags,
-    setIncorrectAnswer,
-    setCorrectAnswer
-  } = useGameStore((state) => state);
-  useInitGame(setOpponentQuit);
-
-  async function completeGame() {
-    if (winner === turn && gameId && user) {
-      const userResponse = await updateUserRank.mutateAsync({
-        username: user?.username,
-        token: user?.token,
-        result: 'win'
-      });
-      console.log({ userResponse });
-      user.setUser({
-        ...user,
-        rank: userResponse.rank
-      });
-      return await mutation.mutateAsync({ gameId, username: user?.username });
-    }
-
-    if (winner && winner !== turn && gameId && user) {
-      const userResponse = await updateUserRank.mutateAsync({
-        username: user.username,
-        token: user.token,
-        result: 'loss'
-      });
-      user.setUser({
-        ...user,
-        rank: userResponse.rank
-      });
-      return;
-    }
-
-    if (opponentQuit && gameId && user) {
-      const userResponse = await updateUserRank.mutateAsync({
-        username: user.username,
-        token: user.token,
-        result: 'win'
-      });
-      user.setUser({
-        ...user,
-        rank: userResponse.rank
-      });
-      return mutation.mutateAsync({ gameId, username: user?.username });
-    }
-  }
-
-  useEffect(() => {
-    completeGame();
-  }, [turn, winner, user.username, opponentQuit]);
-
-  useEffect(() => {
-    let timeout = null;
-    if (
-      currentTurn === 2 &&
-      !winner &&
-      flags &&
-      player === 'computer' &&
-      !gameId
-    ) {
-      timeout = setTimeout(() => {
-        const computerFlag = determineMove(easyComputer, {
-          flags,
-          selectedFlags,
-          answers: gameData.answers,
-          setIncorrectAnswer
-        });
-
-        if (computerFlag) {
-          const { row, col, name, iso_2 } = computerFlag;
-          setCorrectAnswer(2, { name, iso_2 }, { row, col });
-        }
-
-        setTurn(1);
-      }, 2000);
-    }
-
-    return () => {
-      if (timeout) {
-        clearTimeout(timeout);
-      }
-    };
-  }, [currentTurn, winner, player, gameId]);
-
-  useOnMountUnsafe(() => {
-    return () => {
-      game?.quitGame(navigate, gameId);
-    };
-  }, []);
+  const { turn, winner, currentTurn, resetState } = useGameStore(
+    (state) => state
+  );
 
   function handleClick(outerIndex: number, innerIndex: number) {
     setSelectedSquare([outerIndex + 1, innerIndex + 1]);
@@ -156,69 +52,78 @@ export const Game = ({ gameData, opponent, refetch }: Props) => {
   }
 
   return (
-    <>
-      <div className={styles.pageContainer}>
-        <div className={styles.container}>
-          <div style={{ display: 'flex', gap: '2rem' }}>
-            {determineOrder(user, opponent?.user, turn).map((user, index) => (
-              <PlayerNotification
-                user={user}
-                currentTurn={currentTurn}
-                turn={turn}
-                key={user?.username}
-                index={index}
-              />
-            ))}
-          </div>
-          <div className={styles.gameboardContainer}>
-            <Gameboard
-              handleClick={handleClick}
-              data={gameId ? gameData?.game.board : gameData?.game}
+    <GenerateGame gameData={gameData}>
+      {({ game }) => (
+        <>
+          <div className={styles.pageContainer}>
+            <div className={styles.container}>
+              <div style={{ display: 'flex', gap: '2rem' }}>
+                {determineOrder(user, opponent?.user, turn).map(
+                  (user, index) => (
+                    <PlayerNotification
+                      winner={winner}
+                      user={user}
+                      currentTurn={currentTurn}
+                      turn={turn}
+                      key={user?.username}
+                      index={index}
+                    />
+                  )
+                )}
+              </div>
+              <div className={styles.gameboardContainer}>
+                <Gameboard
+                  handleClick={handleClick}
+                  data={gameId ? gameData?.game.board : gameData?.game}
+                />
+              </div>
+            </div>
+            <ActionButtons
+              quitGame={game?.quitGame}
+              handleResetGame={handleReset}
+              winner={winner}
             />
           </div>
-        </div>
-        <ActionButtons
-          quitGame={game?.quitGame}
-          handleResetGame={handleReset}
-          winner={winner}
-        />
-      </div>
-      <Modal isOpen={opponentQuit}>
-        <Heading variant="h2">It looks like your opponent quit!</Heading>
-        <Button
-          handleClick={() => game.quitGame(navigate, gameId)}
-          label="Back"
-        />
-      </Modal>
-      <Modal isOpen={!!selectedSquare[0]}>
-        <AnswerModalContent
-          answers={gameData?.answers}
-          selectedSquareIndex={selectedSquare}
-          closeModal={() => setSelectedSquare([0, 0])}
-        />
-      </Modal>
-
-      <Modal isOpen={!!(winner && gameId) && !opponentQuit}>
-        <Heading variant="h2">Player {winner} has won! Congrats!!</Heading>
-        <p>Do you want to play again?</p>
-        <div>
-          <Button
-            handleClick={() => game.quitGame(navigate, gameId)}
-            label="No"
-          />
-          <Button
-            handleClick={() => {
-              game.playAgain(user, gameId);
-            }}
-            label="Yes"
-          />
-        </div>
-      </Modal>
-    </>
+          <Modal isOpen={!!selectedSquare[0]}>
+            <AnswerModalContent
+              answers={gameData?.answers}
+              selectedSquareIndex={selectedSquare}
+              closeModal={() => setSelectedSquare([0, 0])}
+              game={game}
+            />
+          </Modal>
+        </>
+      )}
+    </GenerateGame>
   );
 };
 
-const PlayerNotification = ({ user, currentTurn, index, turn }) => {
+const PlayerNotification = ({ user, currentTurn, index, turn, winner }) => {
+  const { gameId } = useParams();
+
+  if (!gameId) {
+    return (
+      <Notification>
+        <p>
+          {!!winner ? (
+            <p className={styles.notificationText}>
+              Player {winner} has won! Congrats!!
+            </p>
+          ) : (
+            <p className={styles.notificationText}>
+              {gameId
+                ? currentTurn === turn
+                  ? `It's your turn!`
+                  : "It's your opponents turn!"
+                : currentTurn === 1
+                ? `It's player ones turn!`
+                : "It's player twos turn!"}
+            </p>
+          )}
+        </p>
+      </Notification>
+    );
+  }
   return (
     <Notification
       active={currentTurn - 1 === index}
@@ -237,9 +142,9 @@ const PlayerNotification = ({ user, currentTurn, index, turn }) => {
               fontWeight: 500
             }}
           >
-            {user.username}
+            {user?.username}
           </p>
-          <p style={{ marginLeft: '0.5rem', fontSize: '1rem' }}>{user.rank}</p>
+          <p style={{ marginLeft: '0.5rem', fontSize: '1rem' }}>{user?.rank}</p>
         </div>
       </div>
     </Notification>
@@ -252,21 +157,4 @@ function determineOrder(user, opponentData, turn) {
   }
 
   return [opponentData, user];
-}
-{
-  /* {!!winner ? (
-                <p className={styles.notificationText}>
-                  Player {winner} has won! Congrats!!
-                </p>
-              ) : (
-                <p className={styles.notificationText}>
-                  {gameId
-                    ? currentTurn === turn
-                      ? `It's your turn!`
-                      : "It's your opponents turn!"
-                    : currentTurn === 1
-                    ? `It's player ones turn!`
-                    : "It's player twos turn!"}
-                </p>
-              )} */
 }
