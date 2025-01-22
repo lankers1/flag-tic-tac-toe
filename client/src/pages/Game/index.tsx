@@ -13,6 +13,7 @@ import { FlagAvatar } from '@components/FlagAvatar';
 import { Gameboard } from '@components/Game/Gameboard';
 import { GenerateGame } from '@components/Game/GenerateGame';
 import { AuthContext } from '@context/AuthContext';
+import { Text } from '@components/common/Text';
 
 export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
   const initialized = useRef(false);
@@ -52,7 +53,7 @@ export const Game = ({ gameData, opponent, refetch }: Props) => {
   }
 
   return (
-    <GenerateGame gameData={gameData}>
+    <GenerateGame gameData={gameData} opponent={opponent}>
       {({ game }) => (
         <>
           <div className={styles.pageContainer}>
@@ -132,19 +133,11 @@ const PlayerNotification = ({ user, currentTurn, index, turn, winner }) => {
       <div style={{ display: 'flex' }}>
         <FlagAvatar flagIso2={user?.favouriteFlag} />
         <div>
-          <p style={{ marginLeft: '0.5rem', fontSize: '1rem' }}>
+          <Text fontSize="small">
             {turn - 1 === index ? 'You' : 'Opponent'}
-          </p>
-          <p
-            style={{
-              marginLeft: '0.5rem',
-              fontSize: '1.3rem',
-              fontWeight: 500
-            }}
-          >
-            {user?.username}
-          </p>
-          <p style={{ marginLeft: '0.5rem', fontSize: '1rem' }}>{user?.rank}</p>
+          </Text>
+          <Text fontSize="large">{user?.username}</Text>
+          <Text fontSize="small">{user?.rank}</Text>
         </div>
       </div>
     </Notification>

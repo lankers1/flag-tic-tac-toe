@@ -6,6 +6,7 @@ import { Button } from '@components/Buttons/Button';
 import styles from './styles.module.scss';
 import { AuthContext } from '../../context/AuthContext';
 import { useLoginQuery } from '@query-hooks/auth/useLogin';
+import { Text } from '@components/common/Text';
 
 const initialState = {
   username: '',
@@ -47,9 +48,7 @@ export const LoginForm = () => {
       />
       <Button color="green" type="submit" label=" Log in" size="xlarge" />
       <div style={{ textAlign: 'center' }}>
-        <p style={{ fontSize: '1rem', fontWeight: 500 }}>
-          Don't have an account?
-        </p>
+        <Text fontSize="small">Don't have an account?</Text>
         <Link to="../register" style={{ fontSize: '1rem', fontWeight: 500 }}>
           Create account
         </Link>

@@ -7,6 +7,7 @@ import styles from './styles.module.scss';
 import { AuthContext } from '../../context/AuthContext';
 import { useRegisterUserQuery } from '@query-hooks/auth/useRegisterUser';
 import { Notification } from '@components/Notification';
+import { Text } from '@components/common/Text';
 
 const initialState = {
   username: '',
@@ -44,11 +45,7 @@ export const RegisterForm = () => {
     <>
       {error && (
         <Notification backgroundColor="#ff9494">
-          <p
-            style={{ fontSize: '1.2rem', fontWeight: 500, textAlign: 'center' }}
-          >
-            {error?.message}
-          </p>
+          <Text>{error?.message}</Text>
         </Notification>
       )}
       <form onSubmit={handleSubmit} className={styles.form}>
@@ -79,9 +76,7 @@ export const RegisterForm = () => {
           size="xlarge"
         />
         <div style={{ textAlign: 'center' }}>
-          <p style={{ fontSize: '1rem', fontWeight: 500 }}>
-            Already have an account?
-          </p>
+          <Text fontSize="small">Already have an account?</Text>
           <Link to="../login" style={{ fontSize: '1rem', fontWeight: 500 }}>
             Log in
           </Link>
