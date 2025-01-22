@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './searchInput.module.scss';
+import { Text } from '@components/common/Text';
 
 interface Props {
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -18,7 +19,7 @@ export const TextInput = ({
 }: Props) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
-      <p style={{ fontSize: '1.2rem', fontWeight: 500 }}>{label}</p>
+      <Text>{label}</Text>
       <input
         name={name}
         className={styles.textInput}
