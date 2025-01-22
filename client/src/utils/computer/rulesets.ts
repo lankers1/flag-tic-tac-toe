@@ -1,5 +1,5 @@
-import { answerMap } from '../pages/Game/components/AnswerModalContent';
-import { determineComputerMove } from '../utils/game-ai/minmax';
+import { answerMap } from '../../pages/Game/components/AnswerModalContent';
+import { determineComputerMove } from '../game-ai/minmax';
 
 interface Args {
   flags: Flag[];

@@ -1,11 +1,10 @@
-import { determineMove, easyComputer } from '@computer/rulesets';
+import { determineMove, easyComputer } from '@utils/computer/rulesets';
 import { AuthContext } from '@context/AuthContext';
-import { useOnMountUnsafe } from '@pages/Game';
 import { useSearchFlagsQuery } from '@query-hooks/flags/useSearchFlags';
 import { useGameStore } from '@store/useGameStore';
 import { LocalGame } from '@utils/game/LocalGame';
 import { ReactNode, useContext, useEffect, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 interface Props {
   children: ({

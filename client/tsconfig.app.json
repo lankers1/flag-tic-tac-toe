@@ -18,7 +18,7 @@
     "baseUrl": ".",
     "paths": {
       "@components/*": ["src/components/*"],
-      "@computer/*": ["src/computer/*"],
+      "@computer/*": ["src/utils/computer/*"],
       "@query-hooks/*": ["src/query-hooks/*"],
       "@store/*": ["src/store/*"],
       "@utils/*": ["src/utils/*"],
