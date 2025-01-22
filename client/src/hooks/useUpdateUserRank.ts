@@ -26,7 +26,6 @@ export const useUpdateUserRank = (turn, winner, opponentQuit) => {
     }
 
     if (winner && winner !== turn && gameId && user) {
-      console.log('LOSSSSS');
       const userResponse = await updateUserRank.mutateAsync({
         username: user.username,
         token: user.token,
