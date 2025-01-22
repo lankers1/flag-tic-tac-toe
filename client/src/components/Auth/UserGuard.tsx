@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetGameQuery } from '@query-hooks/game/useGetGame';
 import { useGetUserQuery } from '@query-hooks/user/useGetUser';
-import { Loader } from '@components/Loader';
+import { Loader } from '@components/common/Loader';
 
 import { AuthContext } from '../../context/AuthContext';
 import styles from './styles.module.scss';

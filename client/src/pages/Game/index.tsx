@@ -1,15 +1,15 @@
 import { EffectCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Modal } from '../../components/Modal';
+import { Modal } from '../../components/common/Modal';
 import { useGameStore } from '../../store/useGameStore';
-import { Notification } from '../../components/Notification';
+import { Notification } from '../../components/common/Notification';
 
 import styles from './styles.module.scss';
 
 import { AnswerModalContent } from './components/AnswerModalContent';
 import { ActionButtons } from './components/ActionButtons';
-import { FlagAvatar } from '@components/FlagAvatar';
+import { FlagAvatar } from '@components/common/FlagAvatar';
 import { Gameboard } from '@components/Game/Gameboard';
 import { GenerateGame } from '@components/Game/GenerateGame';
 import { AuthContext } from '@context/AuthContext';

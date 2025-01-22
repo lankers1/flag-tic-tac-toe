@@ -4,9 +4,9 @@ import { AuthContext } from '@context/AuthContext';
 import { useGameStore } from '@store/useGameStore';
 import { useOnlineGame } from '@query-hooks/websockets/useOnlineGame';
 import { OnlineGame } from '@utils/game/OnlineGame';
-import { Modal } from '@components/Modal';
-import { Heading } from '@components/Heading';
-import { Button } from '@components/Buttons/Button';
+import { Modal } from '@components/common/Modal';
+import { Heading } from '@components/common/Heading';
+import { Button } from '@components/common/Buttons/Button';
 import { useUpdateUserRank } from '../../../hooks/useUpdateUserRank';
 
 interface Props {

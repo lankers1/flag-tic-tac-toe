@@ -1,7 +1,7 @@
 import { IoClose } from 'react-icons/io5';
 
-import { Modal } from '@components/Modal';
-import { IconButton } from '@components/Buttons/IconButton';
+import { Modal } from '@components/common/Modal';
+import { IconButton } from '@components/common/Buttons/IconButton';
 import styles from './styles.module.scss';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { RegisterForm } from './RegisterForm';

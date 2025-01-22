@@ -1,5 +1,5 @@
 import { useGetGameQuery } from '@query-hooks/game/useGetGame';
-import { Loader } from '@components/Loader';
+import { Loader } from '@components/common/Loader';
 
 import styles from './styles.module.scss';
 

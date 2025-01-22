@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { TextInput } from '@components/Inputs/TextInput';
-import { Button } from '@components/Buttons/Button';
+import { TextInput } from '@components/common/Inputs/TextInput';
+import { Button } from '@components/common/Buttons/Button';
 import styles from './styles.module.scss';
 import { AuthContext } from '../../context/AuthContext';
 import { useLoginQuery } from '@query-hooks/auth/useLogin';

@@ -1,7 +1,7 @@
 import { useGameStore } from '../../../store/useGameStore';
 import { capitaliseFirst } from '../../../utils/capitaliseFirst';
 import { removeSnakeCase } from '../../../utils/removeSnakeCase';
-import { GameboardButton } from '../../GameboardButton';
+import { GameboardButton } from '../GameboardButton';
 
 import styles from './styles.module.scss';
 import { useParams } from 'react-router-dom';

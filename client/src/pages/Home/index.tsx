@@ -1,14 +1,14 @@
 import { FaUserFriends, FaArrowLeft, FaGlobeAmericas } from 'react-icons/fa';
 import { IoMdLogIn } from 'react-icons/io';
 
-import { LinkButton } from '../../components/Buttons/LinkButton';
-import { Card } from '../../components/Card';
-import { Heading } from '../../components/Heading';
+import { LinkButton } from '../../components/common/Buttons/LinkButton';
+import { Card } from '../../components/common/Card';
+import { Heading } from '../../components/common/Heading';
 
 import styles from './styles.module.scss';
-import { Button } from '../../components/Buttons/Button';
+import { Button } from '../../components/common/Buttons/Button';
 import { useSearchGameWs } from '../../query-hooks/websockets/useSearchGame';
-import { Modal } from '../../components/Modal';
+import { Modal } from '../../components/common/Modal';
 import { useContext, useState } from 'react';
 import { RegisterModal } from '@components/Auth/RegisterModal';
 import { Route, Routes, useNavigate } from 'react-router-dom';

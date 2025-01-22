@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { IoClose } from 'react-icons/io5';
-import { SearchInput } from '../../../../components/Inputs/SearchInput';
+import { SearchInput } from '../../../../components/common/Inputs/SearchInput';
 import { debounce } from '../../../../utils/debounce';
-import { List } from '../../../../components/List';
-import { ListItem } from '../../../../components/List/ListItem';
-import { IconButton } from '../../../../components/Buttons/IconButton';
+import { List } from '../../../../components/common/List';
+import { ListItem } from '../../../../components/common/List/ListItem';
+import { IconButton } from '../../../../components/common/Buttons/IconButton';
 import { useSearchFlagsQuery } from '../../../../query-hooks/flags/useSearchFlags';
 
 import styles from './styles.module.scss';

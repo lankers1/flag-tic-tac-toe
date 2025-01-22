@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 import { Outlet } from 'react-router-dom';
 import { FaAngleUp } from 'react-icons/fa';
-import { FlagAvatar } from '@components/FlagAvatar';
-import { Heading } from '@components/Heading';
+import { FlagAvatar } from '@components/common/FlagAvatar';
+import { Heading } from '@components/common/Heading';
 import { AuthContext } from '../../context/AuthContext';
 import styles from './styles.module.scss';
 
