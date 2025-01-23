@@ -4,6 +4,7 @@ import { Home } from './pages/Home';
 import { Layout } from './components/Layout';
 import { UserGuard } from '@components/Auth/UserGuard';
 import { GameProvider } from '@components/Game/GameProvider';
+import { Leaderboard } from '@pages/Leaderboard';
 
 export const router = createBrowserRouter([
   {
@@ -12,6 +13,10 @@ export const router = createBrowserRouter([
       {
         path: '/*',
         element: <Home />
+      },
+      {
+        path: '/leaderboard',
+        element: <Leaderboard />
       },
       {
         path: '/game/:player',
