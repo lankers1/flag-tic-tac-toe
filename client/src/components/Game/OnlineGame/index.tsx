@@ -1,5 +1,7 @@
-import { ReactNode, useContext, useEffect, useRef, useState } from 'react';
+import { ReactNode, useContext, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import AnimatedNumbers from 'react-animated-numbers';
+
 import { AuthContext } from '@context/AuthContext';
 import { useGameStore } from '@store/useGameStore';
 import { useOnlineGame } from '@query-hooks/websockets/useOnlineGame';
@@ -8,6 +10,7 @@ import { Modal } from '@components/common/Modal';
 import { Heading } from '@components/common/Heading';
 import { Button } from '@components/common/Buttons/Button';
 import { useUpdateUserRank } from '../../../hooks/useUpdateUserRank';
+import { Text } from '@components/common/Text';
 
 interface Props {
   children: ({
@@ -25,7 +28,6 @@ export const OnlineGameProvider = ({ children, game, opponent }: Props) => {
   const { turn, winner } = useGameStore((state) => state);
   useOnlineGame(setOpponentQuit, game);
   useUpdateUserRank(turn, winner, opponentQuit);
-
   return (
     <>
       {children}
@@ -37,28 +39,47 @@ export const OnlineGameProvider = ({ children, game, opponent }: Props) => {
         />
       </Modal>
       <Modal isOpen={!!(winner && gameId) && !opponentQuit}>
-        <div>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'column'
+          }}
+        >
           <Heading variant="h2">
-            {winner === turn ? `You` : `${opponent?.user?.username}`} won!
+            {winner === turn ? `Well done, you` : `${opponent?.user?.username}`}{' '}
+            won!
           </Heading>
-          <p>Your new rank</p>
-          <p>{winner === turn ? `${user?.rank} + 10` : `${user?.rank} - 10`}</p>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Button
-              handleClick={() => game?.quitGame(navigate, gameId)}
-              label="No"
-            />
-            <Button
-              handleClick={() => {
-                const { favouriteFlag, email, username, password, ..._ } = user;
-                game?.playAgain(
-                  { favouriteFlag, email, username, password },
-                  gameId
-                );
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <Text fontSize="large">Your new rank</Text>
+            <AnimatedNumbers
+              includeComma
+              transitions={(index) => ({
+                type: 'spring',
+                duration: index + 0.1
+              })}
+              animateToNumber={
+                winner === turn ? user?.rank + 10 : user?.rank - 10
+              }
+              fontStyle={{
+                fontWeight: '500',
+                fontSize: '1.4rem'
               }}
-              label="Yes"
             />
           </div>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Button
+            handleClick={() => game?.quitGame(navigate, gameId)}
+            label="No"
+          />
+          <Button
+            handleClick={() => {
+              const { username } = user;
+              game?.playAgain({ username }, gameId);
+            }}
+            label="Yes"
+          />
         </div>
       </Modal>
     </>
