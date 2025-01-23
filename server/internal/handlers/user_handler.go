@@ -49,3 +49,14 @@ func (userHandler *UserHandler) UpdateScore(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, user)
 } 
+
+func (userHandler *UserHandler) GetUsers(ctx *gin.Context) {
+	users, err := userHandler.UserRepository.GetUsers()
+
+	if err != nil {
+		ctx.AbortWithStatusJSON(err.Code, err.Message)
+		return
+	}
+	
+	ctx.JSON(http.StatusOK, users)
+}

@@ -90,3 +90,26 @@ func (userRepo *UserRepository) UpdateScore(username string, body *models.Update
 		Message: "Something went wrong",
 	}
 }
+
+func (userRepo *UserRepository) GetUsers() ([]models.User, *appError) {
+	query := "SELECT username, rank, favourite_flag FROM users ORDER BY rank DESC;"
+	rows, queryErr := userRepo.conn.Query(context.Background(), query)
+
+	if queryErr != nil {
+		return nil, &appError{ 
+			Code: http.StatusInternalServerError,
+			Message: "Something went wrong",
+		}
+	}
+
+	user, err := pgx.CollectRows(rows, pgx.RowToStructByPos[models.User])
+
+	if err != nil {
+		return nil, &appError{ 
+			Code: http.StatusInternalServerError,
+			Message: "Something went wrong",
+		}
+	}
+
+	return user, nil
+}
