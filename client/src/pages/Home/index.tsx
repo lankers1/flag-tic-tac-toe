@@ -1,4 +1,9 @@
-import { FaUserFriends, FaArrowLeft, FaGlobeAmericas } from 'react-icons/fa';
+import {
+  FaUserFriends,
+  FaArrowLeft,
+  FaGlobeAmericas,
+  FaTrophy
+} from 'react-icons/fa';
 import { IoMdLogIn } from 'react-icons/io';
 
 import { LinkButton } from '../../components/common/Buttons/LinkButton';
@@ -67,16 +72,28 @@ export const Home = () => {
                   />
                 </>
               ) : (
-                <Button
-                  size="xlarge"
-                  label={
-                    <>
-                      <FaGlobeAmericas className={styles.buttonIcons} />
-                      <p>{'Search for game'}</p>
-                    </>
-                  }
-                  handleClick={searchForGame}
-                />
+                <div className={styles.localButtons}>
+                  <Button
+                    size="xlarge"
+                    label={
+                      <>
+                        <FaGlobeAmericas className={styles.buttonIcons} />
+                        <p>{'Search for game'}</p>
+                      </>
+                    }
+                    handleClick={searchForGame}
+                  />
+                  <LinkButton
+                    size="xlarge"
+                    to="/leaderboard"
+                    label={
+                      <>
+                        <FaTrophy className={styles.buttonIcons} />
+                        <p>{'Leaderboard'}</p>
+                      </>
+                    }
+                  />
+                </div>
               )}
             </div>
           </div>
