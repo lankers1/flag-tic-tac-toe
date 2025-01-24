@@ -85,7 +85,7 @@ export const Home = () => {
                   />
                   <LinkButton
                     size="xlarge"
-                    to="/leaderboard"
+                    to="/leaderboard/1"
                     label={
                       <>
                         <FaTrophy className={styles.buttonIcons} />
