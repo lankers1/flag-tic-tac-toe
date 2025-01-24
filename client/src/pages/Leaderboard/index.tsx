@@ -19,24 +19,29 @@ export const Leaderboard = () => {
       <Card className={styles.card}>
         {isLoading && <Text>Loading</Text>}
         {data?.length > 0 && (
-          <table>
+          <table className={styles.table}>
             <thead>
-              <tr>
-                <th scope="col"></th>
-                <th scope="col">Username</th>
-                <th scope="col">Rank</th>
+              <tr className={styles.tableHeadRow}>
+                <th scope="col" className={styles.tableHead}>
+                  <Text fontSize="large">Username</Text>
+                </th>
+                <th scope="col" className={styles.tableHead}>
+                  <Text fontSize="large">Rank</Text>
+                </th>
               </tr>
             </thead>
             <tbody>
               {data.map((user) => (
                 <tr>
-                  <td>
-                    <FlagAvatar flagIso2={user.favouriteFlag} />
+                  <td className={styles.tableData}>
+                    <div className={styles.usernameCol}>
+                      <FlagAvatar flagIso2={user.favouriteFlag} />
+                      <Text>{user.username}</Text>
+                    </div>
                   </td>
-                  <td>
-                    <Text>{user.username}</Text>
+                  <td className={styles.tableData}>
+                    <Text>{user.rank}</Text>
                   </td>
-                  <td>{user.rank}</td>
                 </tr>
               ))}
             </tbody>
