@@ -1,36 +1,71 @@
-.card {
-  height: 50%;
-  width: 500px;
+@use 'src/sass/theme' as *;
 
-  .table {
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .card {
+    max-width: 500px;
     width: 100%;
-    border-collapse: collapse;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2rem 2rem 1rem 2rem;
 
-    .tableHeadRow {
-      border-bottom: 2px solid black;
 
-      .tableHead {
-        text-align: start;
-        padding-bottom: 1rem;
+    .tableContainer {
+      height: 100%;
+      overflow-y: auto;
+      scrollbar-color: grey $background-blue;
 
-        &:nth-child(2) {
-          text-align: center;
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+        scrollbar-color: grey #b0ddff;
+
+        .tableHeadRow {
+          border-bottom: 2px solid black;
+
+          .tableHead {
+            text-align: start;
+            padding-bottom: 1rem;
+
+            &:nth-child(2) {
+              text-align: center;
+            }
+          }
+        }
+
+        .tableData {
+          text-align: start;
+          padding: 0.5rem 0;
+
+          .usernameCol {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+          }
+
+          &:nth-child(2) {
+            text-align: center;
+          }
         }
       }
     }
 
-    .tableData {
-      text-align: start;
-      padding: 0.5rem 0;
+    .cardFooter {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
 
-      .usernameCol {
+      .pagination {
         display: flex;
         align-items: center;
-        gap: 1rem;
-      }
-
-      &:nth-child(2) {
-        text-align: center;
+        gap: 0.45rem;
+        padding-top: 1rem;
       }
     }
   }
