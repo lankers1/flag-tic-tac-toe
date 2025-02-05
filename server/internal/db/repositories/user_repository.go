@@ -7,6 +7,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jackc/pgx/v5"
 	"github.com/lankers1/fttt/internal/models"
+	"github.com/lankers1/fttt/internal/validators"
 )
 
 type UserRepository struct {
@@ -36,7 +37,7 @@ func (userRepo *UserRepository) GetUser(username string) *models.User {
 	 return &user
 }
 
-func (userRepo *UserRepository) UpdateScore(username string, body *models.UpdateScoreBody) (*models.User, *appError) {
+func (userRepo *UserRepository) UpdateScore(username string, body *models.UpdateScoreBody) (*models.User, *validators.AppError) {
 	if body.Result == "loss" {
 		query := "UPDATE users SET rank = (SELECT rank - 10 FROM users WHERE username = $1) WHERE username = $1 AND token = $2 RETURNING username, rank, favourite_flag"
 		rows, queryErr := userRepo.conn.Query(context.Background(), query, username, body.Token)
@@ -48,7 +49,7 @@ func (userRepo *UserRepository) UpdateScore(username string, body *models.Update
 		user, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.User])
 	
 		if (models.User{}) == user {
-			return nil, &appError{ 
+			return nil, &validators.AppError{ 
 				Code: http.StatusInternalServerError,
 				Message: "You are not authorized to update this user",
 			}
@@ -72,7 +73,7 @@ func (userRepo *UserRepository) UpdateScore(username string, body *models.Update
 		user, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.User])
 
 		if (models.User{}) == user {
-			return nil, &appError{ 
+			return nil, &validators.AppError{ 
 				Code: http.StatusInternalServerError,
 				Message: "You are not authorized to update this user",
 			}
@@ -85,18 +86,18 @@ func (userRepo *UserRepository) UpdateScore(username string, body *models.Update
 		return &user, nil
 	}
 
-	return nil, &appError{ 
+	return nil, &validators.AppError{ 
 		Code: http.StatusInternalServerError,
 		Message: "Something went wrong",
 	}
 }
 
-func (userRepo *UserRepository) GetUsers() ([]models.User, *appError) {
+func (userRepo *UserRepository) GetUsers() ([]models.User, *validators.AppError) {
 	query := "SELECT username, rank, favourite_flag FROM users ORDER BY rank DESC;"
 	rows, queryErr := userRepo.conn.Query(context.Background(), query)
 
 	if queryErr != nil {
-		return nil, &appError{ 
+		return nil, &validators.AppError{ 
 			Code: http.StatusInternalServerError,
 			Message: "Something went wrong",
 		}
@@ -105,7 +106,7 @@ func (userRepo *UserRepository) GetUsers() ([]models.User, *appError) {
 	user, err := pgx.CollectRows(rows, pgx.RowToStructByPos[models.User])
 
 	if err != nil {
-		return nil, &appError{ 
+		return nil, &validators.AppError{ 
 			Code: http.StatusInternalServerError,
 			Message: "Something went wrong",
 		}

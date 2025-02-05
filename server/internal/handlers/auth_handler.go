@@ -27,7 +27,7 @@ func (authHandler *AuthHandler) Register(ctx *gin.Context) {
 	user, err := authHandler.AuthRepository.Register(body);
 
 	if err != nil {
-		ctx.AbortWithStatusJSON(err.Code, err.Message)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, err)
 		return
 	}
 

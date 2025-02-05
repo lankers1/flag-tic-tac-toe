@@ -8,6 +8,8 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jackc/pgx/v5"
 	"github.com/lankers1/fttt/internal/models"
+	"github.com/lankers1/fttt/internal/validators"
+
 )
 
 type GameRepository struct {
@@ -138,12 +140,12 @@ func generateOnlineGame(conn *pgxpool.Pool, game *models.Game, players []string)
 	 return &res
 }
 
-func (gameRepo *GameRepository) UpdateWinner(gameId string, username string) *appError {
+func (gameRepo *GameRepository) UpdateWinner(gameId string, username string) *validators.AppError {
 	query := "UPDATE game SET winner = $1, completed = true WHERE game_id = $2 AND completed = false;"
 	_, queryErr := gameRepo.conn.Query(context.Background(), query, username, gameId)
 
 	if queryErr != nil {
-		return &appError{ 
+		return &validators.AppError{ 
 			Code: http.StatusInternalServerError,
 			Message: "Something went wrong updating the winner",
 		}
