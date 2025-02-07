@@ -1,3 +1,5 @@
+@use 'src/sass/theme' as *;
+
 .searchInput {
   width: 100%;
   border-radius: 28px;
@@ -24,5 +26,9 @@
   font-weight: 500;
   padding: 1rem 1.5rem;
   box-shadow: 5px 5px rgba(0, 0, 0, 0.5);
+}
 
+.error {
+  border: 2px $error solid;
+  color: black;
 }

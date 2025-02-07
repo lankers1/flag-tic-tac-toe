@@ -79,7 +79,6 @@ export class OnlineGame {
   }
 
   playAgain(user: User, gameId: string | undefined) {
-    console.log(user);
     this.socket?.send(
       JSON.stringify({ type: 'play-again', username: user.username, gameId })
     );

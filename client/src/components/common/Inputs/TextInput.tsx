@@ -8,6 +8,8 @@ interface Props {
   placeholder: string;
   label?: string;
   name: string;
+  value: string;
+  error?: string;
 }
 
 export const TextInput = ({
@@ -15,18 +17,22 @@ export const TextInput = ({
   name,
   label,
   type = 'text',
-  placeholder
+  placeholder,
+  value,
+  error
 }: Props) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <Text>{label}</Text>
       <input
         name={name}
-        className={styles.textInput}
+        className={`${styles.textInput} ${error && styles.error}`}
         onChange={handleChange}
         type={type}
         placeholder={placeholder}
+        value={value}
       />
+      {error && <Text color="error">{error}</Text>}
     </div>
   );
 };

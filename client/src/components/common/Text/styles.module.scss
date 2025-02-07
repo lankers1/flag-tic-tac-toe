@@ -1,7 +1,8 @@
+@use 'src/sass/theme' as *;
+
 .text {
   font-weight: 500;
 }
-
 
 .size-small {
   font-size: 1rem;
@@ -13,4 +14,8 @@
 
 .size-large {
   font-size: 1.4rem;
+}
+
+.error {
+  color: $error;
 }
