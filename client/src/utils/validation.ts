@@ -12,7 +12,7 @@ export function validation(
   const errors: Errors = {};
 
   Object.keys(form).map((key) => {
-    validationSchema[key].map((schema: SchemaFunction) => {
+    validationSchema[key].map((schema) => {
       const error = schema(form[key]);
       if (error) {
         errored = true;
