@@ -26,7 +26,7 @@ func existsValidator(errors *[]string, value any) {
 }
 
 func characterValidator(errors *[]string, value string) {
-	match, _ := regexp.MatchString("[\\w]", value)
+	match, _ := regexp.MatchString("^[^-\\s][a-zA-Z0-9]+$", value)
 
 	if match == false {
 		*errors = append(*errors, "Username can only contain letters or numbers")
