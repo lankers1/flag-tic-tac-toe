@@ -1,19 +1,16 @@
 package repositories
 
 import (
-	"log"
-
-	// "fmt"
 	"context"
-
-	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/lankers1/fttt/internal/validators"
-
-	// "github.com/jackc/pgx/v5/pgconn"
+	"errors"
+	"log"
 	"net/http"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/lankers1/fttt/internal/models"
+	"github.com/lankers1/fttt/internal/validators"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -27,14 +24,17 @@ func NewAuthRepository(conn *pgxpool.Pool) *AuthRepository {
 	}
 }
 
-func (authRepo *AuthRepository) Register(body models.Registration) (*models.UserLogin, []validators.AppError) {
+func (authRepo *AuthRepository) Register(body models.Registration) (*models.UserLogin, *validators.AppError) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(body.Password), bcrypt.DefaultCost)
 	user := models.UserLogin{}
 
 	validationErr := validators.RegisterValidators(body)
 
-	if validationErr != nil {
-		return nil, validationErr
+	if len(validationErr) > 0 {
+		return nil, &validators.AppError{
+			Code:     http.StatusUnprocessableEntity,
+			Messages: validationErr,
+		}
 	}
 
 	if err != nil {
@@ -43,27 +43,18 @@ func (authRepo *AuthRepository) Register(body models.Registration) (*models.User
 
 	query := "INSERT INTO users(username, password, rank, email, favourite_flag, token) VALUES($1, $2, 1000, $3, (SELECT iso_2 FROM flags ORDER BY random() limit 1), gen_random_uuid()) RETURNING username, rank, favourite_flag, token"
 
-	authRepo.conn.QueryRow(context.Background(), query, body.Username, hashedPassword, body.Email).Scan(&user.Username, &user.Rank, &user.FavouriteFlag, &user.Token)
-	// if queryErr != nil {
-	// 	var pgErr *pgconn.PgError
-
-	// 	if errors.As(queryErr, &pgErr) {
-	// 		fmt.Println(pgErr.Message)
-	// 		if pgErr.Message == "new row for relation \"users\" violates check constraint \"username_length\"" {
-	// 			return nil, &AppError{
-	// 				Code: http.StatusBadRequest,
-	// 				Message: "Username is too short, needs to be between 3 and 16 characters",
-	// 			}
-	// 		}
-
-	// 		if pgErr.Message == "duplicate key value violates unique constraint \"username_unq\"" {
-	// 			return nil, &AppError{
-	// 				Code: http.StatusBadRequest,
-	// 				Message: "Username already taken, try a different username",
-	// 			}
-	// 		}
-	// 	}
-	//  }
+	queryErr := authRepo.conn.QueryRow(context.Background(), query, body.Username, hashedPassword, body.Email).Scan(&user.Username, &user.Rank, &user.FavouriteFlag, &user.Token)
+	if queryErr != nil {
+		var pgErr *pgconn.PgError
+		if errors.As(queryErr, &pgErr) {
+			if pgErr.Message == "duplicate key value violates unique constraint \"username_unq\"" {
+				return nil, &validators.AppError{
+					Code:     http.StatusConflict,
+					Messages: []string{"Username already taken, try a different username"},
+				}
+			}
+		}
+	}
 
 	if err != nil {
 		log.Printf("CollectRows error: %v", err)
@@ -74,25 +65,24 @@ func (authRepo *AuthRepository) Register(body models.Registration) (*models.User
 }
 
 func (authRepo *AuthRepository) Login(body models.Login) (*models.UserLogin, *validators.AppError) {
-	query := "SELECT username, rank, favourite_flag, password, token FROM users WHERE username = $1;"
+	validationErr := validators.LoginValidators(body)
 
-	rows, queryErr := authRepo.conn.Query(context.Background(), query, body.Username)
-
-	if queryErr != nil {
-		log.Printf("Query error: %v", queryErr)
+	if len(validationErr) > 0 {
 		return nil, &validators.AppError{
-			Code:    http.StatusInsufficientStorage,
-			Message: "random error",
+			Code:     http.StatusUnprocessableEntity,
+			Messages: validationErr,
 		}
 	}
 
+	query := "SELECT username, rank, favourite_flag, password, token FROM users WHERE username = $1;"
+	rows, queryErr := authRepo.conn.Query(context.Background(), query, body.Username)
 	res, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.UserWithPassword])
 
-	if err != nil {
+	if err != nil || queryErr != nil {
 		log.Printf("CollectRows error: %v", err)
 		return nil, &validators.AppError{
-			Code:    http.StatusInsufficientStorage,
-			Message: "random error",
+			Code:     http.StatusInternalServerError,
+			Messages: []string{"random error"},
 		}
 	}
 
@@ -101,9 +91,8 @@ func (authRepo *AuthRepository) Login(body models.Login) (*models.UserLogin, *va
 	if passwordComparisonErr != nil {
 		log.Printf("Incorrect details: %v", passwordComparisonErr)
 		return nil, &validators.AppError{
-			Code:    http.StatusInsufficientStorage,
-			Message: "random error",
-		}
+			Code:     http.StatusUnauthorized,
+			Messages: []string{"Incorrect credentials, please try again"}}
 	}
 
 	response := models.UserLogin{Username: res.Username, Token: res.Token, Rank: res.Rank, FavouriteFlag: res.FavouriteFlag}

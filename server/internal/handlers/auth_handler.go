@@ -1,10 +1,11 @@
 package handlers
 
 import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
 	"github.com/lankers1/fttt/internal/db/repositories"
 	"github.com/lankers1/fttt/internal/models"
-	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 type AuthHandler struct {
@@ -21,10 +22,10 @@ func (authHandler *AuthHandler) Register(ctx *gin.Context) {
 	var body models.Registration
 
 	if err := ctx.BindJSON(&body); err != nil {
-			return
+		return
 	}
-	
-	user, err := authHandler.AuthRepository.Register(body);
+
+	user, err := authHandler.AuthRepository.Register(body)
 
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, err)
@@ -38,13 +39,13 @@ func (authHandler *AuthHandler) Login(ctx *gin.Context) {
 	var body models.Login
 
 	if err := ctx.BindJSON(&body); err != nil {
-			return
+		return
 	}
-	
-	user, err := authHandler.AuthRepository.Login(body);
 
-  if err != nil {
-		ctx.AbortWithStatusJSON(err.Code, err.Message)
+	user, err := authHandler.AuthRepository.Login(body)
+
+	if err != nil {
+		ctx.AbortWithStatusJSON(err.Code, err.Messages)
 		return
 	}
 

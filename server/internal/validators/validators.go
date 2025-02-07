@@ -5,32 +5,30 @@ import (
 )
 
 type AppError struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
+	Code     int      `json:"code"`
+	Messages []string `json:"message"`
 }
 
-func lengthValidator(errors *[]AppError, value string, min, max int) {
+func lengthValidator(errors *[]string, value string, min, max int) {
 	if (len(value) <= min || len(value) > max) && value != "" {
-		*errors = append(*errors, AppError{
-			Message: "Username is too short, needs to be between 3 and 16 characters",
-		})
+		*errors = append(*errors,
+			"Username is too short, needs to be between 3 and 16 characters",
+		)
 	}
 }
 
-func existsValidator(errors *[]AppError, value any) {
+func existsValidator(errors *[]string, value any) {
 	if value == "" {
-		*errors = append(*errors, AppError{
-			Message: "Username is required",
-		})
+		*errors = append(*errors,
+			"Username is required",
+		)
 	}
 }
 
-func characterValidator(errors *[]AppError, value string) {
-	match, _ := regexp.MatchString("[A-Z0-9]", "peach")
+func characterValidator(errors *[]string, value string) {
+	match, _ := regexp.MatchString("[\\w]", value)
 
-	if match {
-		*errors = append(*errors, AppError{
-			Message: "Username can only contain letters or numbers",
-		})
+	if match == false {
+		*errors = append(*errors, "Username can only contain letters or numbers")
 	}
 }

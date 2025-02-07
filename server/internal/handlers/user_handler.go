@@ -1,10 +1,11 @@
 package handlers
 
 import (
-	"github.com/lankers1/fttt/internal/db/repositories"
-	"github.com/gin-gonic/gin"
-	"github.com/lankers1/fttt/internal/models"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/lankers1/fttt/internal/db/repositories"
+	"github.com/lankers1/fttt/internal/models"
 )
 
 type GetUserRes struct {
@@ -23,13 +24,12 @@ func NewUserHandler(userRepo *repositories.UserRepository) *UserHandler {
 
 func (userHandler *UserHandler) GetUser(ctx *gin.Context) {
 	username := ctx.Param("username")
-	user := userHandler.UserRepository.GetUser(username);
+	user := userHandler.UserRepository.GetUser(username)
 
 	res := GetUserRes{User: user}
-	
+
 	ctx.JSON(http.StatusOK, res)
 }
-
 
 func (userHandler *UserHandler) UpdateScore(ctx *gin.Context) {
 	username := ctx.Param("username")
@@ -37,26 +37,26 @@ func (userHandler *UserHandler) UpdateScore(ctx *gin.Context) {
 	var body *models.UpdateScoreBody
 
 	if err := ctx.BindJSON(&body); err != nil {
-			return
+		return
 	}
-	
-	user, err := userHandler.UserRepository.UpdateScore(username, body);
+
+	user, err := userHandler.UserRepository.UpdateScore(username, body)
 
 	if err != nil {
-		ctx.AbortWithStatusJSON(err.Code, err.Message)
+		ctx.AbortWithStatusJSON(err.Code, err.Messages)
 		return
 	}
 
 	ctx.JSON(http.StatusOK, user)
-} 
+}
 
 func (userHandler *UserHandler) GetUsers(ctx *gin.Context) {
 	users, err := userHandler.UserRepository.GetUsers()
 
 	if err != nil {
-		ctx.AbortWithStatusJSON(err.Code, err.Message)
+		ctx.AbortWithStatusJSON(err.Code, err.Messages)
 		return
 	}
-	
+
 	ctx.JSON(http.StatusOK, users)
 }

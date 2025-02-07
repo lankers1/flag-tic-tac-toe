@@ -1,11 +1,12 @@
 package repositories
 
 import (
-	"net/http"
-	"log"
 	"context"
-	"github.com/jackc/pgx/v5/pgxpool"
+	"log"
+	"net/http"
+
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/lankers1/fttt/internal/models"
 	"github.com/lankers1/fttt/internal/validators"
 )
@@ -26,7 +27,7 @@ func (userRepo *UserRepository) GetUser(username string) *models.User {
 
 	if queryErr != nil {
 		log.Printf("Query error: %v", queryErr)
-	 }
+	}
 
 	user, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.User])
 
@@ -34,7 +35,7 @@ func (userRepo *UserRepository) GetUser(username string) *models.User {
 		log.Printf("CollectRows error: %v", err)
 	}
 
-	 return &user
+	return &user
 }
 
 func (userRepo *UserRepository) UpdateScore(username string, body *models.UpdateScoreBody) (*models.User, *validators.AppError) {
@@ -44,23 +45,23 @@ func (userRepo *UserRepository) UpdateScore(username string, body *models.Update
 
 		if queryErr != nil {
 			log.Printf("Query error: %v", queryErr)
-		 }
-	
+		}
+
 		user, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.User])
-	
+
 		if (models.User{}) == user {
-			return nil, &validators.AppError{ 
-				Code: http.StatusInternalServerError,
-				Message: "You are not authorized to update this user",
+			return nil, &validators.AppError{
+				Code:     http.StatusInternalServerError,
+				Messages: []string{"You are not authorized to update this user"},
 			}
 		}
 
 		if err != nil {
 			log.Printf("CollectRows error: %v", err)
 		}
-	
-		 return &user, nil
-	} 
+
+		return &user, nil
+	}
 
 	if body.Result == "win" {
 		query := "UPDATE users SET rank = (SELECT rank + 10 FROM users WHERE username = $1) WHERE username = $1 AND token = $2 RETURNING username, rank, favourite_flag"
@@ -68,27 +69,27 @@ func (userRepo *UserRepository) UpdateScore(username string, body *models.Update
 
 		if queryErr != nil {
 			log.Printf("Query error: %v", queryErr)
-		 }
-	
+		}
+
 		user, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.User])
 
 		if (models.User{}) == user {
-			return nil, &validators.AppError{ 
-				Code: http.StatusInternalServerError,
-				Message: "You are not authorized to update this user",
+			return nil, &validators.AppError{
+				Code:     http.StatusInternalServerError,
+				Messages: []string{"You are not authorized to update this user"},
 			}
 		}
 
 		if err != nil {
 			log.Printf("CollectRows error: %v", err)
 		}
-	
+
 		return &user, nil
 	}
 
-	return nil, &validators.AppError{ 
-		Code: http.StatusInternalServerError,
-		Message: "Something went wrong",
+	return nil, &validators.AppError{
+		Code:     http.StatusInternalServerError,
+		Messages: []string{"Something went wrong"},
 	}
 }
 
@@ -97,18 +98,18 @@ func (userRepo *UserRepository) GetUsers() ([]models.User, *validators.AppError)
 	rows, queryErr := userRepo.conn.Query(context.Background(), query)
 
 	if queryErr != nil {
-		return nil, &validators.AppError{ 
-			Code: http.StatusInternalServerError,
-			Message: "Something went wrong",
+		return nil, &validators.AppError{
+			Code:     http.StatusInternalServerError,
+			Messages: []string{"Something went wrong"},
 		}
 	}
 
 	user, err := pgx.CollectRows(rows, pgx.RowToStructByPos[models.User])
 
 	if err != nil {
-		return nil, &validators.AppError{ 
-			Code: http.StatusInternalServerError,
-			Message: "Something went wrong",
+		return nil, &validators.AppError{
+			Code:     http.StatusInternalServerError,
+			Messages: []string{"Something went wrong"},
 		}
 	}
 
