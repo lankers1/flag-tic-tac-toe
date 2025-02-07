@@ -1,15 +1,21 @@
 import { PropsWithChildren } from 'react';
 import styles from './styles.module.scss';
 
+interface Props {
+  color?: 'error';
+  active?: boolean;
+}
+
 export const Notification = ({
   active,
   children,
-  backgroundColor
-}: PropsWithChildren<{ backgroundColor?: string; active?: boolean }>) => {
+  color
+}: PropsWithChildren<Props>) => {
   return (
     <div
-      style={{ backgroundColor }}
-      className={`${styles.notification}  ${active ? styles.active : ''}`}
+      className={`${styles.notification} ${color && styles[color]} ${
+        active ? styles.active : ''
+      }`}
     >
       {children}
     </div>
