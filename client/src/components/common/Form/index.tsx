@@ -3,7 +3,7 @@ import { ReactElement, useState } from 'react';
 
 type Form = Record<string, unknown>;
 
-interface Props<T> {
+interface Props<T extends object> {
   initialData: T;
   className?: string;
   handleSubmit: (form: T) => void;
