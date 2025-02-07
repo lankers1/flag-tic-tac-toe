@@ -19,7 +19,7 @@ func NewAuthHandler(authRepo *repositories.AuthRepository) *AuthHandler {
 }
 
 func (authHandler *AuthHandler) Register(ctx *gin.Context) {
-	var body models.Registration
+	var body models.Auth
 
 	if err := ctx.BindJSON(&body); err != nil {
 		return
@@ -36,7 +36,7 @@ func (authHandler *AuthHandler) Register(ctx *gin.Context) {
 }
 
 func (authHandler *AuthHandler) Login(ctx *gin.Context) {
-	var body models.Login
+	var body models.Auth
 
 	if err := ctx.BindJSON(&body); err != nil {
 		return
