@@ -24,11 +24,11 @@ func NewAuthRepository(conn *pgxpool.Pool) *AuthRepository {
 	}
 }
 
-func (authRepo *AuthRepository) Register(body models.Auth) (*models.UserLogin, *validators.AppError) {
+func (authRepo *AuthRepository) Register(body models.Register) (*models.UserLogin, *validators.AppError) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(body.Password), bcrypt.DefaultCost)
 	user := models.UserLogin{}
 
-	validationErr := validators.AuthValidators(body)
+	validationErr := validators.RegisterValidators(body)
 
 	if len(validationErr) > 0 {
 		return nil, &validators.AppError{
@@ -43,7 +43,7 @@ func (authRepo *AuthRepository) Register(body models.Auth) (*models.UserLogin, *
 
 	query := "INSERT INTO users(username, password, rank, email, favourite_flag, token) VALUES($1, $2, 1000, $3, (SELECT iso_2 FROM flags ORDER BY random() limit 1), gen_random_uuid()) RETURNING username, rank, favourite_flag, token"
 
-	queryErr := authRepo.conn.QueryRow(context.Background(), query, body.Username, hashedPassword).Scan(&user.Username, &user.Rank, &user.FavouriteFlag, &user.Token)
+	queryErr := authRepo.conn.QueryRow(context.Background(), query, body.Username, hashedPassword, body.Email).Scan(&user.Username, &user.Rank, &user.FavouriteFlag, &user.Token)
 	if queryErr != nil {
 		var pgErr *pgconn.PgError
 		if errors.As(queryErr, &pgErr) {
@@ -64,8 +64,8 @@ func (authRepo *AuthRepository) Register(body models.Auth) (*models.UserLogin, *
 	return &user, nil
 }
 
-func (authRepo *AuthRepository) Login(body models.Auth) (*models.UserLogin, *validators.AppError) {
-	validationErr := validators.AuthValidators(body)
+func (authRepo *AuthRepository) Login(body models.Login) (*models.UserLogin, *validators.AppError) {
+	validationErr := validators.LoginValidators(body)
 
 	if len(validationErr) > 0 {
 		return nil, &validators.AppError{

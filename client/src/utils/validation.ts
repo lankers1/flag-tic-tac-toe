@@ -45,3 +45,11 @@ export function characterValidation(value: string): string | undefined {
     return 'Field can only contain letters or numbers';
   }
 }
+
+export function emailValidation(value: string): string | undefined {
+  const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+  const found = value.match(regex);
+  if (!found) {
+    return 'Email not in correct format';
+  }
+}

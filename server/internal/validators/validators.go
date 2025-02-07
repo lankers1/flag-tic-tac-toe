@@ -9,26 +9,35 @@ type AppError struct {
 	Messages []string `json:"message"`
 }
 
-func lengthValidator(errors *[]string, value string, min, max int) {
+func lengthValidator(errors *[]string, key, value string, min, max int) {
 	if (len(value) <= min || len(value) > max) && value != "" {
 		*errors = append(*errors,
-			"Username is too short, needs to be between 3 and 16 characters",
+			key+" is too short, needs to be between 3 and 16 characters",
 		)
 	}
 }
 
-func existsValidator(errors *[]string, value any) {
+func existsValidator(errors *[]string, key, value string) {
 	if value == "" {
 		*errors = append(*errors,
-			"Username is required",
+			key+" is required",
 		)
 	}
 }
 
-func characterValidator(errors *[]string, value string) {
+func characterValidator(errors *[]string, key, value string) {
 	match, _ := regexp.MatchString("^[^-\\s][a-zA-Z0-9]+$", value)
 
 	if match == false {
-		*errors = append(*errors, "Username can only contain letters or numbers")
+		*errors = append(*errors, key+" can only contain letters or numbers")
+	}
+}
+
+func emailValidator(errors *[]string, key, value string) {
+
+	match, _ := regexp.MatchString("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", value)
+
+	if match == false {
+		*errors = append(*errors, key+" can only contain letters or numbers")
 	}
 }

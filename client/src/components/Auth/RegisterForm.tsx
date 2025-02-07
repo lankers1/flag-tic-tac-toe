@@ -8,8 +8,10 @@ import { AuthContext } from '../../context/AuthContext';
 import { useRegisterUserQuery } from '@query-hooks/auth/useRegisterUser';
 import { Notification } from '@components/common/Notification';
 import { Text } from '@components/common/Text';
+import { Form } from '@components/common/Form';
+import { registerValidation } from './validation';
 
-const initialState = {
+const initialData = {
   username: '',
   password: '',
   email: '',
@@ -19,24 +21,18 @@ const initialState = {
 
 export const RegisterForm = () => {
   const navigate = useNavigate();
-  const [form, setForm] = useState(initialState);
-  const [error, setError] = useState<null | { message: string }>(null);
+  const [error, setError] = useState<{ message: null | string }>({
+    message: null
+  });
   const mutation = useRegisterUserQuery();
   const user = useContext(AuthContext);
 
-  function handleChange(key: string) {
-    return (event: React.ChangeEvent<HTMLInputElement>) => {
-      setForm((state) => ({ ...state, [key]: event.target?.value }));
-    };
-  }
-
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(form: User) {
     try {
-      event?.preventDefault();
       const userRes = await mutation.mutateAsync(form);
       user?.setUser(userRes);
       navigate('../..');
-    } catch (error) {
+    } catch (error: { message: string }) {
       setError(error);
     }
   }
@@ -48,40 +44,66 @@ export const RegisterForm = () => {
           <Text>{error?.message}</Text>
         </Notification>
       )}
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <TextInput
-          label="Username"
-          name="username"
-          placeholder="Enter your username"
-          handleChange={handleChange('username')}
-        />
-        <TextInput
-          label="Password"
-          name="password"
-          placeholder="Enter your password"
-          type="password"
-          handleChange={handleChange('password')}
-        />
-        <TextInput
-          label="Email"
-          name="email"
-          placeholder="Enter your email"
-          type="email"
-          handleChange={handleChange('email')}
-        />
-        <Button
-          color="green"
-          type="submit"
-          label="Create Account"
-          size="xlarge"
-        />
-        <div style={{ textAlign: 'center' }}>
-          <Text fontSize="small">Already have an account?</Text>
-          <Link to="../login" style={{ fontSize: '1rem', fontWeight: 500 }}>
-            Log in
-          </Link>
-        </div>
-      </form>
+      <Form
+        initialData={initialData}
+        handleSubmit={handleSubmit}
+        className={styles.form}
+        validation={registerValidation}
+      >
+        {(form, setForm, errors) => {
+          function handleChange(key: string) {
+            return (event: React.ChangeEvent<HTMLInputElement>) => {
+              setForm(key, event.target.value);
+            };
+          }
+
+          return (
+            <>
+              <TextInput
+                label="Username"
+                name="username"
+                placeholder="Enter your username"
+                handleChange={handleChange('username')}
+                value={form.username}
+                error={errors?.username}
+              />
+              <TextInput
+                label="Password"
+                name="password"
+                placeholder="Enter your password"
+                type="password"
+                handleChange={handleChange('password')}
+                value={form.password}
+                error={errors?.password}
+              />
+              <TextInput
+                label="Email"
+                name="email"
+                placeholder="Enter your email"
+                type="email"
+                handleChange={handleChange('email')}
+                value={form.email}
+                error={errors?.email}
+              />
+              <Button
+                color="green"
+                type="submit"
+                label="Create Account"
+                size="xlarge"
+              />
+              <div style={{ textAlign: 'center' }}>
+                <Text fontSize="small">Already have an account?</Text>
+                <Link
+                  to="../login"
+                  style={{ fontSize: '1rem', fontWeight: 500 }}
+                >
+                  Log in
+                </Link>
+              </div>
+            </>
+          );
+        }}
+      </Form>
     </>
   );
 };
