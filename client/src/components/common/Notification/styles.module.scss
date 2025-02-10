@@ -8,6 +8,9 @@
   transition: border 0.5s;
   border: 2px solid black;
   width: fit-content;
+  box-sizing: border-box;
+  width: 100%;
+  text-align: center;
 }
 
 .active {

@@ -40,7 +40,7 @@ export const RegisterForm = () => {
   return (
     <>
       {error?.message && (
-        <Notification color="error">
+        <Notification className={styles.errorNotification} color="error">
           <Text>{error?.message}</Text>
         </Notification>
       )}
