@@ -146,8 +146,8 @@ func (gameRepo *GameRepository) UpdateWinner(gameId string, username string) *va
 
 	if queryErr != nil {
 		return &validators.AppError{
-			Code:     http.StatusInternalServerError,
-			Messages: []string{"Something went wrong updating the winner"},
+			Code:    http.StatusInternalServerError,
+			Message: "Something went wrong updating the winner",
 		}
 	}
 

@@ -2,19 +2,23 @@ package api
 
 import (
 	"github.com/lankers1/fttt/internal/handlers"
+	"github.com/lankers1/fttt/internal/middleware"
 	"github.com/lankers1/fttt/internal/websockets"
+
 	"github.com/gin-gonic/gin"
 	cors "github.com/rs/cors/wrapper/gin"
 )
 
 func InitApi(httpHandlers *handlers.Handlers) *gin.Engine {
-	router := gin.Default()
-	c := cors.New(cors.Options{
-		AllowedMethods: []string{"GET", "POST", "PATCH"},
-    AllowedOrigins: []string{"http://localhost:8000", "https://flag-tic-tac-toe.it.com"},
-    AllowCredentials: true,
-	})
+	router := gin.New()
+	router.Use(gin.Recovery())
+	router.Use(middleware.LoggingMiddleware())
 
+	c := cors.New(cors.Options{
+		AllowedMethods:   []string{"GET", "POST", "PATCH"},
+		AllowedOrigins:   []string{"http://localhost:8000", "https://flag-tic-tac-toe.it.com"},
+		AllowCredentials: true,
+	})
 
 	hub := websockets.NewHub()
 	go hub.Run(httpHandlers)
@@ -47,7 +51,5 @@ func InitApi(httpHandlers *handlers.Handlers) *gin.Engine {
 		websockets.ServeGameWS(c, gameId, username, hub, httpHandlers)
 	})
 
-
 	return router
 }
- 

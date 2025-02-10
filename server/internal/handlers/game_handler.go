@@ -61,7 +61,7 @@ func (gameHandler *GameHandler) UpdateWinner(ctx *gin.Context) {
 	err := gameHandler.GameRepository.UpdateWinner(gameId, username)
 
 	if err != nil {
-		ctx.AbortWithStatusJSON(err.Code, err.Messages)
+		ctx.AbortWithStatusJSON(err.Code, err.Message)
 		return
 	}
 

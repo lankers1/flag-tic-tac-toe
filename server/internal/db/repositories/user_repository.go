@@ -51,8 +51,8 @@ func (userRepo *UserRepository) UpdateScore(username string, body *models.Update
 
 		if (models.User{}) == user {
 			return nil, &validators.AppError{
-				Code:     http.StatusInternalServerError,
-				Messages: []string{"You are not authorized to update this user"},
+				Code:    http.StatusInternalServerError,
+				Message: "You are not authorized to update this user",
 			}
 		}
 
@@ -75,8 +75,8 @@ func (userRepo *UserRepository) UpdateScore(username string, body *models.Update
 
 		if (models.User{}) == user {
 			return nil, &validators.AppError{
-				Code:     http.StatusInternalServerError,
-				Messages: []string{"You are not authorized to update this user"},
+				Code:    http.StatusInternalServerError,
+				Message: "You are not authorized to update this user",
 			}
 		}
 
@@ -88,8 +88,8 @@ func (userRepo *UserRepository) UpdateScore(username string, body *models.Update
 	}
 
 	return nil, &validators.AppError{
-		Code:     http.StatusInternalServerError,
-		Messages: []string{"Something went wrong"},
+		Code:    http.StatusInternalServerError,
+		Message: "Something went wrong",
 	}
 }
 
@@ -99,8 +99,8 @@ func (userRepo *UserRepository) GetUsers() ([]models.User, *validators.AppError)
 
 	if queryErr != nil {
 		return nil, &validators.AppError{
-			Code:     http.StatusInternalServerError,
-			Messages: []string{"Something went wrong"},
+			Code:    http.StatusInternalServerError,
+			Message: "Something went wrong",
 		}
 	}
 
@@ -108,8 +108,8 @@ func (userRepo *UserRepository) GetUsers() ([]models.User, *validators.AppError)
 
 	if err != nil {
 		return nil, &validators.AppError{
-			Code:     http.StatusInternalServerError,
-			Messages: []string{"Something went wrong"},
+			Code:    http.StatusInternalServerError,
+			Message: "Something went wrong",
 		}
 	}
 

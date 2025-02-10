@@ -19,7 +19,7 @@ func NewAuthHandler(authRepo *repositories.AuthRepository) *AuthHandler {
 }
 
 func (authHandler *AuthHandler) Register(ctx *gin.Context) {
-	var body models.Auth
+	var body models.Register
 
 	if err := ctx.BindJSON(&body); err != nil {
 		return
@@ -28,7 +28,7 @@ func (authHandler *AuthHandler) Register(ctx *gin.Context) {
 	user, err := authHandler.AuthRepository.Register(body)
 
 	if err != nil {
-		ctx.AbortWithStatusJSON(err.Code, err.Messages)
+		ctx.AbortWithStatusJSON(err.Code, err.Message)
 		return
 	}
 
@@ -36,7 +36,7 @@ func (authHandler *AuthHandler) Register(ctx *gin.Context) {
 }
 
 func (authHandler *AuthHandler) Login(ctx *gin.Context) {
-	var body models.Auth
+	var body models.Login
 
 	if err := ctx.BindJSON(&body); err != nil {
 		return
@@ -45,7 +45,7 @@ func (authHandler *AuthHandler) Login(ctx *gin.Context) {
 	user, err := authHandler.AuthRepository.Login(body)
 
 	if err != nil {
-		ctx.AbortWithStatusJSON(err.Code, err.Messages)
+		ctx.AbortWithStatusJSON(err.Code, err.Message)
 		return
 	}
 

@@ -32,31 +32,34 @@ func (authRepo *AuthRepository) Register(body models.Register) (*models.UserLogi
 
 	if len(validationErr) > 0 {
 		return nil, &validators.AppError{
-			Code:     http.StatusUnprocessableEntity,
-			Messages: validationErr,
+			Code:    http.StatusUnprocessableEntity,
+			Message: "Incorrect data for fields",
+			Details: validationErr,
 		}
 	}
 
-	if err != nil {
-		panic(err)
+	if err == nil {
+		return nil, &validators.AppError{
+			Code:    http.StatusInternalServerError,
+			Message: "Something went wrong",
+		}
 	}
 
 	query := "INSERT INTO users(username, password, rank, email, favourite_flag, token) VALUES($1, $2, 1000, $3, (SELECT iso_2 FROM flags ORDER BY random() limit 1), gen_random_uuid()) RETURNING username, rank, favourite_flag, token"
 
 	queryErr := authRepo.conn.QueryRow(context.Background(), query, body.Username, hashedPassword, body.Email).Scan(&user.Username, &user.Rank, &user.FavouriteFlag, &user.Token)
+
 	if queryErr != nil {
 		var pgErr *pgconn.PgError
 		if errors.As(queryErr, &pgErr) {
 			if pgErr.Message == "duplicate key value violates unique constraint \"username_unq\"" {
 				return nil, &validators.AppError{
-					Code:     http.StatusConflict,
-					Messages: []string{"Username already taken, try a different username"},
+					Code:    http.StatusConflict,
+					Message: "Username already taken, try a different username",
 				}
 			}
 		}
-	}
 
-	if err != nil {
 		log.Printf("CollectRows error: %v", err)
 		panic(err)
 	}
@@ -69,8 +72,9 @@ func (authRepo *AuthRepository) Login(body models.Login) (*models.UserLogin, *va
 
 	if len(validationErr) > 0 {
 		return nil, &validators.AppError{
-			Code:     http.StatusUnprocessableEntity,
-			Messages: validationErr,
+			Code:    http.StatusUnprocessableEntity,
+			Message: "Incorrect data for fields",
+			Details: validationErr,
 		}
 	}
 
@@ -81,8 +85,8 @@ func (authRepo *AuthRepository) Login(body models.Login) (*models.UserLogin, *va
 	if err != nil || queryErr != nil {
 		log.Printf("CollectRows error: %v", err)
 		return nil, &validators.AppError{
-			Code:     http.StatusInternalServerError,
-			Messages: []string{"random error"},
+			Code:    http.StatusInternalServerError,
+			Message: "random error",
 		}
 	}
 
@@ -91,8 +95,9 @@ func (authRepo *AuthRepository) Login(body models.Login) (*models.UserLogin, *va
 	if passwordComparisonErr != nil {
 		log.Printf("Incorrect details: %v", passwordComparisonErr)
 		return nil, &validators.AppError{
-			Code:     http.StatusUnauthorized,
-			Messages: []string{"Incorrect credentials, please try again"}}
+			Code:    http.StatusUnauthorized,
+			Message: "Incorrect credentials, please try again",
+		}
 	}
 
 	response := models.UserLogin{Username: res.Username, Token: res.Token, Rank: res.Rank, FavouriteFlag: res.FavouriteFlag}

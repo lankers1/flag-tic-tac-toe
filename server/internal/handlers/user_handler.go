@@ -43,7 +43,7 @@ func (userHandler *UserHandler) UpdateScore(ctx *gin.Context) {
 	user, err := userHandler.UserRepository.UpdateScore(username, body)
 
 	if err != nil {
-		ctx.AbortWithStatusJSON(err.Code, err.Messages)
+		ctx.AbortWithStatusJSON(err.Code, err.Message)
 		return
 	}
 
@@ -54,7 +54,7 @@ func (userHandler *UserHandler) GetUsers(ctx *gin.Context) {
 	users, err := userHandler.UserRepository.GetUsers()
 
 	if err != nil {
-		ctx.AbortWithStatusJSON(err.Code, err.Messages)
+		ctx.AbortWithStatusJSON(err.Code, err.Message)
 		return
 	}
 

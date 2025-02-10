@@ -5,8 +5,9 @@ import (
 )
 
 type AppError struct {
-	Code     int      `json:"code"`
-	Messages []string `json:"message"`
+	Code    int      `json:"code"`
+	Message string   `json:"message"`
+	Details []string `json:"details"`
 }
 
 func lengthValidator(errors *[]string, key, value string, min, max int) {
