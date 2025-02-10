@@ -33,6 +33,8 @@ export function registerValidation(form: {
       characterValidation,
       requiredValidation
     ],
-    email: [emailValidation, requiredValidation]
+    email: [emailValidation, requiredValidation],
+    favouriteFlag: [],
+    rank: []
   });
 }
