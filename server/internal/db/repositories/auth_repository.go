@@ -38,7 +38,7 @@ func (authRepo *AuthRepository) Register(body models.Register) (*models.UserLogi
 		}
 	}
 
-	if err == nil {
+	if err != nil {
 		return nil, &validators.AppError{
 			Code:    http.StatusInternalServerError,
 			Message: "Something went wrong",
