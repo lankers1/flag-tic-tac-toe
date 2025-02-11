@@ -12,8 +12,6 @@ export function validation(
   const errors: Errors = {};
 
   Object.keys(form).map((key) => {
-    console.log(key);
-    console.log(validationSchema[key]);
     validationSchema[key].map((schema) => {
       const error = schema(form[key]);
       if (error) {
