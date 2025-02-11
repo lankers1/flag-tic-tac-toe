@@ -11,7 +11,7 @@ async function handleRegisterUser(user: User) {
     throw Error(error);
   }
 
-  return res.json();
+  return await res.json();
 }
 
 export const useRegisterUserQuery = () =>

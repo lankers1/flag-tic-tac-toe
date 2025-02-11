@@ -7,16 +7,17 @@ import { IconButton } from '@components/common/Buttons/IconButton';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
 import { LinkButton } from '@components/common/Buttons/LinkButton';
+import { Notification } from '@components/common/Notification';
 
 export const Leaderboard = () => {
   const { page } = useParams();
-  const { data, isLoading, isPending, error, refetch } = useGetUsersQuery();
+  const { data, isLoading, error, isError } = useGetUsersQuery();
   const currentPage = (page && +page) || 1;
-
   return (
     <div className={styles.container}>
       <Card className={styles.card}>
         {isLoading && <Text>Loading</Text>}
+        {isError && <Notification type="error">{error.message}</Notification>}
         {data?.length > 0 && (
           <>
             <div className={styles.tableContainer}>

@@ -33,7 +33,7 @@ export function requiredValidation(value: string): string | undefined {
 export function lengthValidation(min: number, max: number) {
   return (value: string): string | undefined => {
     if (value.length < min || value.length > max) {
-      return 'Field is required';
+      return 'Field must be between 3 and 16 characters';
     }
   };
 }

@@ -10,8 +10,13 @@ async function handleLogin(credentials: Args): Promise<User> {
     method: 'POST',
     body: JSON.stringify({ ...credentials })
   });
-  const r = await res.json();
-  return r;
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw Error(error);
+  }
+
+  return await res.json();
 }
 
 export const useLoginQuery = () => useMutation({ mutationFn: handleLogin });
