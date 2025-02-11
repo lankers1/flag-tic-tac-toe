@@ -2,22 +2,22 @@ import { PropsWithChildren } from 'react';
 import styles from './styles.module.scss';
 
 interface Props {
-  color?: 'error';
+  type?: 'error';
   active?: boolean;
-  className: string;
+  className?: string;
 }
 
 export const Notification = ({
   active,
   children,
   className = '',
-  color
+  type
 }: PropsWithChildren<Props>) => {
   return (
     <div
-      className={`${styles.notification} ${className} ${
-        color && styles[color]
-      } ${active ? styles.active : ''}`}
+      className={`${styles.notification} ${className} ${type && styles[type]} ${
+        active ? styles.active : ''
+      }`}
     >
       {children}
     </div>

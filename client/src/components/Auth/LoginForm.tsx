@@ -37,7 +37,7 @@ export const LoginForm = () => {
   return (
     <>
       {error?.message && (
-        <Notification color="error">
+        <Notification type="error">
           <Text>{error?.message}</Text>
         </Notification>
       )}
