@@ -37,6 +37,7 @@ func (userHandler *UserHandler) UpdateScore(ctx *gin.Context) {
 	var body *models.UpdateScoreBody
 
 	if err := ctx.BindJSON(&body); err != nil {
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Missing fields: " + err.Error()})
 		return
 	}
 

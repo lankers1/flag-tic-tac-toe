@@ -18,14 +18,6 @@ func lengthValidator(errors *[]string, key, value string, min, max int) {
 	}
 }
 
-func existsValidator(errors *[]string, key, value string) {
-	if value == "" {
-		*errors = append(*errors,
-			key+" is required",
-		)
-	}
-}
-
 func characterValidator(errors *[]string, key, value string) {
 	match, _ := regexp.MatchString("^[^-\\s][a-zA-Z0-9]+$", value)
 

@@ -21,16 +21,6 @@ func NewFlagRepository(conn *pgxpool.Pool) *FlagRepository {
 }
 
 func (flagRepo *FlagRepository) SearchFlags(searchTerm string) (*[]models.Flag, *validators.AppError) {
-	validationErr := validators.SearchFlagsValidators(searchTerm)
-
-	if len(validationErr) > 0 {
-		return nil, &validators.AppError{
-			Code:    http.StatusUnprocessableEntity,
-			Message: "Incorrect data for fields",
-			Details: validationErr,
-		}
-	}
-
 	query := "SELECT iso_2, name FROM flags WHERE name ILIKE $1;"
 	rows, queryErr := flagRepo.conn.Query(context.Background(), query, "%"+searchTerm+"%")
 

@@ -18,13 +18,14 @@ func NewFlagHandler(flagRepo *repositories.FlagRepository) *FlagHandler {
 }
 
 type searchBody struct {
-	SearchTerm string `json:"search_term"`
+	SearchTerm string `json:"search_term" binding:"required"`
 }
 
 func (flagHandler *FlagHandler) SearchFlags(ctx *gin.Context) {
 	var body searchBody
 
 	if err := ctx.BindJSON(&body); err != nil {
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Missing fields: " + err.Error()})
 		return
 	}
 

@@ -29,8 +29,19 @@ func NewGameHandler(gameRepo *repositories.GameRepository) *GameHandler {
 }
 
 func (gameHandler *GameHandler) CreateGame(ctx *gin.Context) {
-	game := gameHandler.GameRepository.Create()
-	answers := gameHandler.GameRepository.GetAnswers(game)
+	game, gameCreationError := gameHandler.GameRepository.Create()
+
+	if gameCreationError != nil {
+		ctx.AbortWithStatusJSON(gameCreationError.Code, gameCreationError.Message)
+		return
+	}
+
+	answers, getAnswersError := gameHandler.GameRepository.GetAnswers(game)
+
+	if getAnswersError != nil {
+		ctx.AbortWithStatusJSON(getAnswersError.Code, getAnswersError.Message)
+		return
+	}
 
 	res := CreateGameRes{Game: game, Answers: answers}
 
@@ -38,8 +49,17 @@ func (gameHandler *GameHandler) CreateGame(ctx *gin.Context) {
 }
 
 func (gameHandler *GameHandler) OnlineGame(players []string) *models.OnlineGame {
-	game := gameHandler.GameRepository.Create()
-	gameId := gameHandler.GameRepository.OnlineGame(game, players)
+	game, gameCreationError := gameHandler.GameRepository.Create()
+
+	if gameCreationError != nil {
+		return nil
+	}
+
+	gameId, err := gameHandler.GameRepository.OnlineGame(game, players)
+
+	if err != nil {
+		return nil
+	}
 
 	return gameId
 }
@@ -47,8 +67,19 @@ func (gameHandler *GameHandler) OnlineGame(players []string) *models.OnlineGame 
 func (gameHandler *GameHandler) GetOnlineGame(ctx *gin.Context) {
 	gameId := ctx.Param("gameId")
 
-	game := gameHandler.GameRepository.GetOnlineGame(gameId)
-	answers := gameHandler.GameRepository.GetAnswers(game.Board)
+	game, onlineGameErr := gameHandler.GameRepository.GetOnlineGame(gameId)
+
+	if onlineGameErr != nil {
+		ctx.AbortWithStatusJSON(onlineGameErr.Code, onlineGameErr.Message)
+		return
+	}
+
+	answers, answersErr := gameHandler.GameRepository.GetAnswers(game.Board)
+
+	if answersErr != nil {
+		ctx.AbortWithStatusJSON(answersErr.Code, answersErr.Message)
+		return
+	}
 
 	res := CreateOnlineGameRes{Game: game, Answers: answers}
 	ctx.JSON(http.StatusOK, res)

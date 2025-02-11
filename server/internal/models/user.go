@@ -1,6 +1,6 @@
 package models
 
 type UpdateScoreBody struct {
-	Result string `json:"result"`
-	Token string `json:"token"`
+	Result string `json:"result" binding:"required"`
+	Token  string `json:"token" binding:"required"`
 }

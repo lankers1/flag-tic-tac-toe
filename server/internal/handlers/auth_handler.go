@@ -22,6 +22,7 @@ func (authHandler *AuthHandler) Register(ctx *gin.Context) {
 	var body models.Register
 
 	if err := ctx.BindJSON(&body); err != nil {
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Missing fields: " + err.Error()})
 		return
 	}
 
@@ -39,6 +40,7 @@ func (authHandler *AuthHandler) Login(ctx *gin.Context) {
 	var body models.Login
 
 	if err := ctx.BindJSON(&body); err != nil {
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Missing fields: " + err.Error()})
 		return
 	}
 
