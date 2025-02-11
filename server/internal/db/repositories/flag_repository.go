@@ -1,11 +1,13 @@
 package repositories
 
 import (
-	"log"
 	"context"
-	"github.com/jackc/pgx/v5/pgxpool"
+	"net/http"
+
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/lankers1/fttt/internal/models"
+	"github.com/lankers1/fttt/internal/validators"
 )
 
 type FlagRepository struct {
@@ -18,19 +20,35 @@ func NewFlagRepository(conn *pgxpool.Pool) *FlagRepository {
 	}
 }
 
-func (flagRepo *FlagRepository) SearchFlags(searchTerm string) *[]models.Flag {
-	query := "SELECT iso_2, name FROM flags WHERE name ILIKE $1;"
-	rows, queryErr := flagRepo.conn.Query(context.Background(), query, "%" + searchTerm + "%")
+func (flagRepo *FlagRepository) SearchFlags(searchTerm string) (*[]models.Flag, *validators.AppError) {
+	validationErr := validators.SearchFlagsValidators(searchTerm)
 
-	if queryErr != nil {
-		log.Printf("Query error: %v", queryErr)
-	 }
-
-	flags, err := pgx.CollectRows(rows, pgx.RowToStructByPos[models.Flag])
-	
-	if err != nil {
-		log.Printf("CollectRows error: %v", err)
+	if len(validationErr) > 0 {
+		return nil, &validators.AppError{
+			Code:    http.StatusUnprocessableEntity,
+			Message: "Incorrect data for fields",
+			Details: validationErr,
+		}
 	}
 
-	return &flags
+	query := "SELECT iso_2, name FROM flags WHERE name ILIKE $1;"
+	rows, queryErr := flagRepo.conn.Query(context.Background(), query, "%"+searchTerm+"%")
+
+	if queryErr != nil {
+		return nil, &validators.AppError{
+			Code:    http.StatusInternalServerError,
+			Message: "Something went wrong when searching for flags",
+		}
+	}
+
+	flags, err := pgx.CollectRows(rows, pgx.RowToStructByPos[models.Flag])
+
+	if err != nil {
+		return nil, &validators.AppError{
+			Code:    http.StatusInternalServerError,
+			Message: "Something went wrong when searching for flags",
+		}
+	}
+
+	return &flags, nil
 }

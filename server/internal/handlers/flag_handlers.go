@@ -1,9 +1,10 @@
 package handlers
 
 import (
-	"github.com/lankers1/fttt/internal/db/repositories"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/lankers1/fttt/internal/db/repositories"
 )
 
 type FlagHandler struct {
@@ -24,10 +25,15 @@ func (flagHandler *FlagHandler) SearchFlags(ctx *gin.Context) {
 	var body searchBody
 
 	if err := ctx.BindJSON(&body); err != nil {
-			return
+		return
 	}
-	
-	countries := flagHandler.FlagRepository.SearchFlags(body.SearchTerm);
+
+	countries, err := flagHandler.FlagRepository.SearchFlags(body.SearchTerm)
+
+	if err != nil {
+		ctx.AbortWithStatusJSON(err.Code, err.Message)
+		return
+	}
 
 	ctx.JSON(http.StatusOK, countries)
 }
