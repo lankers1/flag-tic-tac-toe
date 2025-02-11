@@ -28,6 +28,13 @@ func (authRepo *AuthRepository) Register(body models.Register) (*models.UserLogi
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(body.Password), bcrypt.DefaultCost)
 	user := models.UserLogin{}
 
+	if err != nil {
+		return nil, &validators.AppError{
+			Code:    http.StatusInternalServerError,
+			Message: "Something went wrong",
+		}
+	}
+
 	validationErr := validators.RegisterValidators(body)
 
 	if len(validationErr) > 0 {
@@ -35,13 +42,6 @@ func (authRepo *AuthRepository) Register(body models.Register) (*models.UserLogi
 			Code:    http.StatusUnprocessableEntity,
 			Message: "Incorrect data for fields",
 			Details: validationErr,
-		}
-	}
-
-	if err != nil {
-		return nil, &validators.AppError{
-			Code:    http.StatusInternalServerError,
-			Message: "Something went wrong",
 		}
 	}
 
@@ -60,8 +60,10 @@ func (authRepo *AuthRepository) Register(body models.Register) (*models.UserLogi
 			}
 		}
 
-		log.Printf("CollectRows error: %v", err)
-		panic(err)
+		return nil, &validators.AppError{
+			Code:    http.StatusInternalServerError,
+			Message: "Something went wrong",
+		}
 	}
 
 	return &user, nil
@@ -83,10 +85,9 @@ func (authRepo *AuthRepository) Login(body models.Login) (*models.UserLogin, *va
 	res, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.UserWithPassword])
 
 	if err != nil || queryErr != nil {
-		log.Printf("CollectRows error: %v", err)
 		return nil, &validators.AppError{
 			Code:    http.StatusInternalServerError,
-			Message: "random error",
+			Message: "Something went wrong",
 		}
 	}
 
