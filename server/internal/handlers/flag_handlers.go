@@ -18,7 +18,7 @@ func NewFlagHandler(flagRepo *repositories.FlagRepository) *FlagHandler {
 }
 
 type searchBody struct {
-	SearchTerm string `json:"search_term" binding:"required"`
+	SearchTerm string `json:"search_term"`
 }
 
 func (flagHandler *FlagHandler) SearchFlags(ctx *gin.Context) {
