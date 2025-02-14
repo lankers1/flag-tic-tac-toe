@@ -2,6 +2,7 @@ import { useGetGameQuery } from '@query-hooks/game/useGetGame';
 import { Loader } from '@components/common/Loader';
 
 import styles from './styles.module.scss';
+import { Notification } from '@components/common/Notification';
 
 interface Props {
   children: (
@@ -11,7 +12,8 @@ interface Props {
 }
 
 export const GameProvider = ({ children }: Props) => {
-  const { data, isLoading, isPending, error, refetch } = useGetGameQuery();
+  const { data, isLoading, isPending, isError, error, refetch } =
+    useGetGameQuery();
 
   if (isLoading || isPending) {
     return (
@@ -23,7 +25,12 @@ export const GameProvider = ({ children }: Props) => {
     );
   }
 
-  if (error) return <p>Error... {error?.message}</p>;
+  if (isError)
+    return (
+      <div className={styles.errorContainer}>
+        <Notification type="error">Error... {error?.message}</Notification>
+      </div>
+    );
 
   return children(data, refetch);
 };

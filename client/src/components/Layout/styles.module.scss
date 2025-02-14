@@ -10,6 +10,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 3px black solid;
+
+    .buttonIcons {
+      margin-right: 0.4rem;
+    }
 
     @media screen and (max-width: $x-large) {
       padding: 0rem 3rem;
@@ -23,25 +28,20 @@
 
     .avatarWrapper {
       position: relative;
-      width: 11%;
-      height: 90%;
+      width: 100px;
+      height: 69px;
 
       @media screen and (max-width: $large) {
         width: 18%;
       }
 
       .avatarContainer {
-        top: 50%;
-        left: 50%;
         display: flex;
         padding: 0.3rem;
         border-radius: 1.8rem;
         border: 2px solid black;
-        box-shadow: 5px 5px rgba(0, 0, 0, 0.5);
         cursor: pointer;
-        transition: box-shadow 0.25s, top 0.25s, left 0.25s;
-        top: 0px;
-        left: 0px;
+
         position: absolute;
         flex-direction: column;
         background-color: $background-pink;
@@ -67,9 +67,7 @@
         }
 
         &:hover {
-          box-shadow: 0px 0px rgba(0, 0, 0, 0.5);
-          top: 5px;
-          left: 5px;
+
 
           .icon {
             transform: rotate(180deg);

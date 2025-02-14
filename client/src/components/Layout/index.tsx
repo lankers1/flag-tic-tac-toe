@@ -1,10 +1,12 @@
 import { useContext } from 'react';
 import { Outlet } from 'react-router-dom';
-import { FaAngleUp } from 'react-icons/fa';
+import { FaAngleUp, FaFlag, FaTrophy } from 'react-icons/fa';
 import { FlagAvatar } from '@components/common/FlagAvatar';
 import { Heading } from '@components/common/Heading';
 import { AuthContext } from '../../context/AuthContext';
 import styles from './styles.module.scss';
+import { Text } from '@components/common/Text';
+import { Link } from '@components/common/Link';
 
 export const Layout = () => {
   const user = useContext(AuthContext);
@@ -12,8 +14,18 @@ export const Layout = () => {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <Heading variant="h1">Flag tic-tac-toe</Heading>
-        {user?.loggedIn && <UserMenu />}
+        <Heading variant="h3">Flag tic-tac-toe</Heading>
+        <nav style={{ display: 'flex', gap: '1.5rem' }}>
+          <Link to="/leaderboard/1">
+            <FaFlag className={styles.buttonIcons} />
+            <Text fontSize="large">{'Flags'}</Text>
+          </Link>
+          <Link to="/leaderboard/1">
+            <FaTrophy className={styles.buttonIcons} />
+            <Text fontSize="large">{'Leaderboard'}</Text>
+          </Link>
+          {user?.loggedIn && <UserMenu />}
+        </nav>
       </header>
       <main className={styles.main}>
         <Outlet />

@@ -1,4 +1,4 @@
-import { answerMap } from '../../pages/Game/components/AnswerModalContent';
+import { answerMap } from '@components/Game/AnswerModalContent';
 import { determineComputerMove } from '../game-ai/minmax';
 
 interface Args {

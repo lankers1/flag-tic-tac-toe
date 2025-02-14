@@ -83,16 +83,6 @@ export const Home = () => {
                     }
                     handleClick={searchForGame}
                   />
-                  <LinkButton
-                    size="xlarge"
-                    to="/leaderboard/1"
-                    label={
-                      <>
-                        <FaTrophy className={styles.buttonIcons} />
-                        <p>{'Leaderboard'}</p>
-                      </>
-                    }
-                  />
                 </div>
               )}
             </div>

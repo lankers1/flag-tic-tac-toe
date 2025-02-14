@@ -6,6 +6,7 @@ import { ReactNode, useContext, useState } from 'react';
 import { useGameStore } from '@store/useGameStore';
 import { AuthContext } from '@context/AuthContext';
 import { useOnMountUnsafe } from '@pages/Game';
+import { LocalGame } from '@utils/game/LocalGame';
 
 interface Props {
   children: ({ game }: { game: InstanceType<typeof OnlineGame> }) => ReactNode;
@@ -34,6 +35,8 @@ export const GenerateGame = ({ children, gameData, opponent }: Props) => {
           username: user?.username
         })
       );
+    } else if (!game) {
+      setGame(true);
     }
   }, [gameId, game]);
 
@@ -47,7 +50,7 @@ export const GenerateGame = ({ children, gameData, opponent }: Props) => {
     } else {
       return (
         <LocalGameProvider gameData={gameData}>
-          {children({ game })}
+          {({ game }) => children({ game })}
         </LocalGameProvider>
       );
     }

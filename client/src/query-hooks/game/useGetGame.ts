@@ -4,9 +4,17 @@ import { useParams } from 'react-router-dom';
 async function handleGetGame(gameId: string | undefined) {
   if (gameId) {
     const res = await fetch(`${import.meta.env.VITE_API_URL}/game/${gameId}`);
+    if (!res.ok) {
+      const error = await res.json();
+      throw Error(error);
+    }
     return await res.json();
   }
   const res = await fetch(`${import.meta.env.VITE_API_URL}/game`);
+  if (!res.ok) {
+    const error = await res.json();
+    throw Error(error);
+  }
   return await res.json();
 }
 

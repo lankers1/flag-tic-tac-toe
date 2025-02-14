@@ -5,6 +5,12 @@ async function handleSearchFlags(searchTerm: string) {
     method: 'POST',
     body: JSON.stringify({ search_term: searchTerm })
   });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw Error(error);
+  }
+
   return await res.json();
 }
 

@@ -7,13 +7,13 @@ import { Notification } from '../../components/common/Notification';
 
 import styles from './styles.module.scss';
 
-import { AnswerModalContent } from './components/AnswerModalContent';
-import { ActionButtons } from './components/ActionButtons';
 import { FlagAvatar } from '@components/common/FlagAvatar';
 import { Gameboard } from '@components/Game/Gameboard';
 import { GenerateGame } from '@components/Game/GenerateGame';
 import { AuthContext } from '@context/AuthContext';
 import { Text } from '@components/common/Text';
+import { ActionButtons } from '@components/Game/ActionButtons';
+import { AnswerModalContent } from '@components/Game/AnswerModalContent';
 
 export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
   const initialized = useRef(false);

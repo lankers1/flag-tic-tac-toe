@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { GrPowerReset } from 'react-icons/gr';
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 
-import { Button } from '../../../../components/common/Buttons/Button';
-import { Heading } from '../../../../components/common/Heading';
-import { Modal } from '../../../../components/common/Modal';
-
+import { Button } from '@components/common/Buttons/Button';
+import { Modal } from '@components/common/Modal';
 import styles from './styles.module.scss';
+import { Heading } from '@components/common/Heading';
 
 interface Props {
   winner: number | null;

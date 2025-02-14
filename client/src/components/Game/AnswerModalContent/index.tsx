@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { IoClose } from 'react-icons/io5';
-import { SearchInput } from '../../../../components/common/Inputs/SearchInput';
-import { debounce } from '../../../../utils/debounce';
-import { List } from '../../../../components/common/List';
-import { ListItem } from '../../../../components/common/List/ListItem';
-import { IconButton } from '../../../../components/common/Buttons/IconButton';
-import { useSearchFlagsQuery } from '../../../../query-hooks/flags/useSearchFlags';
 
 import styles from './styles.module.scss';
-import { useGameStore } from '../../../../store/useGameStore';
 import { useParams } from 'react-router-dom';
 import { LocalGame } from '@utils/game/LocalGame';
 import { OnlineGame } from '@utils/game/OnlineGame';
+import { Notification } from '@components/common/Notification';
+import { useGameStore } from '@store/useGameStore';
+import { useSearchFlagsQuery } from '@query-hooks/flags/useSearchFlags';
+import { debounce } from '@utils/debounce';
+import { SearchInput } from '@components/common/Inputs/SearchInput';
+import { IconButton } from '@components/common/Buttons/IconButton';
+import { List } from '@components/common/List';
+import { ListItem } from '@components/common/List/ListItem';
 
 interface Props {
   closeModal: () => void;
@@ -35,7 +36,7 @@ export const AnswerModalContent = ({
   const { gameId } = useParams();
   const { currentTurn, selectedFlags } = useGameStore((state) => state);
   const [searchTerm, setSearchTerm] = useState('');
-  const { data: flags } = useSearchFlagsQuery(searchTerm);
+  const { data: flags, error, isError } = useSearchFlagsQuery(searchTerm);
 
   const handleSearch = debounce(
     (event: React.ChangeEvent<HTMLInputElement>) =>
@@ -67,6 +68,11 @@ export const AnswerModalContent = ({
         <SearchInput handleSearch={handleSearch} autoFocus />
         <IconButton handleClick={closeModal} Icon={IoClose} />
       </header>
+      {isError && (
+        <Notification className={styles.errorNotification} type="error">
+          {error?.message}
+        </Notification>
+      )}
       <div className={styles.listContainer}>
         <List>
           {flags
