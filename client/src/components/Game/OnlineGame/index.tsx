@@ -11,6 +11,8 @@ import { Heading } from '@components/common/Heading';
 import { Button } from '@components/common/Buttons/Button';
 import { useUpdateUserRank } from '../../../hooks/useUpdateUserRank';
 import { Text } from '@components/common/Text';
+import { Notification } from '@components/common/Notification';
+import { LinkButton } from '@components/common/Buttons/LinkButton';
 
 interface Props {
   children: ({
@@ -26,8 +28,25 @@ export const OnlineGameProvider = ({ children, game, opponent }: Props) => {
   const [opponentQuit, setOpponentQuit] = useState(false);
   const user = useContext(AuthContext);
   const { turn, winner } = useGameStore((state) => state);
-  useOnlineGame(setOpponentQuit, game);
+  const { fullGame } = useOnlineGame(setOpponentQuit, game);
   useUpdateUserRank(turn, winner, opponentQuit);
+
+  if (fullGame) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', width: '50%' }}>
+        <Notification>
+          <Text fontSize="large">
+            Woops! Looks like this game is full, go back to find a different
+            online game
+          </Text>
+          <div>
+            <LinkButton label={'Back'} to={'/'} />
+          </div>
+        </Notification>
+      </div>
+    );
+  }
+
   return (
     <>
       {children}

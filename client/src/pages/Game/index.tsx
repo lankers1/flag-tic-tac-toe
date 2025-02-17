@@ -128,14 +128,11 @@ const PlayerNotification = ({ user, currentTurn, index, turn, winner }) => {
   return (
     <Notification
       active={currentTurn - 1 === index}
-      backgroundColor={index === 0 ? '#b0ddff' : '#C4FFBF'}
+      type={index === 0 ? 'playerOne' : 'playerTwo'}
     >
       <div style={{ display: 'flex' }}>
         <FlagAvatar flagIso2={user?.favouriteFlag} />
-        <div>
-          <Text fontSize="small">
-            {turn - 1 === index ? 'You' : 'Opponent'}
-          </Text>
+        <div style={{ marginLeft: '1rem' }}>
           <Text fontSize="large">{user?.username}</Text>
           <Text fontSize="small">{user?.rank}</Text>
         </div>

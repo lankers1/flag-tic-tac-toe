@@ -1,7 +1,7 @@
 @use 'src/sass/theme' as *;
 
 .notification {
-  background-color: red;
+  background-color: $background-blue;
   padding: 0.5rem;
   border-radius: $border-radius;
   box-shadow: 5px 5px rgba(0, 0, 0, 0.5);
@@ -19,4 +19,12 @@
 
 .error {
   background-color: $error;
+}
+
+.playerOne {
+  background-color: $background-blue;
+}
+
+.playerTwo {
+  background-color: $background-green;
 }

@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react';
 import styles from './styles.module.scss';
 
 interface Props {
-  type?: 'error';
+  type?: 'error' | 'playerOne' | 'playerTwo';
   active?: boolean;
   className?: string;
 }

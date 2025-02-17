@@ -1,9 +1,4 @@
-import {
-  FaUserFriends,
-  FaArrowLeft,
-  FaGlobeAmericas,
-  FaTrophy
-} from 'react-icons/fa';
+import { FaUserFriends, FaArrowLeft, FaGlobeAmericas } from 'react-icons/fa';
 import { IoMdLogIn } from 'react-icons/io';
 
 import { LinkButton } from '../../components/common/Buttons/LinkButton';
