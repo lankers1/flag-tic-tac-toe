@@ -85,21 +85,31 @@ func (h *Hub) RegisterNewClient(client *Client) {
 }
 
 func (h *Hub) RegisterNewGameClient(client *Client) {
-
 	connections := h.gameClients[client.Channel]
 	if connections == nil {
 		connections = make(map[*Client]bool)
 		h.gameClients[client.Channel] = connections
 	}
-	h.gameClients[client.Channel][client] = true
-
-	message := Metadata{PlayerTurn: len(h.gameClients[client.Channel]), Type: "metadata"}
-	sendGameMetadata := client.sendGameMetadata
-	select {
-	case sendGameMetadata <- message:
-	default:
-		close(sendGameMetadata)
-		delete(h.gameClients[client.Channel], client)
+	if len(h.gameClients[client.Channel]) == 2 {
+		message := Message{Type: "full-game"}
+		sendGameMetadata := client.sendAnswer
+		select {
+		case sendGameMetadata <- message:
+			return
+		default:
+			close(sendGameMetadata)
+			delete(h.gameClients[client.Channel], client)
+		}
+	} else {
+		h.gameClients[client.Channel][client] = true
+		message := Metadata{PlayerTurn: len(h.gameClients[client.Channel]), Type: "metadata"}
+		sendGameMetadata := client.sendGameMetadata
+		select {
+		case sendGameMetadata <- message:
+		default:
+			close(sendGameMetadata)
+			delete(h.gameClients[client.Channel], client)
+		}
 	}
 }
 
