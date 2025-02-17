@@ -71,8 +71,14 @@ export class OnlineGame {
     this.setIncorrectAnswer({ player, flag, cell });
   }
 
-  quitGame(navigate: NavigateFunction, gameId: string | undefined) {
-    this.socket?.send(JSON.stringify({ type: 'quit', gameId }));
+  quitGame(
+    navigate: NavigateFunction,
+    gameId: string | undefined,
+    type: string
+  ) {
+    if (type !== 'full-game') {
+      this.socket?.send(JSON.stringify({ type: 'quit', gameId }));
+    }
     this.socket?.close();
     this.resetState();
     navigate('/');

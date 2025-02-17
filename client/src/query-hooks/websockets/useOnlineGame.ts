@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { OnlineGame } from '@utils/game/OnlineGame';
 import { AuthContext } from '@context/AuthContext';
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
@@ -8,6 +8,7 @@ export const useOnlineGame = (
   setOpponentQuit: (arg: boolean) => void,
   game: InstanceType<typeof OnlineGame> | void
 ) => {
+  const [fullGame, setFullGame] = useState(false);
   const user = useContext(AuthContext);
   const navigate = useNavigate();
   const { resetState } = useGameStore((state) => state);
@@ -18,13 +19,22 @@ export const useOnlineGame = (
       game.socket.onmessage = (event: { data: string }) => {
         try {
           const message = JSON.parse(event?.data);
-          handleWsMessage(message, game, setOpponentQuit, navigate, resetState);
+          handleWsMessage(
+            message,
+            game,
+            setOpponentQuit,
+            navigate,
+            resetState,
+            setFullGame
+          );
         } catch (e) {
           console.error(e);
         }
       };
     }
   }, [gameId, player, game, user?.username]);
+
+  return { fullGame };
 };
 
 function handleWsMessage(
@@ -32,9 +42,14 @@ function handleWsMessage(
   game: InstanceType<typeof OnlineGame>,
   setOpponentQuit: (arg: boolean) => void,
   navigate: NavigateFunction,
-  resetState: () => void
+  resetState: () => void,
+  setFullGame: (fullGame: boolean) => void
 ) {
   switch (message.type) {
+    case 'full-game':
+      game.socket.close();
+      setFullGame(true);
+      break;
     case 'metadata':
       game?.setTurn(message.playerTurn);
       break;
