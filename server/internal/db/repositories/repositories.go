@@ -1,6 +1,10 @@
 package repositories
 
-import "github.com/jackc/pgx/v5/pgxpool"
+import (
+	"context"
+
+	"github.com/jackc/pgx/v5/pgxpool"
+)
 
 type Repositories struct {
 	GameRepository *GameRepository
@@ -9,11 +13,11 @@ type Repositories struct {
 	UserRepository *UserRepository
 }
 
-func NewRepositories(db *pgxpool.Pool) *Repositories {
+func NewRepositories(db *pgxpool.Pool, ctx context.Context) *Repositories {
 	return &Repositories{
-		GameRepository: NewGameRepository(db),
-		FlagRepository: NewFlagRepository(db),
-		AuthRepository: NewAuthRepository(db),
-		UserRepository: NewUserRepository(db),
+		GameRepository: NewGameRepository(db, ctx),
+		FlagRepository: NewFlagRepository(db, ctx),
+		AuthRepository: NewAuthRepository(db, ctx),
+		UserRepository: NewUserRepository(db, ctx),
 	}
 }

@@ -12,17 +12,19 @@ import (
 
 type FlagRepository struct {
 	conn *pgxpool.Pool
+	ctx  context.Context
 }
 
-func NewFlagRepository(conn *pgxpool.Pool) *FlagRepository {
+func NewFlagRepository(conn *pgxpool.Pool, ctx context.Context) *FlagRepository {
 	return &FlagRepository{
 		conn: conn,
+		ctx:  ctx,
 	}
 }
 
 func (flagRepo *FlagRepository) SearchFlags(searchTerm string) (*[]models.Flag, *validators.AppError) {
 	query := "SELECT iso_2, name FROM flags WHERE name ILIKE $1;"
-	rows, queryErr := flagRepo.conn.Query(context.Background(), query, "%"+searchTerm+"%")
+	rows, queryErr := flagRepo.conn.Query(flagRepo.ctx, query, "%"+searchTerm+"%")
 
 	if queryErr != nil {
 		return nil, &validators.AppError{
@@ -30,6 +32,8 @@ func (flagRepo *FlagRepository) SearchFlags(searchTerm string) (*[]models.Flag, 
 			Message: "Something went wrong when searching for flags",
 		}
 	}
+
+	defer rows.Close()
 
 	flags, err := pgx.CollectRows(rows, pgx.RowToStructByPos[models.Flag])
 

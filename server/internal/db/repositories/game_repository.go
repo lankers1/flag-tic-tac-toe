@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -14,37 +15,41 @@ import (
 
 type GameRepository struct {
 	conn *pgxpool.Pool
+	ctx  context.Context
 }
 
-func NewGameRepository(conn *pgxpool.Pool) *GameRepository {
+func NewGameRepository(conn *pgxpool.Pool, ctx context.Context) *GameRepository {
 	return &GameRepository{
 		conn: conn,
+		ctx:  ctx,
 	}
 }
 
-func generateGame(conn *pgxpool.Pool) (*models.Game, *validators.AppError) {
+func generateGame(conn *pgxpool.Pool, ctx context.Context) (*models.Game, *validators.AppError) {
 	query := "SELECT * FROM generate_game"
-	rows, queryErr := conn.Query(context.Background(), query)
+	rows, queryErr := conn.Query(ctx, query)
 
 	if queryErr != nil {
+		fmt.Println("Something went wrong when generating game")
 		return nil, &validators.AppError{
 			Code:    http.StatusInternalServerError,
 			Message: "Something went wrong when generating game",
 		}
 	}
+	defer rows.Close()
 
 	game, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.Game])
 
 	if err != nil {
 		log.Printf("CollectRows error: %v", err)
-		return generateGame(conn)
+		return generateGame(conn, ctx)
 	}
 
 	return &game, nil
 }
 
 func (gameRepo *GameRepository) Create() (*models.Game, *validators.AppError) {
-	game, err := generateGame(gameRepo.conn)
+	game, err := generateGame(gameRepo.conn, gameRepo.ctx)
 
 	if err != nil {
 		return nil, err
@@ -75,7 +80,7 @@ func (gameRepo *GameRepository) GetAnswers(game *models.Game) (*models.Answer, *
 							get_flag_ids_on_char_id($8) AS r2c3, 
 							get_flag_ids_on_char_id($9) AS r3c3;`
 
-	rows, queryErr := gameRepo.conn.Query(context.Background(), query,
+	rows, queryErr := gameRepo.conn.Query(gameRepo.ctx, query,
 		"{"+strconv.Itoa(game.FirstColumnId)+","+strconv.Itoa(game.FirstRowId)+"}",
 		"{"+strconv.Itoa(game.FirstColumnId)+","+strconv.Itoa(game.SecondRowId)+"}",
 		"{"+strconv.Itoa(game.FirstColumnId)+","+strconv.Itoa(game.ThirdRowId)+"}",
@@ -94,6 +99,10 @@ func (gameRepo *GameRepository) GetAnswers(game *models.Game) (*models.Answer, *
 		}
 	}
 
+	defer func() {
+		rows.Close()
+	}()
+
 	answers, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.Answer])
 
 	if err != nil {
@@ -107,7 +116,7 @@ func (gameRepo *GameRepository) GetAnswers(game *models.Game) (*models.Answer, *
 }
 
 func (gameRepo *GameRepository) OnlineGame(game *models.Game, players []string) (*models.OnlineGame, *validators.AppError) {
-	onlineGame, err := generateOnlineGame(gameRepo.conn, game, players)
+	onlineGame, err := generateOnlineGame(gameRepo.conn, gameRepo.ctx, game, players)
 
 	if err != nil {
 		return nil, err
@@ -128,7 +137,7 @@ func (gameRepo *GameRepository) GetOnlineGame(gameId string) (*models.OnlineGame
 		}
 	}
 
-	rows, queryErr := gameRepo.conn.Query(context.Background(), query, i)
+	rows, queryErr := gameRepo.conn.Query(gameRepo.ctx, query, i)
 
 	if queryErr != nil {
 		return nil, &validators.AppError{
@@ -136,6 +145,8 @@ func (gameRepo *GameRepository) GetOnlineGame(gameId string) (*models.OnlineGame
 			Message: "Something went wrong when getting online game",
 		}
 	}
+
+	defer rows.Close()
 
 	res, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.OnlineGameBoard])
 
@@ -149,9 +160,9 @@ func (gameRepo *GameRepository) GetOnlineGame(gameId string) (*models.OnlineGame
 	return &res, nil
 }
 
-func generateOnlineGame(conn *pgxpool.Pool, game *models.Game, players []string) (*models.OnlineGame, *validators.AppError) {
+func generateOnlineGame(conn *pgxpool.Pool, ctx context.Context, game *models.Game, players []string) (*models.OnlineGame, *validators.AppError) {
 	query := "INSERT INTO game(game_id, player_one_id, player_two_id, time_played, board) VALUES(floor(random() * 100000000 + 1)::int, $2, $3, current_timestamp, $1) RETURNING game_id"
-	rows, queryErr := conn.Query(context.Background(), query, game, players[0], players[1])
+	rows, queryErr := conn.Query(ctx, query, game, players[0], players[1])
 
 	if queryErr != nil {
 		return nil, &validators.AppError{
@@ -159,6 +170,10 @@ func generateOnlineGame(conn *pgxpool.Pool, game *models.Game, players []string)
 			Message: "Something went wrong when generating online game",
 		}
 	}
+
+	defer func() {
+		rows.Close()
+	}()
 
 	res, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.OnlineGame])
 
@@ -174,7 +189,7 @@ func generateOnlineGame(conn *pgxpool.Pool, game *models.Game, players []string)
 
 func (gameRepo *GameRepository) UpdateWinner(gameId string, username string) *validators.AppError {
 	query := "UPDATE game SET winner = $1, completed = true WHERE game_id = $2 AND completed = false;"
-	_, queryErr := gameRepo.conn.Query(context.Background(), query, username, gameId)
+	rows, queryErr := gameRepo.conn.Query(gameRepo.ctx, query, username, gameId)
 
 	if queryErr != nil {
 		return &validators.AppError{
@@ -182,6 +197,8 @@ func (gameRepo *GameRepository) UpdateWinner(gameId string, username string) *va
 			Message: "Something went wrong updating the winner",
 		}
 	}
+
+	defer rows.Close()
 
 	return nil
 }

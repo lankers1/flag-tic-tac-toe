@@ -3,7 +3,6 @@ package api
 import (
 	"github.com/lankers1/fttt/internal/handlers"
 	"github.com/lankers1/fttt/internal/middleware"
-	"github.com/lankers1/fttt/internal/websockets"
 
 	"github.com/gin-gonic/gin"
 	cors "github.com/rs/cors/wrapper/gin"
@@ -20,10 +19,14 @@ func InitApi(httpHandlers *handlers.Handlers) *gin.Engine {
 		AllowCredentials: true,
 	})
 
-	hub := websockets.NewHub()
-	go hub.Run(httpHandlers)
-
 	router.Use(c)
+
+	router.GET("/ws/search-game/:username", httpHandlers.GameSearchWebsocketHandler.SubscribeHandler)
+	router.POST("/ws/search-game", httpHandlers.GameSearchWebsocketHandler.PublishHandler)
+
+	router.GET("/ws/game/:gameId/:username", httpHandlers.GameWebsocketHandler.SubscribeHandler)
+	router.POST("/ws/game/:gameId/:username", httpHandlers.GameWebsocketHandler.PublishHandler)
+	router.POST("/ws/game/:gameId/:username/play-again", httpHandlers.GameWebsocketHandler.PublishPlayAgainHandler)
 
 	router.GET("/game", httpHandlers.GameHandler.CreateGame)
 	router.GET("/game/:gameId", httpHandlers.GameHandler.GetOnlineGame)
@@ -37,19 +40,6 @@ func InitApi(httpHandlers *handlers.Handlers) *gin.Engine {
 	router.GET("/users", httpHandlers.UserHandler.GetUsers)
 	router.GET("/user/:username", httpHandlers.UserHandler.GetUser)
 	router.PATCH("/user/:username", httpHandlers.UserHandler.UpdateScore)
-
-	router.GET("/ws/:username", func(c *gin.Context) {
-		username := c.Param("username")
-
-		websockets.ServeWS(c, username, hub, httpHandlers)
-	})
-
-	router.GET("/ws/game/:username/:gameId", func(c *gin.Context) {
-		gameId := c.Param("gameId")
-		username := c.Param("username")
-
-		websockets.ServeGameWS(c, gameId, username, hub, httpHandlers)
-	})
 
 	return router
 }

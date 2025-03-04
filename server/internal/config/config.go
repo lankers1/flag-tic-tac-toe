@@ -1,10 +1,12 @@
 package config
 
 import (
-	"os"
+	"context"
 	"log"
-	"github.com/joho/godotenv"
+	"os"
+
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/joho/godotenv"
 	"github.com/lankers1/fttt/internal/db/repositories"
 	"github.com/lankers1/fttt/internal/handlers"
 )
@@ -16,17 +18,17 @@ type Config struct {
 func InitConfig() Config {
 	err := godotenv.Load(".env")
 
-  if err != nil {
-    log.Printf("Error loading .env file")
-  }
+	if err != nil {
+		log.Printf("Error loading .env file")
+	}
 
 	config := Config{DatabaseUrl: os.Getenv("DATABASE_URL")}
 
 	return config
 }
 
-func InitRepositories(conn *pgxpool.Pool) *repositories.Repositories {
-	return repositories.NewRepositories(conn)
+func InitRepositories(conn *pgxpool.Pool, ctx context.Context) *repositories.Repositories {
+	return repositories.NewRepositories(conn, ctx)
 }
 
 func InitHandlers(repo *repositories.Repositories) *handlers.Handlers {

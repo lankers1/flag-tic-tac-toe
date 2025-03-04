@@ -16,11 +16,13 @@ import (
 
 type AuthRepository struct {
 	conn *pgxpool.Pool
+	ctx  context.Context
 }
 
-func NewAuthRepository(conn *pgxpool.Pool) *AuthRepository {
+func NewAuthRepository(conn *pgxpool.Pool, ctx context.Context) *AuthRepository {
 	return &AuthRepository{
 		conn: conn,
+		ctx:  ctx,
 	}
 }
 
@@ -47,7 +49,7 @@ func (authRepo *AuthRepository) Register(body models.Register) (*models.UserLogi
 
 	query := "INSERT INTO users(username, password, rank, email, favourite_flag, token) VALUES($1, $2, 1000, $3, (SELECT iso_2 FROM flags ORDER BY random() limit 1), gen_random_uuid()) RETURNING username, rank, favourite_flag, token"
 
-	queryErr := authRepo.conn.QueryRow(context.Background(), query, body.Username, hashedPassword, body.Email).Scan(&user.Username, &user.Rank, &user.FavouriteFlag, &user.Token)
+	queryErr := authRepo.conn.QueryRow(authRepo.ctx, query, body.Username, hashedPassword, body.Email).Scan(&user.Username, &user.Rank, &user.FavouriteFlag, &user.Token)
 
 	if queryErr != nil {
 		var pgErr *pgconn.PgError
@@ -81,7 +83,7 @@ func (authRepo *AuthRepository) Login(body models.Login) (*models.UserLogin, *va
 	}
 
 	query := "SELECT username, rank, favourite_flag, password, token FROM users WHERE username = $1;"
-	rows, queryErr := authRepo.conn.Query(context.Background(), query, body.Username)
+	rows, queryErr := authRepo.conn.Query(authRepo.ctx, query, body.Username)
 	res, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.UserWithPassword])
 
 	if err != nil || queryErr != nil {
@@ -90,6 +92,8 @@ func (authRepo *AuthRepository) Login(body models.Login) (*models.UserLogin, *va
 			Message: "Something went wrong",
 		}
 	}
+
+	defer rows.Close()
 
 	passwordComparisonErr := bcrypt.CompareHashAndPassword(res.Password, []byte(body.Password))
 
