@@ -13,6 +13,7 @@ import { useContext, useState } from 'react';
 import { RegisterModal } from '@components/Auth/RegisterModal';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../..//context/AuthContext';
+import { Loader } from '@components/common/Loader';
 
 export const Home = () => {
   const user = useContext(AuthContext);
@@ -70,6 +71,7 @@ export const Home = () => {
                 <div className={styles.localButtons}>
                   <Button
                     size="xlarge"
+                    disabled={!!displayModal}
                     label={
                       <>
                         <FaGlobeAmericas className={styles.buttonIcons} />
@@ -119,15 +121,26 @@ export const Home = () => {
         </Card>
       </div>
       <Modal isOpen={displayModal}>
-        <h3>Searching for game</h3>
-        <Button
-          handleClick={cancelSearch}
-          label={
-            <p style={{ gap: '6px', alignItems: 'center', display: 'flex' }}>
-              <FaArrowLeft /> Back
-            </p>
-          }
-        />
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'column'
+          }}
+        >
+          <h3>Searching for game</h3>
+          <div style={{ width: '5rem', display: 'flex', padding: '1rem 0' }}>
+            <Loader />
+          </div>
+          <Button
+            handleClick={cancelSearch}
+            label={
+              <p style={{ gap: '6px', alignItems: 'center', display: 'flex' }}>
+                <FaArrowLeft /> Cancel
+              </p>
+            }
+          />
+        </div>
       </Modal>
       <Routes>
         <Route

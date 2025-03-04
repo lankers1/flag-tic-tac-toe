@@ -33,11 +33,12 @@ export const Loader = () => (
         fillRule="nonzero"
       />
       <animate
+        id="animation1"
         attributeName="opacity"
         fill="freeze"
-        values="0;1"
-        begin="0s"
-        dur="1s"
+        values="0;1;0"
+        begin="0s;animation9.end"
+        dur="2s"
       />
     </g>
     <g clipPath="url(#6dcadf5cb7)" opacity={0}>
@@ -72,11 +73,12 @@ export const Loader = () => (
         fillRule="nonzero"
       />
       <animate
+        id="animation2"
         attributeName="opacity"
         fill="freeze"
-        values="0;1"
-        begin="1s"
-        dur="1s"
+        values="0;1;0"
+        begin="animation1.end"
+        dur="2s"
       />
     </g>
     <g clipPath="url(#5cdccc7320)" opacity={0}>
@@ -106,12 +108,12 @@ export const Loader = () => (
         d="M 421.808594 159.273438 C 421.808594 160.097656 421.753906 160.910156 421.644531 161.71875 C 421.539062 162.523438 421.378906 163.308594 421.167969 164.070312 C 420.957031 164.828125 420.699219 165.550781 420.390625 166.234375 C 420.085938 166.917969 419.734375 167.554688 419.347656 168.132812 C 418.957031 168.714844 418.53125 169.234375 418.074219 169.691406 C 417.613281 170.152344 417.128906 170.535156 416.621094 170.851562 C 416.109375 171.167969 415.585938 171.402344 415.042969 171.566406 C 414.5 171.726562 413.957031 171.804688 413.402344 171.804688 C 412.851562 171.804688 412.304688 171.726562 411.761719 171.566406 C 411.222656 171.402344 410.695312 171.167969 410.1875 170.851562 C 409.675781 170.535156 409.191406 170.152344 408.734375 169.691406 C 408.273438 169.234375 407.851562 168.714844 407.460938 168.132812 C 407.070312 167.554688 406.722656 166.917969 406.414062 166.234375 C 406.109375 165.550781 405.851562 164.828125 405.636719 164.070312 C 405.425781 163.308594 405.269531 162.523438 405.160156 161.71875 C 405.050781 160.910156 405 160.097656 405 159.273438 C 405 158.449219 405.050781 157.636719 405.160156 156.828125 C 405.269531 156.019531 405.425781 155.238281 405.636719 154.476562 C 405.851562 153.714844 406.109375 152.996094 406.414062 152.308594 C 406.722656 151.625 407.070312 150.992188 407.460938 150.410156 C 407.851562 149.828125 408.273438 149.308594 408.734375 148.851562 C 409.191406 148.394531 409.675781 148.007812 410.1875 147.695312 C 410.695312 147.378906 411.222656 147.140625 411.761719 146.980469 C 412.304688 146.820312 412.851562 146.742188 413.402344 146.742188 C 413.957031 146.742188 414.5 146.820312 415.042969 146.980469 C 415.585938 147.140625 416.109375 147.378906 416.621094 147.695312 C 417.128906 148.007812 417.613281 148.394531 418.074219 148.851562 C 418.53125 149.308594 418.957031 149.828125 419.347656 150.410156 C 419.734375 150.992188 420.085938 151.625 420.390625 152.308594 C 420.699219 152.996094 420.957031 153.714844 421.167969 154.476562 C 421.378906 155.238281 421.539062 156.019531 421.644531 156.828125 C 421.753906 157.636719 421.808594 158.449219 421.808594 159.273438 Z M 421.808594 159.273438 "
       />
       <animate
+        id="animation3"
         attributeName="opacity"
-        from="0"
-        to="1"
+        values="0;1;0"
         fill="freeze"
-        begin="2s"
-        dur="1s"
+        begin="animation2.end"
+        dur="2s"
       />
     </g>
     <path
@@ -196,12 +198,12 @@ export const Loader = () => (
         fillRule="nonzero"
       />
       <animate
+        id="animation4"
+        begin="animation3.end"
         attributeName="opacity"
-        from="0"
-        to="1"
+        values="0;1;0"
         fill="freeze"
-        begin="3s"
-        dur="1s"
+        dur="2s"
       />
     </g>
     <g clipPath="url(#a53921b213)" opacity={0}>
@@ -230,12 +232,12 @@ export const Loader = () => (
         fillRule="nonzero"
       />
       <animate
+        id="animation5"
+        begin="animation4.end"
         attributeName="opacity"
-        from="0"
-        to="1"
+        values="0;1;0"
         fill="freeze"
-        begin="4s"
-        dur="1s"
+        dur="2s"
       />
     </g>
     <g clipPath="url(#ec279a7de0)" opacity={0}>
@@ -264,12 +266,12 @@ export const Loader = () => (
         fillRule="nonzero"
       />
       <animate
+        id="animation6"
+        begin="animation5.end"
         attributeName="opacity"
-        from="0"
-        to="1"
+        values="0;1;0"
         fill="freeze"
-        begin="5s"
-        dur="1s"
+        dur="2s"
       />
     </g>
     <g clipPath="url(#87eb0f0c31)" opacity={0}>
@@ -304,12 +306,12 @@ export const Loader = () => (
         fillRule="nonzero"
       />
       <animate
+        id="animation7"
+        begin="animation6.end"
         attributeName="opacity"
-        from="0"
-        to="1"
+        values="0;1;0"
         fill="freeze"
-        begin="6s"
-        dur="1s"
+        dur="2s"
       />
     </g>
     <g clipPath="url(#5f414e8fd9)" opacity={0}>
@@ -369,12 +371,12 @@ export const Loader = () => (
         fillRule="nonzero"
       />
       <animate
+        id="animation8"
+        begin="animation7.end"
         attributeName="opacity"
-        from="0"
-        to="1"
+        values="0;1;0"
         fill="freeze"
-        begin="7s"
-        dur="1s"
+        dur="2s"
       />
     </g>
     <g clipPath="url(#11b995efbc)" opacity={0}>
@@ -403,12 +405,12 @@ export const Loader = () => (
         fillRule="nonzero"
       />
       <animate
+        id="animation9"
+        begin="animation8.end"
         attributeName="opacity"
-        from="0"
-        to="1"
+        values="0;1;0"
         fill="freeze"
-        begin="8s"
-        dur="1s"
+        dur="2s"
       />
     </g>
   </svg>

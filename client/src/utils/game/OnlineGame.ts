@@ -1,3 +1,4 @@
+import { SendAnswerArgs } from '@query-hooks/game/useSendAnswer';
 import { SetSelectedFlag } from '@store/useGameStore';
 import { NavigateFunction } from 'react-router-dom';
 
@@ -5,61 +6,54 @@ export type OnlineGameArgs = {
   gameId: string | undefined;
   username: string | undefined;
   player: string | undefined;
-  setTurn: (turn: number) => void;
   setCorrectAnswer: SetSelectedFlag;
   setIncorrectAnswer: (incorrectAnswer: IncorrectAnswer) => void;
   resetState: () => void;
+  sendAnswer: (args: SendAnswerArgs) => void;
+  sendPlayAgain: () => void;
+  sendQuitGame: () => void;
 };
 
 export class OnlineGame {
   setCorrectAnswer;
   setIncorrectAnswer;
-  setPlayerTurn;
   resetState;
   gameId;
+  sendAnswer;
+  sendPlayAgain;
+  sendQuitGame;
   socket: WebSocket;
   constructor(args: OnlineGameArgs) {
     this.socket = new WebSocket(
-      `${import.meta.env.VITE_WEBSOCKET_PORT}/ws/game/${args.username}/${
-        args.gameId
-      }`
+      `${import.meta.env.VITE_API_URL}/ws/game/${args.gameId}/${args.username}`
     );
-    this.setPlayerTurn = args.setTurn;
     this.setCorrectAnswer = args.setCorrectAnswer;
     this.setIncorrectAnswer = args.setIncorrectAnswer;
     this.resetState = args.resetState;
+    this.sendAnswer = args.sendAnswer;
+    this.sendPlayAgain = args.sendPlayAgain;
+    this.sendQuitGame = args.sendQuitGame;
     this.quitGame = this.quitGame.bind(this);
     this.playAgain = this.playAgain.bind(this);
     this.gameId = args.gameId;
   }
 
-  setTurn(playerTurn: number) {
-    this.setPlayerTurn(playerTurn);
-  }
-
   handleAnswer(
     cb: () => void,
-    gameId: string | undefined,
     player: number,
     flagIso: string,
     name: string,
     selectedSquareIndex: number[],
     isCorrect: boolean
   ) {
-    this.socket.send(
-      JSON.stringify({
-        type: 'turn',
-        gameId: gameId,
-        player,
-        isCorrect,
-        flagIso,
-        name,
-        cell: {
-          row: selectedSquareIndex[0] - 1,
-          col: selectedSquareIndex[1] - 1
-        }
-      })
-    );
+    this.sendAnswer({
+      player,
+      isCorrect,
+      flagIso,
+      name,
+      selectedSquareIndex
+    });
+
     cb();
   }
 
@@ -71,22 +65,16 @@ export class OnlineGame {
     this.setIncorrectAnswer({ player, flag, cell });
   }
 
-  quitGame(
-    navigate: NavigateFunction,
-    gameId: string | undefined,
-    type: string
-  ) {
+  async quitGame(navigate: NavigateFunction, type: string) {
     if (type !== 'full-game') {
-      this.socket?.send(JSON.stringify({ type: 'quit', gameId }));
+      await this.sendQuitGame();
     }
     this.socket?.close();
     this.resetState();
     navigate('/');
   }
 
-  playAgain(user: User, gameId: string | undefined) {
-    this.socket?.send(
-      JSON.stringify({ type: 'play-again', username: user.username, gameId })
-    );
+  playAgain() {
+    this.sendPlayAgain();
   }
 }

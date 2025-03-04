@@ -33,7 +33,6 @@ export const AnswerModalContent = ({
   selectedSquareIndex,
   game
 }: Props) => {
-  const { gameId } = useParams();
   const { currentTurn, selectedFlags } = useGameStore((state) => state);
   const [searchTerm, setSearchTerm] = useState('');
   const { data: flags, error, isError } = useSearchFlagsQuery(searchTerm);
@@ -53,7 +52,6 @@ export const AnswerModalContent = ({
 
     game.handleAnswer(
       closeModal,
-      gameId,
       currentTurn,
       flag.iso_2,
       flag.name,

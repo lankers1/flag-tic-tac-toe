@@ -14,6 +14,7 @@ import { AuthContext } from '@context/AuthContext';
 import { Text } from '@components/common/Text';
 import { ActionButtons } from '@components/Game/ActionButtons';
 import { AnswerModalContent } from '@components/Game/AnswerModalContent';
+import { Clock } from '@components/common/Clock';
 
 export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
   const initialized = useRef(false);
@@ -59,17 +60,25 @@ export const Game = ({ gameData, opponent, refetch }: Props) => {
           <div className={styles.pageContainer}>
             <div className={styles.container}>
               <div style={{ display: 'flex', gap: '2rem' }}>
-                {determineOrder(user, opponent?.user, turn).map(
-                  (user, index) => (
-                    <PlayerNotification
-                      winner={winner}
-                      user={user}
-                      currentTurn={currentTurn}
-                      turn={turn}
-                      key={user?.username}
-                      index={index}
-                    />
+                {gameId ? (
+                  determineOrder(user, opponent?.user, turn).map(
+                    (user, index) => (
+                      <PlayerNotification
+                        winner={winner}
+                        user={user}
+                        currentTurn={currentTurn}
+                        turn={turn}
+                        key={user?.username}
+                        index={index}
+                      />
+                    )
                   )
+                ) : (
+                  <PlayerNotification
+                    winner={winner}
+                    currentTurn={currentTurn}
+                    turn={turn}
+                  />
                 )}
               </div>
               <div className={styles.gameboardContainer}>
@@ -107,11 +116,9 @@ const PlayerNotification = ({ user, currentTurn, index, turn, winner }) => {
       <Notification>
         <p>
           {!!winner ? (
-            <p className={styles.notificationText}>
-              Player {winner} has won! Congrats!!
-            </p>
+            <Text fontSize="large">Player {winner} has won! Congrats!!</Text>
           ) : (
-            <p className={styles.notificationText}>
+            <Text fontSize="large">
               {gameId
                 ? currentTurn === turn
                   ? `It's your turn!`
@@ -119,25 +126,30 @@ const PlayerNotification = ({ user, currentTurn, index, turn, winner }) => {
                 : currentTurn === 1
                 ? `It's player ones turn!`
                 : "It's player twos turn!"}
-            </p>
+            </Text>
           )}
         </p>
       </Notification>
     );
   }
   return (
-    <Notification
-      active={currentTurn - 1 === index}
-      type={index === 0 ? 'playerOne' : 'playerTwo'}
-    >
-      <div style={{ display: 'flex' }}>
-        <FlagAvatar flagIso2={user?.favouriteFlag} />
-        <div style={{ marginLeft: '1rem' }}>
-          <Text fontSize="large">{user?.username}</Text>
-          <Text fontSize="small">{user?.rank}</Text>
+    <>
+      <Notification
+        active={currentTurn - 1 === index}
+        type={index === 0 ? 'playerOne' : 'playerTwo'}
+      >
+        <div style={{ display: 'flex' }}>
+          <FlagAvatar flagIso2={user?.favouriteFlag} />
+          <div style={{ marginLeft: '1rem' }}>
+            <Text fontSize="large">{user?.username}</Text>
+            <Text fontSize="small">{user?.rank}</Text>
+          </div>
         </div>
-      </div>
-    </Notification>
+      </Notification>
+      {index === 0 && (
+        <Clock currentTurn={currentTurn} turn={turn} size={100} />
+      )}
+    </>
   );
 };
 

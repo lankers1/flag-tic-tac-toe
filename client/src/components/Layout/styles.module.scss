@@ -5,31 +5,41 @@
   flex: 1;
   flex-direction: column;
 
+  .nav {
+    display: flex;
+    gap: 1.5rem;
+
+    @media screen and (max-width: $medium) {
+      gap: 0.5rem;
+    }
+  }
+
   .header {
-    padding: 0rem 6rem;
+    padding: 0.25rem 3rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 3px black solid;
+    min-height: 70px;
 
     .buttonIcons {
       margin-right: 0.4rem;
     }
 
-    @media screen and (max-width: $x-large) {
-      padding: 0rem 3rem;
+    @media screen and (max-width: $large) {
+      padding: 0.25rem 8rem 0.25rem 2rem;
     }
 
-    @media screen and (max-width: 614px) {
-      padding: 0rem;
+    @media screen and (max-width: $medium) {
+      padding: 0.25rem 7rem 0.25rem 1rem;
     }
 
     background-color: #E1E2C1;
 
     .avatarWrapper {
       position: relative;
-      width: 100px;
-      height: 69px;
+      width: 6rem;
+      height: 4.5rem;
 
       @media screen and (max-width: $large) {
         width: 18%;
@@ -41,7 +51,6 @@
         border-radius: 1.8rem;
         border: 2px solid black;
         cursor: pointer;
-
         position: absolute;
         flex-direction: column;
         background-color: $background-pink;
@@ -67,8 +76,6 @@
         }
 
         &:hover {
-
-
           .icon {
             transform: rotate(180deg);
           }

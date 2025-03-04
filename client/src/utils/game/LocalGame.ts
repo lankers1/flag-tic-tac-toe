@@ -32,7 +32,6 @@ export class LocalGame {
 
   handleAnswer(
     cb: () => void,
-    _: string | undefined,
     player: number,
     flagIso: string,
     name: string,

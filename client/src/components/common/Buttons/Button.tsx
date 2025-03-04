@@ -5,6 +5,7 @@ type Color = 'blue' | 'green' | 'default';
 interface Props {
   label: ReactNode;
   size?: string;
+  disabled?: boolean;
   type?: 'reset' | 'button' | 'submit' | undefined;
   handleClick?: () => void;
   color?: Color;
@@ -26,10 +27,12 @@ export const Button = ({
   size,
   handleClick,
   type = 'button',
-  color = 'default'
+  color = 'default',
+  disabled = false
 }: Props) => {
   return (
     <button
+      disabled={disabled}
       onClick={handleClick}
       className={`${styles.button} ${
         size === 'xlarge' && styles.xlarge

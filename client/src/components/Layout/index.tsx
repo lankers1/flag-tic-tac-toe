@@ -14,8 +14,10 @@ export const Layout = () => {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <Heading variant="h3">Flag tic-tac-toe</Heading>
-        <nav style={{ display: 'flex', gap: '1.5rem' }}>
+        <Heading variant="h2" bold>
+          FTTT
+        </Heading>
+        <nav className={styles.nav}>
           <Link to="/leaderboard/1">
             <FaFlag className={styles.buttonIcons} />
             <Text fontSize="large">{'Flags'}</Text>

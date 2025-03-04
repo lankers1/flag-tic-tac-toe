@@ -50,11 +50,9 @@ function handleWsMessage(
       game.socket.close();
       setFullGame(true);
       break;
-    case 'metadata':
-      game?.setTurn(message.playerTurn);
-      break;
-    case 'turn':
+    case 'answer':
       const { name, flagIso: iso_2, player, cell } = message;
+
       if (message.isCorrect) {
         game.handleCorrectAnswer(player, { name, iso_2 }, cell);
       } else {

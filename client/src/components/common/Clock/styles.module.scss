@@ -1,0 +1,9 @@
+@use 'src/sass/theme' as *;
+
+.playerOne {
+  fill: $background-blue;
+}
+
+.playerTwo {
+  fill: $background-green;
+}

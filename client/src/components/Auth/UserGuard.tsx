@@ -6,6 +6,7 @@ import { Loader } from '@components/common/Loader';
 
 import { AuthContext } from '../../context/AuthContext';
 import styles from './styles.module.scss';
+import { useGameStore } from '@store/useGameStore';
 
 const getOpponentUsername = (
   game: Game | undefined,
@@ -28,6 +29,7 @@ interface Props {
 
 export const UserGuard = ({ children }: Props) => {
   const { data, isLoading, isPending, error, refetch } = useGetGameQuery();
+  const { setTurn, turn } = useGameStore((state) => state);
   const user = useContext(AuthContext);
   const opponentData = useGetUserQuery(
     getOpponentUsername(data?.game, user?.username)
@@ -43,7 +45,11 @@ export const UserGuard = ({ children }: Props) => {
     ) {
       navigate('/');
     }
-  }, [user, data]);
+
+    if (data && turn === 0) {
+      setTurn(data?.game?.playerOneId === user?.username ? 1 : 2);
+    }
+  }, [user, data, turn]);
 
   if (
     isLoading ||

@@ -10,7 +10,7 @@ export const useSearchGameWs = (toggleDisplayModal: () => void) => {
 
   function searchForGame() {
     socket = new WebSocket(
-      `${import.meta.env.VITE_WEBSOCKET_PORT}/ws/${user?.username}`
+      `${import.meta.env.VITE_WEBSOCKET_PORT}/ws/search-game/${user?.username}`
     );
 
     socket.onclose = () => {
@@ -19,17 +19,12 @@ export const useSearchGameWs = (toggleDisplayModal: () => void) => {
 
     socket.onmessage = (event) => {
       const gameId = JSON.parse(event.data).gameId;
-      navigate(`/game/online/${gameId}`);
       socket?.close();
+      navigate(`/game/online/${gameId}`);
     };
 
     socket.onopen = () => {
-      socket?.send(
-        JSON.stringify({
-          type: 'search',
-          user
-        })
-      );
+      console.info('websocket connected');
       toggleDisplayModal();
     };
   }

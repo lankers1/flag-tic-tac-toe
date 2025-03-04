@@ -55,9 +55,9 @@ interface LabelProps {
 
 const Labels = ({ data, labelKey }: LabelProps) => {
   const labels = [
-    data[`first_${labelKey}` as keyof Game],
-    data[`second_${labelKey}` as keyof Game],
-    data[`third_${labelKey}` as keyof Game]
+    data[`first_${labelKey}` as keyof Board],
+    data[`second_${labelKey}` as keyof Board],
+    data[`third_${labelKey}` as keyof Board]
   ] as string[];
 
   return (

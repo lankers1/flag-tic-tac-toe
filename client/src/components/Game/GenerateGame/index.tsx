@@ -6,7 +6,9 @@ import { ReactNode, useContext, useState } from 'react';
 import { useGameStore } from '@store/useGameStore';
 import { AuthContext } from '@context/AuthContext';
 import { useOnMountUnsafe } from '@pages/Game';
-import { LocalGame } from '@utils/game/LocalGame';
+import { useSendAnswer } from '@query-hooks/game/useSendAnswer';
+import { useSendPlayAgain } from '@query-hooks/game/useSendPlayAgain';
+import { useSendQuitGame } from '@query-hooks/game/useSendQuitGame';
 
 interface Props {
   children: ({ game }: { game: InstanceType<typeof OnlineGame> }) => ReactNode;
@@ -14,13 +16,18 @@ interface Props {
 }
 
 export const GenerateGame = ({ children, gameData, opponent }: Props) => {
+  const sendAnswerMutation = useSendAnswer();
+  const quitGameMutation = useSendQuitGame();
+  const playAgainMutation = useSendPlayAgain();
+
   const [game, setGame] = useState<InstanceType<typeof OnlineGame> | null>(
     null
   );
   const { gameId, player } = useParams();
   const user = useContext(AuthContext);
-  const { setTurn, setCorrectAnswer, resetState, setIncorrectAnswer } =
-    useGameStore((state) => state);
+  const { setCorrectAnswer, resetState, setIncorrectAnswer } = useGameStore(
+    (state) => state
+  );
 
   useOnMountUnsafe(() => {
     if (gameId && !game) {
@@ -28,10 +35,12 @@ export const GenerateGame = ({ children, gameData, opponent }: Props) => {
         new OnlineGame({
           gameId,
           player,
-          setTurn,
           setCorrectAnswer,
           setIncorrectAnswer,
           resetState,
+          sendAnswer: sendAnswerMutation.mutateAsync,
+          sendPlayAgain: playAgainMutation.mutateAsync,
+          sendQuitGame: quitGameMutation.mutateAsync,
           username: user?.username
         })
       );

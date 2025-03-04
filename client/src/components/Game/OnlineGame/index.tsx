@@ -77,9 +77,7 @@ export const OnlineGameProvider = ({ children, game, opponent }: Props) => {
                 type: 'spring',
                 duration: index + 0.1
               })}
-              animateToNumber={
-                winner === turn ? user?.rank + 10 : user?.rank - 10
-              }
+              animateToNumber={user?.rank}
               fontStyle={{
                 fontWeight: '500',
                 fontSize: '1.4rem'
@@ -87,6 +85,7 @@ export const OnlineGameProvider = ({ children, game, opponent }: Props) => {
             />
           </div>
         </div>
+        <Text>Do you want to play again?</Text>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Button
             handleClick={() => game?.quitGame(navigate, gameId)}

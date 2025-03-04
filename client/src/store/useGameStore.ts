@@ -38,7 +38,7 @@ function setSelectedFlags(selectedFlags: SelectedFlags, state: GameState) {
 }
 
 const initialState = {
-  turn: 1,
+  turn: 0,
   currentTurn: 1,
   moveCounter: 0,
   incorrectAnswer: null,
