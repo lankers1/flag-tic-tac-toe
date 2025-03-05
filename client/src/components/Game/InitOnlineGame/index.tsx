@@ -1,14 +1,15 @@
 import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { useGetGameQuery } from '@query-hooks/game/useGetGame';
 import { useGetUserQuery } from '@query-hooks/user/useGetUser';
 import { Loader } from '@components/common/Loader';
-
-import { AuthContext } from '../../context/AuthContext';
-import styles from './styles.module.scss';
+import { AuthContext } from '@context/AuthContext';
 import { useGameStore } from '@store/useGameStore';
 import { PublicUser } from '@types/user';
 import { Game } from '@types/game';
+
+import styles from './styles.module.scss';
 
 const getOpponentUsername = (
   game: Game | undefined,
@@ -29,7 +30,7 @@ interface Props {
   ) => JSX.Element;
 }
 
-export const UserGuard = ({ children }: Props) => {
+export const InitOnlineGame = ({ children }: Props) => {
   const { data, isLoading, isPending, error, refetch } = useGetGameQuery();
   const { setTurn, turn } = useGameStore((state) => state);
   const user = useContext(AuthContext);

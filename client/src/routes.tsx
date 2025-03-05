@@ -1,10 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { Game } from './pages/Game';
-import { Home } from './pages/Home';
-import { Layout } from './components/Layout';
-import { UserGuard } from '@components/Auth/UserGuard';
+
 import { GameProvider } from '@components/Game/GameProvider';
-import { Leaderboard } from '@pages/Leaderboard';
+import { Home } from '@pages/Home';
+import { Layout } from '@components/Layout';
+import { Game } from '@pages/Game';
+import { InitOnlineGame } from '@components/Game/InitOnlineGame';
 
 export const router = createBrowserRouter([
   {
@@ -27,11 +27,11 @@ export const router = createBrowserRouter([
       {
         path: '/game/:player/:gameId',
         element: (
-          <UserGuard>
+          <InitOnlineGame>
             {(gameData, opponent, refetch) => (
               <Game gameData={gameData} opponent={opponent} refetch={refetch} />
             )}
-          </UserGuard>
+          </InitOnlineGame>
         )
       }
     ]
