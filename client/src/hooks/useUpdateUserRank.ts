@@ -1,11 +1,16 @@
-import { AuthContext } from '@context/AuthContext';
-import { useUpdateGameWinnerQuery } from '@query-hooks/game/useUpdateGameWinner';
-import { useUpdateUserRankQuery } from '@query-hooks/user/useUpdateUserRank';
 import { useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-export const useUpdateUserRank = (turn, winner, opponentQuit) => {
-  const mutation = useUpdateGameWinnerQuery();
+import { AuthContext } from '@context/AuthContext';
+import { useUpdateGameWinnerQuery } from '@query-hooks/game/useUpdateGameWinner';
+import { useUpdateUserRankQuery } from '@query-hooks/user/useUpdateUserRank';
+
+export const useUpdateUserRank = (
+  turn: number,
+  winner: number,
+  opponentQuit: boolean
+) => {
+  const updateGameWinner = useUpdateGameWinnerQuery();
   const updateUserRank = useUpdateUserRankQuery();
   const { gameId } = useParams();
 
@@ -22,7 +27,10 @@ export const useUpdateUserRank = (turn, winner, opponentQuit) => {
         ...user,
         rank: userResponse.rank
       });
-      return await mutation.mutateAsync({ gameId, username: user?.username });
+      return await updateGameWinner.mutateAsync({
+        gameId,
+        username: user?.username
+      });
     }
 
     if (winner && winner !== turn && gameId && user) {
@@ -48,7 +56,7 @@ export const useUpdateUserRank = (turn, winner, opponentQuit) => {
         ...user,
         rank: userResponse.rank
       });
-      return mutation.mutateAsync({ gameId, username: user?.username });
+      return updateGameWinner.mutateAsync({ gameId, username: user?.username });
     }
   }
 
