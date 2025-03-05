@@ -1,5 +1,6 @@
 import { NavigateFunction } from 'react-router-dom';
 import { SetSelectedFlag } from '@store/useGameStore';
+import { IncorrectAnswer } from '@types/game';
 
 type Args = {
   gameId: string | undefined;

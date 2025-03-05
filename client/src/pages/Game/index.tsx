@@ -15,6 +15,7 @@ import { Text } from '@components/common/Text';
 import { ActionButtons } from '@components/Game/ActionButtons';
 import { AnswerModalContent } from '@components/Game/AnswerModalContent';
 import { Clock } from '@components/common/Clock';
+import { Game as GameType } from '@types/game.ts';
 
 export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
   const initialized = useRef(false);
@@ -28,7 +29,7 @@ export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
 }
 
 interface Props {
-  gameData: { game: Game; answers: Answers };
+  gameData: { game: GameType; answers: Answers };
   opponent?: { user: User };
   refetch: () => void;
 }

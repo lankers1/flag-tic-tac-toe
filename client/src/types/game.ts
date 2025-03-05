@@ -1,4 +1,4 @@
-type Board = {
+export type Board = {
   first_column: string;
   first_column_id: number;
   second_column: string;
@@ -13,18 +13,18 @@ type Board = {
   third_row_id: number;
 };
 
-type Game = {
+export type Game = {
   board: Board;
   completed: boolean;
   playerOneId: string;
   playerTwoId: string;
 };
 
-type Answers = {
+export type Answers = {
   string: string[];
 };
 
-type Message = {
+export type Message = {
   playerTurn: number;
   isCorrect: boolean;
   type: string;
@@ -34,4 +34,10 @@ type Message = {
   cell: { col: number; row: number };
   playAgain: boolean;
   gameId: string;
+};
+
+export type IncorrectAnswer = {
+  player: number;
+  cell: { row: number; col: number };
+  flag: Flag;
 };

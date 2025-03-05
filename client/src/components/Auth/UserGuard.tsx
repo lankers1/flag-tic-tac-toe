@@ -7,6 +7,8 @@ import { Loader } from '@components/common/Loader';
 import { AuthContext } from '../../context/AuthContext';
 import styles from './styles.module.scss';
 import { useGameStore } from '@store/useGameStore';
+import { PublicUser } from '@types/user';
+import { Game } from '@types/game';
 
 const getOpponentUsername = (
   game: Game | undefined,
@@ -22,7 +24,7 @@ const getOpponentUsername = (
 interface Props {
   children: (
     data: { game: Game; answers: Answers },
-    opponent: { user: User },
+    opponent: { user: PublicUser },
     refetch: () => void
   ) => JSX.Element;
 }

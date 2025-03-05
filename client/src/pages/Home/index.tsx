@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import {
   FaUserFriends,
   FaArrowLeft,
@@ -15,12 +17,11 @@ import styles from './styles.module.scss';
 import { Button } from '../../components/common/Buttons/Button';
 import { useSearchGameWs } from '../../query-hooks/websockets/useSearchGame';
 import { Modal } from '../../components/common/Modal';
-import { useContext } from 'react';
 import { RegisterModal } from '@components/Auth/RegisterModal';
-import { Route, Routes, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../..//context/AuthContext';
 import { Loader } from '@components/common/Loader';
 import { Text } from '@components/common/Text';
+import { Leaderboard } from '@pages/Leaderboard';
 
 export const Home = () => {
   const user = useContext(AuthContext);
@@ -156,15 +157,24 @@ export const Home = () => {
           <Button
             handleClick={cancelSearch}
             label={
-              <Text
-                style={{ gap: '6px', alignItems: 'center', display: 'flex' }}
-              >
-                <FaArrowLeft /> Cancel
-              </Text>
+              <>
+                <FaArrowLeft className={styles.buttonIcons} />
+                <Text>Cancel</Text>
+              </>
             }
           />
         </div>
       </Modal>
+      <Routes>
+        <Route
+          path="leaderboard/:page"
+          element={
+            <Modal isOpen={true} height="80%">
+              <Leaderboard />
+            </Modal>
+          }
+        />
+      </Routes>
       <Modal isOpen={displayAccountSearchingModal}>
         <div
           style={{
@@ -179,11 +189,10 @@ export const Home = () => {
           <Button
             handleClick={closeAccountSearchingModal}
             label={
-              <Text
-                style={{ gap: '6px', alignItems: 'center', display: 'flex' }}
-              >
-                <FaArrowLeft /> Cancel
-              </Text>
+              <>
+                <FaArrowLeft className={styles.buttonIcons} />
+                <Text>Cancel</Text>
+              </>
             }
           />
         </div>

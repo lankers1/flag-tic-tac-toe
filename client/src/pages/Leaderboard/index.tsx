@@ -1,13 +1,12 @@
-import { Card } from '@components/common/Card';
+import { useParams } from 'react-router-dom';
 import { useGetUsersQuery } from '@query-hooks/user/useGetUsers';
-import styles from './styles.module.scss';
 import { Text } from '@components/common/Text';
 import { FlagAvatar } from '@components/common/FlagAvatar';
 import { IconButton } from '@components/common/Buttons/IconButton';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import { useParams } from 'react-router-dom';
 import { LinkButton } from '@components/common/Buttons/LinkButton';
 import { Notification } from '@components/common/Notification';
+import styles from './styles.module.scss';
 
 export const Leaderboard = () => {
   const { page } = useParams();
@@ -15,10 +14,10 @@ export const Leaderboard = () => {
   const currentPage = (page && +page) || 1;
   return (
     <div className={styles.container}>
-      <Card className={styles.card}>
+      <div className={styles.card}>
         {isLoading && <Text>Loading</Text>}
         {isError && <Notification type="error">{error.message}</Notification>}
-        {data?.length > 0 && (
+        {data && data?.length > 0 && (
           <>
             <div className={styles.tableContainer}>
               <table className={styles.table}>
@@ -50,7 +49,7 @@ export const Leaderboard = () => {
               </table>
             </div>
             <footer className={styles.cardFooter}>
-              <LinkButton label="Back" to="/" />
+              <LinkButton label="Close" to="/" />
               <div className={styles.pagination}>
                 <IconButton
                   disabled={+currentPage === 1}
@@ -67,7 +66,7 @@ export const Leaderboard = () => {
             </footer>
           </>
         )}
-      </Card>
+      </div>
     </div>
   );
 };

@@ -35,6 +35,10 @@
         flex: 1;
         width: 100%;
 
+        @media screen and (max-width: $x-large) {
+          flex-direction: column;
+        }
+
         button {
           flex: 3;
 

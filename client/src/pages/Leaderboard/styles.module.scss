@@ -1,20 +1,24 @@
 @use 'src/sass/theme' as *;
 
 .container {
-  width: 100%;
+  width: 50vw;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 
+  @media screen and (max-width: $large) {
+    width: 80vw;
+  }
+
   .card {
-    max-width: 500px;
     width: 100%;
-    height: 70%;
+    height: 100%;
     display: flex;
+    overflow-y: auto;
     flex-direction: column;
     justify-content: space-between;
     padding: 2rem 2rem 1rem 2rem;
-
 
     .tableContainer {
       height: 100%;

@@ -1,8 +1,10 @@
+import { useEffect, useState } from 'react';
 import * as flags from 'country-flag-icons/react/3x2';
 import { IoCloseSharp } from 'react-icons/io5';
 
+import { IncorrectAnswer } from '@types/game';
 import styles from './styles.module.scss';
-import { useEffect, useState } from 'react';
+import { SelectedFlag } from '@types/flag';
 
 interface Props {
   handleClick: () => void;

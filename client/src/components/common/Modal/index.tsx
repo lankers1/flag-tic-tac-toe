@@ -13,8 +13,8 @@ export const Modal = ({
 }: PropsWithChildren<Props>) => {
   if (!isOpen) return null;
   return (
-    <div className={styles.modalBackground} style={{ height }}>
-      <dialog className={styles.modal} open={isOpen}>
+    <div className={styles.modalBackground}>
+      <dialog className={styles.modal} style={{ height }} open={isOpen}>
         {children}
       </dialog>
     </div>
