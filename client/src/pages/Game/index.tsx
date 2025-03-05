@@ -16,6 +16,7 @@ import { ActionButtons } from '@components/Game/ActionButtons';
 import { AnswerModalContent } from '@components/Game/AnswerModalContent';
 import { Clock } from '@components/common/Clock';
 import { Game as GameType } from '@types/game.ts';
+import { User } from '@types/user';
 
 export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
   const initialized = useRef(false);
@@ -35,6 +36,7 @@ interface Props {
 }
 
 export const Game = ({ gameData, opponent, refetch }: Props) => {
+  console.log(opponent);
   const user = useContext(AuthContext);
   const { gameId } = useParams();
   const [selectedSquare, setSelectedSquare] = useState<[number, number]>([
@@ -147,9 +149,7 @@ const PlayerNotification = ({ user, currentTurn, index, turn, winner }) => {
           </div>
         </div>
       </Notification>
-      {index === 0 && (
-        <Clock currentTurn={currentTurn} turn={turn} size={100} />
-      )}
+      {index === 0 && <Clock size={100} />}
     </>
   );
 };
