@@ -1,4 +1,10 @@
-import { FaUserFriends, FaArrowLeft, FaGlobeAmericas } from 'react-icons/fa';
+import {
+  FaUserFriends,
+  FaArrowLeft,
+  FaGlobeAmericas,
+  FaTrophy,
+  FaRobot
+} from 'react-icons/fa';
 import { IoMdLogIn } from 'react-icons/io';
 
 import { LinkButton } from '../../components/common/Buttons/LinkButton';
@@ -9,18 +15,23 @@ import styles from './styles.module.scss';
 import { Button } from '../../components/common/Buttons/Button';
 import { useSearchGameWs } from '../../query-hooks/websockets/useSearchGame';
 import { Modal } from '../../components/common/Modal';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { RegisterModal } from '@components/Auth/RegisterModal';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../..//context/AuthContext';
 import { Loader } from '@components/common/Loader';
+import { Text } from '@components/common/Text';
 
 export const Home = () => {
   const user = useContext(AuthContext);
   const navigate = useNavigate();
-  const [displayModal, setDisplayModal] = useState(false);
-  const toggleDisplayModal = () => setDisplayModal((state) => !state);
-  const { searchForGame, cancelSearch } = useSearchGameWs(toggleDisplayModal);
+  const {
+    displaySearchModal,
+    searchForGame,
+    cancelSearch,
+    displayAccountSearchingModal,
+    closeAccountSearchingModal
+  } = useSearchGameWs();
 
   function handleToggleRegisterModal() {
     navigate('auth/register');
@@ -37,11 +48,11 @@ export const Home = () => {
           <div className={styles.cardContainer}>
             <div className={styles.subheading}>
               <Heading variant="h2">Play online</Heading>
-              <Heading variant="h3">
+              <Text>
                 Aim to beat your opponent by guessing the flags based on
                 categories. The first to complete three in a row, column or
                 diagonally wins.
-              </Heading>
+              </Text>
             </div>
             <div className={styles.localButtons}>
               {!user?.loggedIn ? (
@@ -68,19 +79,29 @@ export const Home = () => {
                   />
                 </>
               ) : (
-                <div className={styles.localButtons}>
+                <>
                   <Button
                     size="xlarge"
-                    disabled={!!displayModal}
+                    disabled={!!displaySearchModal}
                     label={
                       <>
                         <FaGlobeAmericas className={styles.buttonIcons} />
-                        <p>{'Search for game'}</p>
+                        <Text fontSize="small">{'Search for game'}</Text>
                       </>
                     }
                     handleClick={searchForGame}
                   />
-                </div>
+                  <LinkButton
+                    size="xlarge"
+                    to="/leaderboard/1"
+                    label={
+                      <>
+                        <FaTrophy className={styles.buttonIcons} />
+                        <Text fontSize="small">{'Leaderboard'}</Text>
+                      </>
+                    }
+                  />
+                </>
               )}
             </div>
           </div>
@@ -89,11 +110,11 @@ export const Home = () => {
           <div className={styles.cardContainer}>
             <div className={styles.subheading}>
               <Heading variant="h2">Play locally</Heading>
-              <Heading variant="h3">
+              <Text>
                 Aim to beat your opponent by guessing the flags based on
                 categories. The first to complete three in a row, column or
                 diagonally wins.
-              </Heading>
+              </Text>
             </div>
             <div className={styles.localButtons}>
               <LinkButton
@@ -102,25 +123,25 @@ export const Home = () => {
                 label={
                   <>
                     <FaUserFriends className={styles.buttonIcons} />
-                    <p>{'Local Play'}</p>
+                    <Text fontSize="small">{'Local Play'}</Text>
                   </>
                 }
               />
-              {/* <LinkButton
+              <LinkButton
                 size="xlarge"
                 to="/game/computer"
                 label={
                   <>
                     <FaRobot className={styles.buttonIcons} />
-                    {'Vs Computer'}
+                    <Text fontSize="small">{'VS Computer'}</Text>
                   </>
                 }
-              /> */}
+              />
             </div>
           </div>
         </Card>
       </div>
-      <Modal isOpen={displayModal}>
+      <Modal isOpen={displaySearchModal}>
         <div
           style={{
             display: 'flex',
@@ -128,16 +149,41 @@ export const Home = () => {
             flexDirection: 'column'
           }}
         >
-          <h3>Searching for game</h3>
+          <Heading variant="h3">Searching for game</Heading>
           <div style={{ width: '5rem', display: 'flex', padding: '1rem 0' }}>
             <Loader />
           </div>
           <Button
             handleClick={cancelSearch}
             label={
-              <p style={{ gap: '6px', alignItems: 'center', display: 'flex' }}>
+              <Text
+                style={{ gap: '6px', alignItems: 'center', display: 'flex' }}
+              >
                 <FaArrowLeft /> Cancel
-              </p>
+              </Text>
+            }
+          />
+        </div>
+      </Modal>
+      <Modal isOpen={displayAccountSearchingModal}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'column'
+          }}
+        >
+          <Heading variant="h3">
+            You have another tab open searching for a game.
+          </Heading>
+          <Button
+            handleClick={closeAccountSearchingModal}
+            label={
+              <Text
+                style={{ gap: '6px', alignItems: 'center', display: 'flex' }}
+              >
+                <FaArrowLeft /> Cancel
+              </Text>
             }
           />
         </div>

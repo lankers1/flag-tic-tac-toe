@@ -1,20 +1,40 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '@context/AuthContext';
 
 let socket: WebSocket;
 
-export const useSearchGameWs = (toggleDisplayModal: () => void) => {
+export const useSearchGameWs = () => {
+  const [displaySearchModal, setDisplaySearchModal] = useState(false);
   const user = useContext(AuthContext);
+  const [displayAccountSearchingModal, setDisplayAccountSearchingModal] =
+    useState(false);
+
   const navigate = useNavigate();
 
+  function toggleDisplaySearchModal() {
+    setDisplaySearchModal((state) => !state);
+  }
+
+  function closeAccountSearchingModal() {
+    setDisplayAccountSearchingModal(false);
+  }
+
   function searchForGame() {
+    const isAccountSearching =
+      localStorage.getItem('ftt-searching-for-game') === user?.username;
+
+    if (isAccountSearching) {
+      return setDisplayAccountSearchingModal(true);
+    }
+
     socket = new WebSocket(
       `${import.meta.env.VITE_WEBSOCKET_PORT}/ws/search-game/${user?.username}`
     );
 
     socket.onclose = () => {
       console.log('connection closed');
+      localStorage.removeItem('ftt-searching-for-game');
     };
 
     socket.onmessage = (event) => {
@@ -25,14 +45,22 @@ export const useSearchGameWs = (toggleDisplayModal: () => void) => {
 
     socket.onopen = () => {
       console.info('websocket connected');
-      toggleDisplayModal();
+      localStorage.setItem('ftt-searching-for-game', user?.username);
+      toggleDisplaySearchModal();
     };
   }
 
   function cancelSearch() {
+    localStorage.removeItem('ftt-searching-for-game');
     socket?.close();
-    toggleDisplayModal();
+    toggleDisplaySearchModal();
   }
 
-  return { searchForGame, cancelSearch };
+  return {
+    displaySearchModal,
+    searchForGame,
+    cancelSearch,
+    displayAccountSearchingModal,
+    closeAccountSearchingModal
+  };
 };

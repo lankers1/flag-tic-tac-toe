@@ -17,17 +17,7 @@ export const Layout = () => {
         <Heading variant="h2" bold>
           FTTT
         </Heading>
-        <nav className={styles.nav}>
-          <Link to="/leaderboard/1">
-            <FaFlag className={styles.buttonIcons} />
-            <Text fontSize="large">{'Flags'}</Text>
-          </Link>
-          <Link to="/leaderboard/1">
-            <FaTrophy className={styles.buttonIcons} />
-            <Text fontSize="large">{'Leaderboard'}</Text>
-          </Link>
-          {user?.loggedIn && <UserMenu />}
-        </nav>
+        <nav className={styles.nav}>{user?.loggedIn && <UserMenu />}</nav>
       </header>
       <main className={styles.main}>
         <Outlet />
@@ -46,8 +36,10 @@ const UserMenu = () => {
           <FlagAvatar flagIso2={user?.favouriteFlag} />
         </div>
         <div className={styles.menuItems}>
-          <a>Account</a>
-          <a onClick={user?.logout}>Logout</a>
+          <a style={{ paddingLeft: '6px' }}>Account</a>
+          <a style={{ paddingLeft: '6px' }} onClick={user?.logout}>
+            Logout
+          </a>
         </div>
       </div>
     </div>
