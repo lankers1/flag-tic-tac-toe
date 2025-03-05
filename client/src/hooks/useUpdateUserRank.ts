@@ -13,11 +13,14 @@ export const useUpdateUserRank = (
   const updateGameWinner = useUpdateGameWinnerQuery();
   const updateUserRank = useUpdateUserRankQuery();
   const { gameId } = useParams();
-
   const user = useContext(AuthContext);
 
+  const isWinner = winner === turn && gameId && user;
+  const isLoser = winner && winner !== turn && gameId && user;
+  const opponentLeft = opponentQuit && gameId && user;
+
   async function completeGame() {
-    if (winner === turn && gameId && user) {
+    if (isWinner) {
       const userResponse = await updateUserRank.mutateAsync({
         username: user?.username,
         token: user?.token,
@@ -33,7 +36,7 @@ export const useUpdateUserRank = (
       });
     }
 
-    if (winner && winner !== turn && gameId && user) {
+    if (isLoser) {
       const userResponse = await updateUserRank.mutateAsync({
         username: user.username,
         token: user.token,
@@ -46,7 +49,7 @@ export const useUpdateUserRank = (
       return;
     }
 
-    if (opponentQuit && gameId && user) {
+    if (opponentLeft) {
       const userResponse = await updateUserRank.mutateAsync({
         username: user.username,
         token: user.token,
