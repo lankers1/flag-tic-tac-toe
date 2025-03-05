@@ -4,10 +4,12 @@ import { useOnMountUnsafe } from '../../../hooks/useOnMountUnsafe';
 import { useSendAnswer } from '@query-hooks/game/useSendAnswer';
 import { useGameStore } from '@store/useGameStore';
 
-export const Clock = ({ size }) => {
+export const Clock = ({ size }: { size: number }) => {
   const mutation = useSendAnswer();
   const ticks = useRef();
-  const interval = useRef(null);
+  const interval = useRef<ReturnType<typeof setInterval> | undefined>(
+    undefined
+  );
   const [time, setTime] = useState(0);
   let middle = size / 2;
 
@@ -67,7 +69,6 @@ export const Clock = ({ size }) => {
           strokeWidth={3}
         />
         <text
-          // style={{ transform: 'rotate(204deg)' }}
           x="50%"
           y="50%"
           text-anchor="middle"
