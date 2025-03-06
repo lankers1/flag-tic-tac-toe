@@ -22,6 +22,7 @@ import { AuthContext } from '../..//context/AuthContext';
 import { Loader } from '@components/common/Loader';
 import { Text } from '@components/common/Text';
 import { Leaderboard } from '@pages/Leaderboard';
+import { FlexDiv } from '@components/common/FlexDiv';
 
 export const Home = () => {
   const user = useContext(AuthContext);
@@ -143,13 +144,7 @@ export const Home = () => {
         </Card>
       </div>
       <Modal isOpen={displaySearchModal}>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            flexDirection: 'column'
-          }}
-        >
+        <FlexDiv alignItems="center" flexDirection="col">
           <Heading variant="h3">Searching for game</Heading>
           <div style={{ width: '5rem', display: 'flex', padding: '1rem 0' }}>
             <Loader />
@@ -163,7 +158,7 @@ export const Home = () => {
               </>
             }
           />
-        </div>
+        </FlexDiv>
       </Modal>
       <Routes>
         <Route
@@ -176,13 +171,7 @@ export const Home = () => {
         />
       </Routes>
       <Modal isOpen={displayAccountSearchingModal}>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            flexDirection: 'column'
-          }}
-        >
+        <FlexDiv alignItems="center" flexDirection="col">
           <Heading variant="h3">
             You have another tab open searching for a game.
           </Heading>
@@ -195,7 +184,7 @@ export const Home = () => {
               </>
             }
           />
-        </div>
+        </FlexDiv>
       </Modal>
       <Routes>
         <Route

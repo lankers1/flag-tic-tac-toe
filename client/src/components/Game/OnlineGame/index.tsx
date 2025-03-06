@@ -13,6 +13,7 @@ import { useUpdateUserRank } from '../../../hooks/useUpdateUserRank';
 import { Text } from '@components/common/Text';
 import { Notification } from '@components/common/Notification';
 import { LinkButton } from '@components/common/Buttons/LinkButton';
+import { FlexDiv } from '@components/common/FlexDiv';
 
 interface Props {
   children: ({
@@ -58,15 +59,11 @@ export const OnlineGameProvider = ({ children, game, opponent }: Props) => {
         />
       </Modal>
       <Modal isOpen={!!(winner && gameId) && !opponentQuit}>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            flexDirection: 'column'
-          }}
-        >
+        <FlexDiv alignItems="center" flexDirection="col">
           <Heading variant="h2">
-            {winner === turn ? `Well done, you` : `${opponent?.user?.username}`}{' '}
+            {winner === turn
+              ? `Well done, you`
+              : `Your opponent ${opponent?.user?.username}`}{' '}
             won!
           </Heading>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -84,7 +81,7 @@ export const OnlineGameProvider = ({ children, game, opponent }: Props) => {
               }}
             />
           </div>
-        </div>
+        </FlexDiv>
         <Text>Do you want to play again?</Text>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Button
