@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 
 import styles from './styles.module.scss';
-import { useParams } from 'react-router-dom';
 import { LocalGame } from '@utils/game/LocalGame';
 import { OnlineGame } from '@utils/game/OnlineGame';
 import { Notification } from '@components/common/Notification';

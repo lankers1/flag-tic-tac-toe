@@ -1,19 +1,19 @@
 import { useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { AuthContext } from '@context/AuthContext';
+import { AuthContext, UserContext } from '@context/AuthContext';
 import { useUpdateGameWinnerQuery } from '@query-hooks/game/useUpdateGameWinner';
 import { useUpdateUserRankQuery } from '@query-hooks/user/useUpdateUserRank';
 
 export const useUpdateUserRank = (
   turn: number,
-  winner: number,
+  winner: number | null,
   opponentQuit: boolean
 ) => {
   const updateGameWinner = useUpdateGameWinnerQuery();
   const updateUserRank = useUpdateUserRankQuery();
   const { gameId } = useParams();
-  const user = useContext(AuthContext);
+  const user = useContext(AuthContext) as UserContext;
 
   const isWinner = winner === turn && gameId && user;
   const isLoser = winner && winner !== turn && gameId && user;

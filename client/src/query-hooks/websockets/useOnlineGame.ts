@@ -3,6 +3,7 @@ import { OnlineGame } from '@utils/game/OnlineGame';
 import { AuthContext } from '@context/AuthContext';
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import { useGameStore } from '@store/useGameStore';
+import { Message } from 'src/type-defs/game';
 
 export const useOnlineGame = (
   setOpponentQuit: (arg: boolean) => void,

@@ -238,4 +238,4 @@ CREATE TABLE users(
 ALTER TABLE users
 ADD CONSTRAINT username_unq UNIQUE(username);
 ALTER TABLE users
-ADD CONSTRAINT username_length CHECK (char_length(username) > 2)
+ADD CONSTRAINT username_length CHECK (char_length(username) > 5)

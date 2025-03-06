@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { evaluateBoardForWinner } from '../utils/game-ai/minmax';
-import { IncorrectAnswer } from '@types/game';
-import { SelectedFlags } from '@types/flag';
+import { IncorrectAnswer } from 'src/type-defs/game';
+import { SelectedFlags } from 'src/type-defs/flag';
 
 export type SetSelectedFlag = (
   player: number,

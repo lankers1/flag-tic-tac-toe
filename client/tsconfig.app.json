@@ -23,7 +23,7 @@
       "@store/*": ["src/store/*"],
       "@utils/*": ["src/utils/*"],
       "@pages/*": ["src/pages/*"],
-      "@types/*": ["src/types/*"],
+      "@type-defs/*": ["src/type-defs/*"],
       "@context/*": ["src/context/*"],
     },
   },

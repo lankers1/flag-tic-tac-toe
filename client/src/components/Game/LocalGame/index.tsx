@@ -1,17 +1,15 @@
+import { ReactNode, useContext, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
+
 import { determineMove, easyComputer } from '@utils/computer/rulesets';
 import { AuthContext } from '@context/AuthContext';
 import { useSearchFlagsQuery } from '@query-hooks/flags/useSearchFlags';
 import { useGameStore } from '@store/useGameStore';
 import { LocalGame } from '@utils/game/LocalGame';
-import { ReactNode, useContext, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { Game } from '@type-defs/game';
 
 interface Props {
-  children: ({
-    game
-  }: {
-    game: InstanceType<typeof LocalGame> | undefined;
-  }) => ReactNode;
+  children: ({ game }: { game: InstanceType<typeof LocalGame> }) => ReactNode;
   gameData: { game: Game; answers: Answers };
 }
 

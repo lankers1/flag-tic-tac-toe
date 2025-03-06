@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { User } from '@type-defs/user';
 
 async function handleRegisterUser(user: User) {
   const res = await fetch(`${import.meta.env.VITE_API_URL}/register`, {

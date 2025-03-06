@@ -29,8 +29,10 @@ export const LoginForm = () => {
       const userRes = await mutation.mutateAsync(form);
       user?.setUser(userRes);
       navigate('../..');
-    } catch (error: { message: string }) {
-      setError(error);
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error);
+      }
     }
   }
 

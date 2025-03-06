@@ -15,7 +15,7 @@ async function handleSearchFlags(searchTerm: string) {
 }
 
 export const useSearchFlagsQuery = (searchTerm: string) =>
-  useQuery<Flag[], void>({
+  useQuery<Flag[]>({
     queryKey: [searchTerm],
     queryFn: () => handleSearchFlags(searchTerm)
   });

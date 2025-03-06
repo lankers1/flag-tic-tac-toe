@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { User } from '@type-defs/user';
 
 interface Args {
   username: string;

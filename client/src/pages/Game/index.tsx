@@ -1,7 +1,6 @@
 import { EffectCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Modal } from '../../components/common/Modal';
 import { useGameStore } from '../../store/useGameStore';
 
 import styles from './styles.module.scss';
@@ -11,9 +10,10 @@ import { GenerateGame } from '@components/Game/GenerateGame';
 import { AuthContext, UserContext } from '@context/AuthContext';
 import { ActionButtons } from '@components/Game/ActionButtons';
 import { AnswerModalContent } from '@components/Game/AnswerModalContent';
-import { Game as GameType } from '@types/game.ts';
-import { User } from '@types/user';
+import { Board, Game as GameType } from '@type-defs/game';
+import { PublicUser } from '@type-defs/user';
 import { PlayerNotification } from '@components/Game/PlayerNotification';
+import { Modal } from '@components/common/Modal';
 
 export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
   const initialized = useRef(false);
@@ -28,11 +28,12 @@ export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
 
 interface Props {
   gameData: { game: GameType; answers: Answers };
-  opponent?: { user: User };
+  board: Board;
+  opponent?: { user: PublicUser };
   refetch: () => void;
 }
 
-export const Game = ({ gameData, opponent, refetch }: Props) => {
+export const Game = ({ gameData, board, opponent, refetch }: Props) => {
   const user = useContext(AuthContext);
   const { gameId } = useParams();
   const [selectedSquare, setSelectedSquare] = useState<[number, number]>([
@@ -56,7 +57,7 @@ export const Game = ({ gameData, opponent, refetch }: Props) => {
         <>
           <div className={styles.pageContainer}>
             <div className={styles.container}>
-              <div style={{ display: 'flex', gap: '2rem' }}>
+              <div style={{ gap: '2rem' }}>
                 {gameId ? (
                   determineOrder(user, opponent?.user, turn).map(
                     (user, index) => (
@@ -68,10 +69,7 @@ export const Game = ({ gameData, opponent, refetch }: Props) => {
                 )}
               </div>
               <div className={styles.gameboardContainer}>
-                <Gameboard
-                  handleClick={handleClick}
-                  data={gameId ? gameData?.game.board : gameData?.game}
-                />
+                <Gameboard handleClick={handleClick} data={board} />
               </div>
             </div>
             <ActionButtons
@@ -96,7 +94,7 @@ export const Game = ({ gameData, opponent, refetch }: Props) => {
 
 function determineOrder(
   user: UserContext | null,
-  opponentData: User | undefined,
+  opponentData: PublicUser | undefined,
   turn: number
 ) {
   if (turn === 1) {

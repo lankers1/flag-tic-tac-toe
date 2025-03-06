@@ -10,6 +10,7 @@ import { Notification } from '@components/common/Notification';
 import { Text } from '@components/common/Text';
 import { Form } from '@components/common/Form';
 import { registerValidation } from './validation';
+import { User } from '@type-defs/user';
 
 const initialData = {
   username: '',
@@ -32,8 +33,10 @@ export const RegisterForm = () => {
       const userRes = await mutation.mutateAsync(form);
       user?.setUser(userRes);
       navigate('../..');
-    } catch (error: { message: string }) {
-      setError(error);
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error);
+      }
     }
   }
 

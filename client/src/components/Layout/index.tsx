@@ -1,12 +1,10 @@
 import { useContext } from 'react';
 import { Outlet } from 'react-router-dom';
-import { FaAngleUp, FaFlag, FaTrophy } from 'react-icons/fa';
+import { FaAngleUp } from 'react-icons/fa';
 import { FlagAvatar } from '@components/common/FlagAvatar';
 import { Heading } from '@components/common/Heading';
-import { AuthContext } from '../../context/AuthContext';
+import { AuthContext, UserContext } from '../../context/AuthContext';
 import styles from './styles.module.scss';
-import { Text } from '@components/common/Text';
-import { Link } from '@components/common/Link';
 
 export const Layout = () => {
   const user = useContext(AuthContext);
@@ -27,13 +25,13 @@ export const Layout = () => {
 };
 
 const UserMenu = () => {
-  const user = useContext(AuthContext);
+  const user = useContext(AuthContext) as UserContext;
   return (
     <div className={styles.avatarWrapper}>
       <div className={styles.avatarContainer}>
         <div className={styles.innerContainer}>
           <FaAngleUp className={styles.icon} />
-          <FlagAvatar flagIso2={user?.favouriteFlag} />
+          <FlagAvatar flagIso2={user.favouriteFlag} />
         </div>
         <div className={styles.menuItems}>
           <a style={{ paddingLeft: '6px' }}>Account</a>

@@ -1,6 +1,6 @@
 import { NavigateFunction } from 'react-router-dom';
 import { SetSelectedFlag } from '@store/useGameStore';
-import { IncorrectAnswer } from '@types/game';
+import { IncorrectAnswer } from 'src/type-defs/game';
 
 type Args = {
   gameId: string | undefined;
@@ -61,7 +61,7 @@ export class LocalGame {
     this.setIncorrectAnswer({ player, flag, cell });
   }
 
-  quitGame(navigate: NavigateFunction, _: string | undefined) {
+  quitGame(navigate: NavigateFunction, _: string) {
     this.resetState();
     navigate('/');
   }

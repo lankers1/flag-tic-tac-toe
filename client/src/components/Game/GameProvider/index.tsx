@@ -3,6 +3,7 @@ import { Loader } from '@components/common/Loader';
 
 import styles from './styles.module.scss';
 import { Notification } from '@components/common/Notification';
+import { Game } from '@type-defs/game';
 
 interface Props {
   children: (

@@ -3,7 +3,7 @@ import { FlagAvatar } from '@components/common/FlagAvatar';
 import { Text } from '@components/common/Text';
 import { Clock } from '@components/common/Clock';
 import { Notification } from '@components/common/Notification';
-import { AuthContext } from '@context/AuthContext';
+import { AuthContext, UserContext } from '@context/AuthContext';
 import { FlexDiv } from '@components/common/FlexDiv';
 
 import styles from './styles.module.scss';
@@ -58,7 +58,7 @@ function winnerNotification(player: string, winner: number) {
 
 export const PlayerNotification = ({ index }: Props) => {
   const { turn, winner, currentTurn } = useGameStore((state) => state);
-  const user = useContext(AuthContext);
+  const user = useContext(AuthContext) as UserContext;
 
   const { gameId, player } = useParams() as { gameId: string; player: string };
 
@@ -81,7 +81,7 @@ export const PlayerNotification = ({ index }: Props) => {
     <>
       <Notification type={index === 0 ? 'playerOne' : 'playerTwo'}>
         <FlexDiv>
-          <FlagAvatar flagIso2={user?.favouriteFlag} />
+          <FlagAvatar flagIso2={user.favouriteFlag} />
           <div className={styles.playerDetails}>
             <Text fontSize="large">{user?.username}</Text>
             <Text fontSize="small">{user?.rank}</Text>

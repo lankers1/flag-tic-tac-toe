@@ -10,7 +10,7 @@ import { Heading } from '@components/common/Heading';
 interface Props {
   winner: number | null;
   handleResetGame: () => void;
-  quitGame: (navigate: NavigateFunction, gameId: string | undefined) => void;
+  quitGame: (navigate: NavigateFunction, type: string) => void;
 }
 
 export const ActionButtons = ({ winner, handleResetGame, quitGame }: Props) => {
@@ -48,7 +48,7 @@ export const ActionButtons = ({ winner, handleResetGame, quitGame }: Props) => {
 interface ModalContentProps {
   type: 'give_up' | 'restart' | false;
   closeModal: () => void;
-  quitGame: (navigate: NavigateFunction, gameId: string | undefined) => void;
+  quitGame: (navigate: NavigateFunction, type: string) => void;
   handleResetGame: () => void;
 }
 
@@ -59,7 +59,6 @@ const ModalContent = ({
   handleResetGame
 }: ModalContentProps) => {
   const navigate = useNavigate();
-  const { gameId } = useParams();
 
   switch (type) {
     case 'give_up':
@@ -68,10 +67,7 @@ const ModalContent = ({
           <Heading variant="h3">Are you sure you want to give up?</Heading>
           <div className={styles.buttonContainer}>
             <Button handleClick={closeModal} label="No" />
-            <Button
-              handleClick={() => quitGame(navigate, gameId)}
-              label="Yes"
-            />
+            <Button handleClick={() => quitGame(navigate, type)} label="Yes" />
           </div>
         </>
       );

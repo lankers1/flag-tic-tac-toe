@@ -2,7 +2,7 @@ import { ReactNode, useContext, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import AnimatedNumbers from 'react-animated-numbers';
 
-import { AuthContext } from '@context/AuthContext';
+import { AuthContext, UserContext } from '@context/AuthContext';
 import { useGameStore } from '@store/useGameStore';
 import { useOnlineGame } from '@query-hooks/websockets/useOnlineGame';
 import { OnlineGame } from '@utils/game/OnlineGame';
@@ -14,20 +14,19 @@ import { Text } from '@components/common/Text';
 import { Notification } from '@components/common/Notification';
 import { LinkButton } from '@components/common/Buttons/LinkButton';
 import { FlexDiv } from '@components/common/FlexDiv';
+import { PublicUser } from '@type-defs/user';
 
 interface Props {
-  children: ({
-    game
-  }: {
-    game: InstanceType<typeof OnlineGame> | undefined;
-  }) => ReactNode;
+  children: ({ game }: { game: InstanceType<typeof OnlineGame> }) => ReactNode;
+  game: OnlineGame;
+  opponent: { user: PublicUser };
 }
 
 export const OnlineGameProvider = ({ children, game, opponent }: Props) => {
   const navigate = useNavigate();
-  const { gameId } = useParams();
+  const { gameId } = useParams() as { gameId: string };
   const [opponentQuit, setOpponentQuit] = useState(false);
-  const user = useContext(AuthContext);
+  const user = useContext(AuthContext) as UserContext;
   const { turn, winner } = useGameStore((state) => state);
   const { fullGame } = useOnlineGame(setOpponentQuit, game);
   useUpdateUserRank(turn, winner, opponentQuit);
@@ -50,7 +49,7 @@ export const OnlineGameProvider = ({ children, game, opponent }: Props) => {
 
   return (
     <>
-      {children}
+      {children({ game })}
       <Modal isOpen={opponentQuit}>
         <Heading variant="h2">It looks like your opponent quit!</Heading>
         <Button
@@ -90,8 +89,7 @@ export const OnlineGameProvider = ({ children, game, opponent }: Props) => {
           />
           <Button
             handleClick={() => {
-              const { username } = user;
-              game?.playAgain({ username }, gameId);
+              game?.playAgain();
             }}
             label="Yes"
           />

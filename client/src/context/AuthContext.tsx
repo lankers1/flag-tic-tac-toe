@@ -1,12 +1,12 @@
 import { createContext, useState } from 'react';
-import { User } from '@types/user';
+import { PublicUser } from 'src/type-defs/user';
 
 export interface UserContext {
   loggedIn: boolean;
-  setUser: (user: User) => void;
+  setUser: (user: PublicUser) => void;
   logout: () => void;
   favouriteFlag: string;
-  username: string | undefined;
+  username: string;
   token: string | undefined;
   rank: number;
 }
@@ -21,7 +21,7 @@ export const AuthContextProvider = ({
   );
   const loggedIn = !!(user.token && user.username && user.rank);
 
-  function setUserItem(user: User) {
+  function setUserItem(user: PublicUser) {
     localStorage.setItem('user', JSON.stringify(user));
     setUser(user);
   }

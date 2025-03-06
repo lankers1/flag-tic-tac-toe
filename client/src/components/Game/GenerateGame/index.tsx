@@ -9,10 +9,18 @@ import { useOnMountUnsafe } from '@pages/Game';
 import { useSendAnswer } from '@query-hooks/game/useSendAnswer';
 import { useSendPlayAgain } from '@query-hooks/game/useSendPlayAgain';
 import { useSendQuitGame } from '@query-hooks/game/useSendQuitGame';
+import { Game } from '@type-defs/game';
+import { PublicUser } from '@type-defs/user';
+import { LocalGame } from '@utils/game/LocalGame';
 
 interface Props {
-  children: ({ game }: { game: InstanceType<typeof OnlineGame> }) => ReactNode;
+  children: ({
+    game
+  }: {
+    game: InstanceType<typeof OnlineGame | typeof LocalGame>;
+  }) => ReactNode;
   gameData: { game: Game; answers: Answers };
+  opponent?: { user: PublicUser };
 }
 
 export const GenerateGame = ({ children, gameData, opponent }: Props) => {
@@ -45,24 +53,23 @@ export const GenerateGame = ({ children, gameData, opponent }: Props) => {
         })
       );
     } else if (!game) {
-      setGame(true);
+      setGame(null);
     }
   }, [gameId, game]);
 
   if (game) {
-    if (gameId) {
+    if (gameId && opponent) {
       return (
         <OnlineGameProvider opponent={opponent} game={game}>
-          {children({ game })}
+          {({ game }) => children({ game })}
         </OnlineGameProvider>
       );
-    } else {
-      return (
-        <LocalGameProvider gameData={gameData}>
-          {({ game }) => children({ game })}
-        </LocalGameProvider>
-      );
     }
+    return (
+      <LocalGameProvider gameData={gameData}>
+        {({ game }) => children({ game })}
+      </LocalGameProvider>
+    );
   }
 
   return null;

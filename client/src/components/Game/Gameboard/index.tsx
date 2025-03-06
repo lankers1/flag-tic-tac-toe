@@ -1,3 +1,4 @@
+import { Board } from '@type-defs/game';
 import { useGameStore } from '../../../store/useGameStore';
 import { capitaliseFirst } from '../../../utils/capitaliseFirst';
 import { removeSnakeCase } from '../../../utils/removeSnakeCase';

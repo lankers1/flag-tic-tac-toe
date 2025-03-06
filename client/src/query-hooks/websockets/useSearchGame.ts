@@ -1,12 +1,12 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '@context/AuthContext';
+import { AuthContext, UserContext } from '@context/AuthContext';
 
 let socket: WebSocket;
 
 export const useSearchGameWs = () => {
   const [displayGameSearchModal, setDisplayGameSearchModal] = useState(false);
-  const user = useContext(AuthContext);
+  const user = useContext(AuthContext) as UserContext;
   const [displayAccountSearchingModal, setDisplayAccountSearchingModal] =
     useState(false);
 
@@ -45,7 +45,7 @@ export const useSearchGameWs = () => {
 
     socket.onopen = () => {
       console.info('websocket connected');
-      localStorage.setItem('ftt-searching-for-game', user?.username);
+      localStorage.setItem('ftt-searching-for-game', user?.username || '');
       toggleDisplaySearchModal();
     };
   }

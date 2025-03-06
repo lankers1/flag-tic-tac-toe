@@ -5,6 +5,7 @@ import { Home } from '@pages/Home';
 import { Layout } from '@components/Layout';
 import { Game } from '@pages/Game';
 import { InitOnlineGame } from '@components/Game/InitOnlineGame';
+import { Board } from '@type-defs/game';
 
 export const router = createBrowserRouter([
   {
@@ -19,7 +20,11 @@ export const router = createBrowserRouter([
         element: (
           <GameProvider>
             {(gameData, refetch) => (
-              <Game gameData={gameData} refetch={refetch} />
+              <Game
+                gameData={gameData}
+                board={gameData.game as unknown as Board}
+                refetch={refetch}
+              />
             )}
           </GameProvider>
         )
@@ -29,7 +34,12 @@ export const router = createBrowserRouter([
         element: (
           <InitOnlineGame>
             {(gameData, opponent, refetch) => (
-              <Game gameData={gameData} opponent={opponent} refetch={refetch} />
+              <Game
+                gameData={gameData}
+                board={gameData?.game?.board}
+                opponent={opponent}
+                refetch={refetch}
+              />
             )}
           </InitOnlineGame>
         )
