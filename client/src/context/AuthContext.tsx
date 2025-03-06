@@ -1,7 +1,7 @@
 import { createContext, useState } from 'react';
 import { User } from '@types/user';
 
-interface AuthContextType {
+export interface UserContext {
   loggedIn: boolean;
   setUser: (user: User) => void;
   logout: () => void;
@@ -11,7 +11,7 @@ interface AuthContextType {
   rank: number;
 }
 
-export const AuthContext = createContext<AuthContextType | null>(null);
+export const AuthContext = createContext<UserContext | null>(null);
 
 export const AuthContextProvider = ({
   children
