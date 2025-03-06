@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useGetUsersQuery } from '@query-hooks/user/useGetUsers';
 import { Text } from '@components/common/Text';
 import { FlagAvatar } from '@components/common/FlagAvatar';
@@ -9,15 +9,19 @@ import { Notification } from '@components/common/Notification';
 import styles from './styles.module.scss';
 
 export const Leaderboard = () => {
+  const navigate = useNavigate();
   const { page } = useParams();
-  const { data, isLoading, error, isError } = useGetUsersQuery();
   const currentPage = (page && +page) || 1;
+  const { data, isLoading, error, isError } = useGetUsersQuery(
+    currentPage * 10 - 10
+  );
+
   return (
     <div className={styles.container}>
       <div className={styles.card}>
         {isLoading && <Text>Loading</Text>}
         {isError && <Notification type="error">{error.message}</Notification>}
-        {data && data?.length > 0 && (
+        {data && data?.users && data?.users?.length > 0 && (
           <>
             <div className={styles.tableContainer}>
               <table className={styles.table}>
@@ -32,8 +36,8 @@ export const Leaderboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.map((user) => (
-                    <tr>
+                  {data?.users.map((user) => (
+                    <tr key={user.username}>
                       <td className={styles.tableData}>
                         <div className={styles.usernameCol}>
                           <FlagAvatar flagIso2={user.favouriteFlag} />
@@ -48,24 +52,26 @@ export const Leaderboard = () => {
                 </tbody>
               </table>
             </div>
-            <footer className={styles.cardFooter}>
-              <LinkButton label="Close" to="/" />
-              <div className={styles.pagination}>
-                <IconButton
-                  disabled={+currentPage === 1}
-                  Icon={FaChevronLeft}
-                />
-                <Text fontSize="large">
-                  {currentPage}/{Math.ceil(data.length / 10)}
-                </Text>
-                <IconButton
-                  disabled={+currentPage === Math.ceil(data.length / 10)}
-                  Icon={FaChevronRight}
-                />
-              </div>
-            </footer>
           </>
         )}
+        <footer className={styles.cardFooter}>
+          <LinkButton label="Close" to="/" />
+          <div className={styles.pagination}>
+            <IconButton
+              disabled={+currentPage === 1}
+              Icon={FaChevronLeft}
+              handleClick={() => navigate(`/leaderboard/${currentPage - 1}`)}
+            />
+            <Text fontSize="large">
+              {currentPage}/{Math.ceil((data?.total || 10) / 10)}
+            </Text>
+            <IconButton
+              disabled={+currentPage === Math.ceil((data?.total || 10) / 10)}
+              Icon={FaChevronRight}
+              handleClick={() => navigate(`/leaderboard/${currentPage + 1}`)}
+            />
+          </div>
+        </footer>
       </div>
     </div>
   );
