@@ -1,0 +1,35 @@
+.flex {
+  display: flex
+}
+
+.centerJustifyContent {
+  justify-content: center;
+}
+
+.flexEndJustifyContent {
+  justify-content: flex-end;
+}
+
+.flexStartJustifyContent {
+  justify-content: flex-start;
+}
+
+.centerAlignItems {
+  align-items: center;
+}
+
+.flexEndAlignItems {
+  align-items: flex-end;
+}
+
+.flexStartAlignItems {
+  align-items: flex-start;
+}
+
+.rowFlexDirect {
+  flex-direction: row;
+}
+
+.colFlexDirection {
+  flex-direction: column;
+}
