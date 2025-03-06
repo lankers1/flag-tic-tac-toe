@@ -11,9 +11,9 @@ type AppError struct {
 }
 
 func lengthValidator(errors *[]string, key, value string, min, max int) {
-	if (len(value) <= min || len(value) > max) && value != "" {
+	if (len(value) < min || len(value) > max) && value != "" {
 		*errors = append(*errors,
-			key+" is too short, needs to be between 3 and 16 characters",
+			key+" is too short, needs to be between 6 and 16 characters",
 		)
 	}
 }
