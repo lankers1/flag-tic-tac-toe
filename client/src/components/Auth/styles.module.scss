@@ -5,10 +5,12 @@
   align-items: center;
 }
 
+
 .form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  width: 420px;
 }
 
 .errorNotification {
