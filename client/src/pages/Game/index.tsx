@@ -13,6 +13,7 @@ import { ActionButtons } from '@components/Game/ActionButtons';
 import { AnswerModalContent } from '@components/Game/AnswerModalContent';
 import { Game as GameType } from '@types/game.ts';
 import { User } from '@types/user';
+import { PlayerNotification } from '@components/Game/PlayerNotification';
 
 export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
   const initialized = useRef(false);
@@ -38,9 +39,7 @@ export const Game = ({ gameData, opponent, refetch }: Props) => {
     0, 0
   ]);
 
-  const { turn, winner, currentTurn, resetState } = useGameStore(
-    (state) => state
-  );
+  const { turn, winner, resetState } = useGameStore((state) => state);
 
   function handleClick(outerIndex: number, innerIndex: number) {
     setSelectedSquare([outerIndex + 1, innerIndex + 1]);
@@ -61,22 +60,11 @@ export const Game = ({ gameData, opponent, refetch }: Props) => {
                 {gameId ? (
                   determineOrder(user, opponent?.user, turn).map(
                     (user, index) => (
-                      <PlayerNotification
-                        winner={winner}
-                        user={user}
-                        currentTurn={currentTurn}
-                        turn={turn}
-                        key={user?.username}
-                        index={index}
-                      />
+                      <PlayerNotification key={user?.username} index={index} />
                     )
                   )
                 ) : (
-                  <PlayerNotification
-                    winner={winner}
-                    currentTurn={currentTurn}
-                    turn={turn}
-                  />
+                  <PlayerNotification />
                 )}
               </div>
               <div className={styles.gameboardContainer}>
