@@ -3,7 +3,7 @@ import { FlagAvatar } from '@components/common/FlagAvatar';
 import { Text } from '@components/common/Text';
 import { Clock } from '@components/common/Clock';
 import { Notification } from '@components/common/Notification';
-import { AuthContext, UserContext } from '@context/AuthContext';
+import { AuthContext } from '@context/AuthContext';
 import { FlexDiv } from '@components/common/FlexDiv';
 
 import styles from './styles.module.scss';
