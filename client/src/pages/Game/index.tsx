@@ -3,18 +3,14 @@ import { useParams } from 'react-router-dom';
 
 import { Modal } from '../../components/common/Modal';
 import { useGameStore } from '../../store/useGameStore';
-import { Notification } from '../../components/common/Notification';
 
 import styles from './styles.module.scss';
 
-import { FlagAvatar } from '@components/common/FlagAvatar';
 import { Gameboard } from '@components/Game/Gameboard';
 import { GenerateGame } from '@components/Game/GenerateGame';
-import { AuthContext } from '@context/AuthContext';
-import { Text } from '@components/common/Text';
+import { AuthContext, UserContext } from '@context/AuthContext';
 import { ActionButtons } from '@components/Game/ActionButtons';
 import { AnswerModalContent } from '@components/Game/AnswerModalContent';
-import { Clock } from '@components/common/Clock';
 import { Game as GameType } from '@types/game.ts';
 import { User } from '@types/user';
 
@@ -36,7 +32,6 @@ interface Props {
 }
 
 export const Game = ({ gameData, opponent, refetch }: Props) => {
-  console.log(opponent);
   const user = useContext(AuthContext);
   const { gameId } = useParams();
   const [selectedSquare, setSelectedSquare] = useState<[number, number]>([
@@ -111,50 +106,11 @@ export const Game = ({ gameData, opponent, refetch }: Props) => {
   );
 };
 
-const PlayerNotification = ({ user, currentTurn, index, turn, winner }) => {
-  const { gameId } = useParams();
-
-  if (!gameId) {
-    return (
-      <Notification>
-        <p>
-          {!!winner ? (
-            <Text fontSize="large">Player {winner} has won! Congrats!!</Text>
-          ) : (
-            <Text fontSize="large">
-              {gameId
-                ? currentTurn === turn
-                  ? `It's your turn!`
-                  : "It's your opponents turn!"
-                : currentTurn === 1
-                ? `It's player ones turn!`
-                : "It's player twos turn!"}
-            </Text>
-          )}
-        </p>
-      </Notification>
-    );
-  }
-  return (
-    <>
-      <Notification
-        active={currentTurn - 1 === index}
-        type={index === 0 ? 'playerOne' : 'playerTwo'}
-      >
-        <div style={{ display: 'flex' }}>
-          <FlagAvatar flagIso2={user?.favouriteFlag} />
-          <div style={{ marginLeft: '1rem' }}>
-            <Text fontSize="large">{user?.username}</Text>
-            <Text fontSize="small">{user?.rank}</Text>
-          </div>
-        </div>
-      </Notification>
-      {index === 0 && <Clock size={100} />}
-    </>
-  );
-};
-
-function determineOrder(user, opponentData, turn) {
+function determineOrder(
+  user: UserContext | null,
+  opponentData: User | undefined,
+  turn: number
+) {
   if (turn === 1) {
     return [user, opponentData];
   }
