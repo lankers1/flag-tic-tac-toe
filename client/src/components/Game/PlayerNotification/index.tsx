@@ -3,17 +3,15 @@ import { FlagAvatar } from '@components/common/FlagAvatar';
 import { Text } from '@components/common/Text';
 import { Clock } from '@components/common/Clock';
 import { Notification } from '@components/common/Notification';
-import { UserContext } from '@context/AuthContext';
+import { AuthContext, UserContext } from '@context/AuthContext';
 import { FlexDiv } from '@components/common/FlexDiv';
 
 import styles from './styles.module.scss';
+import { useGameStore } from '@store/useGameStore';
+import { useContext } from 'react';
 
 interface Props {
-  user: UserContext;
-  currentTurn: number;
-  index: number;
-  turn: number;
-  winner: number;
+  index?: number;
 }
 
 function turnNotification(
@@ -37,13 +35,10 @@ function turnNotification(
   }
 }
 
-export const PlayerNotification = ({
-  user,
-  currentTurn,
-  index,
-  turn,
-  winner
-}: Props) => {
+export const PlayerNotification = ({ index }: Props) => {
+  const { turn, winner, currentTurn } = useGameStore((state) => state);
+  const user = useContext(AuthContext);
+
   const { gameId } = useParams();
 
   if (!gameId) {
