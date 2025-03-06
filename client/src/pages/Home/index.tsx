@@ -19,16 +19,16 @@ import { useSearchGameWs } from '../../query-hooks/websockets/useSearchGame';
 import { Modal } from '../../components/common/Modal';
 import { RegisterModal } from '@components/Auth/RegisterModal';
 import { AuthContext } from '../..//context/AuthContext';
-import { Loader } from '@components/common/Loader';
 import { Text } from '@components/common/Text';
 import { Leaderboard } from '@pages/Leaderboard';
 import { FlexDiv } from '@components/common/FlexDiv';
+import { OnlineGameSearchModal } from '@components/Home/GameSearchModal';
 
 export const Home = () => {
   const user = useContext(AuthContext);
   const navigate = useNavigate();
   const {
-    displaySearchModal,
+    displayGameSearchModal,
     searchForGame,
     cancelSearch,
     displayAccountSearchingModal,
@@ -45,9 +45,18 @@ export const Home = () => {
 
   return (
     <>
-      <div className={styles.container}>
+      <FlexDiv
+        justifyContent="center"
+        alignItems="center"
+        className={styles.container}
+      >
         <Card className={styles.card}>
-          <div className={styles.cardContainer}>
+          <FlexDiv
+            justifyContent="center"
+            alignItems="center"
+            flexDirection="col"
+            className={styles.cardContainer}
+          >
             <div className={styles.subheading}>
               <Heading variant="h2">Play online</Heading>
               <Text>
@@ -56,7 +65,7 @@ export const Home = () => {
                 diagonally wins.
               </Text>
             </div>
-            <div className={styles.localButtons}>
+            <FlexDiv className={styles.localButtons}>
               {!user?.loggedIn ? (
                 <>
                   <Button
@@ -84,7 +93,7 @@ export const Home = () => {
                 <>
                   <Button
                     size="xlarge"
-                    disabled={!!displaySearchModal}
+                    disabled={!!displayGameSearchModal}
                     label={
                       <>
                         <FaGlobeAmericas className={styles.buttonIcons} />
@@ -105,11 +114,16 @@ export const Home = () => {
                   />
                 </>
               )}
-            </div>
-          </div>
+            </FlexDiv>
+          </FlexDiv>
         </Card>
         <Card className={styles.card}>
-          <div className={styles.cardContainer}>
+          <FlexDiv
+            justifyContent="center"
+            alignItems="center"
+            flexDirection="col"
+            className={styles.cardContainer}
+          >
             <div className={styles.subheading}>
               <Heading variant="h2">Play locally</Heading>
               <Text>
@@ -118,7 +132,7 @@ export const Home = () => {
                 diagonally wins.
               </Text>
             </div>
-            <div className={styles.localButtons}>
+            <FlexDiv className={styles.localButtons}>
               <LinkButton
                 size="xlarge"
                 to="/game/local"
@@ -139,27 +153,14 @@ export const Home = () => {
                   </>
                 }
               />
-            </div>
-          </div>
+            </FlexDiv>
+          </FlexDiv>
         </Card>
-      </div>
-      <Modal isOpen={displaySearchModal}>
-        <FlexDiv alignItems="center" flexDirection="col">
-          <Heading variant="h3">Searching for game</Heading>
-          <div style={{ width: '5rem', display: 'flex', padding: '1rem 0' }}>
-            <Loader />
-          </div>
-          <Button
-            handleClick={cancelSearch}
-            label={
-              <>
-                <FaArrowLeft className={styles.buttonIcons} />
-                <Text>Cancel</Text>
-              </>
-            }
-          />
-        </FlexDiv>
-      </Modal>
+      </FlexDiv>
+      <OnlineGameSearchModal
+        isOpen={displayGameSearchModal}
+        cancelSearch={cancelSearch}
+      />
       <Routes>
         <Route
           path="leaderboard/:page"

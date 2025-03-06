@@ -5,7 +5,7 @@ import { AuthContext } from '@context/AuthContext';
 let socket: WebSocket;
 
 export const useSearchGameWs = () => {
-  const [displaySearchModal, setDisplaySearchModal] = useState(false);
+  const [displayGameSearchModal, setDisplayGameSearchModal] = useState(false);
   const user = useContext(AuthContext);
   const [displayAccountSearchingModal, setDisplayAccountSearchingModal] =
     useState(false);
@@ -13,7 +13,7 @@ export const useSearchGameWs = () => {
   const navigate = useNavigate();
 
   function toggleDisplaySearchModal() {
-    setDisplaySearchModal((state) => !state);
+    setDisplayGameSearchModal((state) => !state);
   }
 
   function closeAccountSearchingModal() {
@@ -57,7 +57,7 @@ export const useSearchGameWs = () => {
   }
 
   return {
-    displaySearchModal,
+    displayGameSearchModal,
     searchForGame,
     cancelSearch,
     displayAccountSearchingModal,

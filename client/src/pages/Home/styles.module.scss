@@ -5,10 +5,6 @@
 }
 
 .container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
   gap: 4rem;
 
   @media screen and (max-width: $large) {
@@ -22,16 +18,11 @@
     display: flex;
 
     .cardContainer {
-      flex-direction: column;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       flex: 1;
       width: 100%;
 
       .localButtons {
         gap: 20px;
-        display: flex;
         flex: 1;
         width: 100%;
 

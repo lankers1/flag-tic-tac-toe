@@ -1,6 +1,6 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren } from 'react';
 
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
 interface Props {
   className?: string;
@@ -10,11 +10,14 @@ interface Props {
 export const Card = ({
   children,
   className,
-  backgroundColor,
+  backgroundColor
 }: PropsWithChildren<Props>) => {
   return (
-    <div className={`${styles.card} ${className}`} style={{ backgroundColor }}>
+    <article
+      className={`${styles.card} ${className}`}
+      style={{ backgroundColor }}
+    >
       {children}
-    </div>
+    </article>
   );
 };
