@@ -13,16 +13,16 @@ interface Props {
 
 export const FlexDiv = ({
   children,
-  justifyContent: jc = 'flexStart',
-  alignItems: ai = 'flexStart',
-  flexDirection: fd = 'row',
+  justifyContent: jc,
+  alignItems: ai,
+  flexDirection: fd,
   className
 }: PropsWithChildren<Props>) => {
   return (
     <div
-      className={`${className ? className : ''} ${styles.flex} ${
-        styles[`${jc}JustifyContent`]
-      } ${styles[`${ai}AlignItems`]} ${styles[`${fd}FlexDirection`]} `}
+      className={`${styles.flex} ${jc && styles[`${jc}JustifyContent`]} ${
+        ai && styles[`${ai}AlignItems`]
+      } ${fd && styles[`${fd}FlexDirection`]} ${className ? className : ''}`}
     >
       {children}
     </div>
