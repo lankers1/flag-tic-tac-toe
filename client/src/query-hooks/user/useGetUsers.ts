@@ -6,8 +6,13 @@ interface User {
   rank: number;
 }
 
-async function handleGetUsers(): Promise<User[]> {
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/users`);
+async function handleGetUsers(
+  offset: number
+): Promise<{ users: User[]; total: number }> {
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
+    method: 'POST',
+    body: JSON.stringify({ offset })
+  });
   if (!res.ok) {
     const response = await res.json();
     throw new Error(response);
@@ -15,11 +20,10 @@ async function handleGetUsers(): Promise<User[]> {
   return await res.json();
 }
 
-export const useGetUsersQuery = () => {
+export const useGetUsersQuery = (offset: number) => {
   return useQuery({
-    queryKey: ['users'],
-    gcTime: 0,
-    queryFn: handleGetUsers,
+    queryKey: ['users', offset],
+    queryFn: () => handleGetUsers(offset),
     refetchOnWindowFocus: false
   });
 };

@@ -52,7 +52,14 @@ func (userHandler *UserHandler) UpdateScore(ctx *gin.Context) {
 }
 
 func (userHandler *UserHandler) GetUsers(ctx *gin.Context) {
-	users, err := userHandler.UserRepository.GetUsers()
+	var body *models.GetUsersBody
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Something went wrong" + err.Error()})
+		return
+	}
+
+	users, err := userHandler.UserRepository.GetUsers(body.Offset)
 
 	if err != nil {
 		ctx.AbortWithStatusJSON(err.Code, err.Message)

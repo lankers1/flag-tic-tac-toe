@@ -101,12 +101,33 @@ func (userRepo *UserRepository) UpdateScore(username string, body *models.Update
 	}
 }
 
-func (userRepo *UserRepository) GetUsers() ([]models.User, *validators.AppError) {
-	query := "SELECT username, rank, favourite_flag FROM users ORDER BY rank DESC;"
-	rows, queryErr := userRepo.conn.Query(userRepo.ctx, query)
+func (userRepo *UserRepository) GetUsers(offset int) (models.Users, *validators.AppError) {
+	query := `WITH filtered_data AS (
+				SELECT 
+				username,
+				rank, 
+				favourite_flag
+				FROM users
+			ORDER BY rank DESC
+				OFFSET $1
+				LIMIT 10
+		), 
+		total_count AS (
+				SELECT COUNT(username) AS total_rows
+				FROM users
+		)
+		SELECT 
+				JSONB_AGG(JSONB_BUILD_OBJECT(
+						'username', username, 
+						'rank', rank, 
+						'favouriteFlag', favourite_flag
+				)) as data,
+				(SELECT total_rows FROM total_count) as total
+		FROM filtered_data;`
+	rows, queryErr := userRepo.conn.Query(userRepo.ctx, query, offset)
 
 	if queryErr != nil {
-		return nil, &validators.AppError{
+		return models.Users{}, &validators.AppError{
 			Code:    http.StatusInternalServerError,
 			Message: "Something went wrong",
 		}
@@ -114,10 +135,10 @@ func (userRepo *UserRepository) GetUsers() ([]models.User, *validators.AppError)
 
 	defer rows.Close()
 
-	user, err := pgx.CollectRows(rows, pgx.RowToStructByPos[models.User])
+	user, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.Users])
 
 	if err != nil {
-		return nil, &validators.AppError{
+		return models.Users{}, &validators.AppError{
 			Code:    http.StatusInternalServerError,
 			Message: "Something went wrong",
 		}
