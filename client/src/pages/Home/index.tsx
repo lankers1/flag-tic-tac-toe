@@ -25,8 +25,8 @@ import { FlexDiv } from '@components/common/FlexDiv';
 import { OnlineGameSearchModal } from '@components/Home/GameSearchModal';
 
 export const Home = () => {
-  const user = useContext(AuthContext);
   const navigate = useNavigate();
+  const user = useContext(AuthContext);
   const {
     displayGameSearchModal,
     searchForGame,
@@ -34,14 +34,6 @@ export const Home = () => {
     displayAccountSearchingModal,
     closeAccountSearchingModal
   } = useSearchGameWs();
-
-  function handleToggleRegisterModal() {
-    navigate('auth/register');
-  }
-
-  function handleToggleLoginModal() {
-    navigate('auth/login');
-  }
 
   return (
     <>
@@ -68,25 +60,25 @@ export const Home = () => {
             <FlexDiv className={styles.localButtons}>
               {!user?.loggedIn ? (
                 <>
-                  <Button
+                  <LinkButton
                     size="xlarge"
+                    to="auth/login"
                     label={
                       <>
                         <IoMdLogIn className={styles.buttonIcons} />
-                        {'Login'}
+                        <Text fontSize="small">{'Login'}</Text>
                       </>
                     }
-                    handleClick={handleToggleLoginModal}
                   />
-                  <Button
+                  <LinkButton
                     size="xlarge"
+                    to="auth/register"
                     label={
                       <>
                         <FaGlobeAmericas className={styles.buttonIcons} />
-                        {'Register'}
+                        <Text fontSize="small">{'Register'}</Text>
                       </>
                     }
-                    handleClick={handleToggleRegisterModal}
                   />
                 </>
               ) : (
@@ -191,10 +183,7 @@ export const Home = () => {
         <Route
           path="auth/*"
           element={
-            <RegisterModal
-              isOpen={true}
-              closeModal={handleToggleRegisterModal}
-            />
+            <RegisterModal isOpen={true} closeModal={() => navigate('/')} />
           }
         />
       </Routes>
