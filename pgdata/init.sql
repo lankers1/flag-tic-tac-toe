@@ -226,7 +226,7 @@ CREATE TABLE game(
   player_two_id varchar(50),
   time_played date,
   board json,
-  completed boolean,
+  completed boolean DEFAULT false,
   winner varchar(50)
 );
 CREATE TABLE users(
