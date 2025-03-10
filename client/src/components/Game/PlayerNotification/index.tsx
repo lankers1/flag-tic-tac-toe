@@ -3,15 +3,15 @@ import { FlagAvatar } from '@components/common/FlagAvatar';
 import { Text } from '@components/common/Text';
 import { Clock } from '@components/common/Clock';
 import { Notification } from '@components/common/Notification';
-import { AuthContext, UserContext } from '@context/AuthContext';
 import { FlexDiv } from '@components/common/FlexDiv';
 
 import styles from './styles.module.scss';
 import { useGameStore } from '@store/useGameStore';
-import { useContext } from 'react';
+import { PublicUser } from '@type-defs/user';
 
 interface Props {
   index?: number;
+  user?: PublicUser | null;
 }
 
 function turnNotification(
@@ -56,39 +56,37 @@ function winnerNotification(player: string, winner: number) {
   }
 }
 
-export const PlayerNotification = ({ index }: Props) => {
+export const PlayerNotification = ({ index, user }: Props) => {
   const { turn, winner, currentTurn } = useGameStore((state) => state);
-  const user = useContext(AuthContext) as UserContext;
-
   const { gameId, player } = useParams() as { gameId: string; player: string };
 
   if (!gameId) {
     return (
       <Notification type={currentTurn === 1 ? 'playerOne' : 'playerTwo'}>
-        <p>
-          {!!winner ? (
-            <Text fontSize="large">{winnerNotification(player, winner)}</Text>
-          ) : (
-            <Text fontSize="large">
-              {turnNotification(gameId, currentTurn, turn, player)}
-            </Text>
-          )}
-        </p>
+        {!!winner ? (
+          <Text fontSize="large">{winnerNotification(player, winner)}</Text>
+        ) : (
+          <Text fontSize="large">
+            {turnNotification(gameId, currentTurn, turn, player)}
+          </Text>
+        )}
       </Notification>
     );
   }
-  return (
-    <>
-      <Notification type={index === 0 ? 'playerOne' : 'playerTwo'}>
-        <FlexDiv>
-          <FlagAvatar flagIso2={user.favouriteFlag} />
-          <div className={styles.playerDetails}>
-            <Text fontSize="large">{user?.username}</Text>
-            <Text fontSize="small">{user?.rank}</Text>
-          </div>
-        </FlexDiv>
-      </Notification>
-      {index === 0 && <Clock size={100} />}
-    </>
-  );
+  if (user) {
+    return (
+      <>
+        <Notification type={index === 0 ? 'playerOne' : 'playerTwo'}>
+          <FlexDiv>
+            <FlagAvatar flagIso2={user.favouriteFlag} />
+            <div className={styles.playerDetails}>
+              <Text fontSize="large">{user?.username}</Text>
+              <Text fontSize="small">{user?.rank}</Text>
+            </div>
+          </FlexDiv>
+        </Notification>
+        {index === 0 && <Clock size={100} />}
+      </>
+    );
+  }
 };
