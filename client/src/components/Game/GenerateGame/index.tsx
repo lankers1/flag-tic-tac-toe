@@ -28,8 +28,8 @@ export const GenerateGame = ({ children, gameData, opponent }: Props) => {
   const quitGameMutation = useSendQuitGame();
   const playAgainMutation = useSendPlayAgain();
 
-  const [game, setGame] = useState<InstanceType<typeof OnlineGame> | null>(
-    null
+  const [game, setGame] = useState<InstanceType<typeof OnlineGame> | boolean>(
+    false
   );
   const { gameId, player } = useParams();
   const user = useContext(AuthContext);
@@ -53,7 +53,7 @@ export const GenerateGame = ({ children, gameData, opponent }: Props) => {
         })
       );
     } else if (!game) {
-      setGame(null);
+      setGame(true);
     }
   }, [gameId, game]);
 
