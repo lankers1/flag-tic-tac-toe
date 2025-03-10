@@ -91,8 +91,8 @@ export const RegisterForm = () => {
               <Button
                 color="green"
                 type="submit"
-                label="Create Account"
-                size="xlarge"
+                label={<Text fontSize="medium">Create Account</Text>}
+                size="medium"
               />
               <div style={{ textAlign: 'center' }}>
                 <Text fontSize="small">Already have an account?</Text>
