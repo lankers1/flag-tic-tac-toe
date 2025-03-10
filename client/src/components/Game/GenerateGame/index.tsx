@@ -58,7 +58,7 @@ export const GenerateGame = ({ children, gameData, opponent }: Props) => {
   }, [gameId, game]);
 
   if (game) {
-    if (gameId && opponent) {
+    if (gameId && opponent && game instanceof OnlineGame) {
       return (
         <OnlineGameProvider opponent={opponent} game={game}>
           {({ game }) => children({ game })}
