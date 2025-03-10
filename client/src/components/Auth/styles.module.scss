@@ -1,3 +1,5 @@
+@use 'src/sass/theme' as *;
+
 .modalHeader {
   justify-content: flex-end;
   gap: 18px;
@@ -11,6 +13,10 @@
   flex-direction: column;
   gap: 1.5rem;
   width: 420px;
+
+  @media screen and (max-width: $medium) {
+    width: 320px
+  }
 }
 
 .errorNotification {
