@@ -222,10 +222,12 @@ CREATE TABLE restricted_characteristics(
 );
 CREATE TABLE game(
   game_id integer,
-  player_one_id integer,
-  player_two_id integer,
+  player_one_id varchar(50),
+  player_two_id varchar(50),
   time_played date,
-  board json completed boolean
+  board json,
+  completed boolean,
+  winner varchar(50)
 );
 CREATE TABLE users(
   username varchar(50) NOT NULL,
