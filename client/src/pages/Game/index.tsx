@@ -1,4 +1,4 @@
-import { EffectCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useGameStore } from '../../store/useGameStore';
@@ -14,17 +14,6 @@ import { Board, Game as GameType } from '@type-defs/game';
 import { PublicUser } from '@type-defs/user';
 import { PlayerNotification } from '@components/Game/PlayerNotification';
 import { Modal } from '@components/common/Modal';
-
-export function useOnMountUnsafe(effect: EffectCallback, dependencies: any[]) {
-  const initialized = useRef(false);
-
-  useEffect(() => {
-    if (initialized.current) {
-      return effect();
-    }
-    initialized.current = true;
-  }, dependencies);
-}
 
 interface Props {
   gameData: { game: GameType; answers: Answers };

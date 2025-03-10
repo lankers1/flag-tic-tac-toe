@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './styles.module.scss';
-import { useOnMountUnsafe } from '../../../hooks/useOnMountUnsafe';
 import { useSendAnswer } from '@query-hooks/game/useSendAnswer';
 import { useGameStore } from '@store/useGameStore';
 
@@ -15,10 +14,14 @@ export const Clock = ({ size }: { size: number }) => {
 
   const { turn, winner, currentTurn } = useGameStore((state) => state);
 
-  useOnMountUnsafe(() => {
+  useEffect(() => {
     if (!interval?.current) {
       interval.current = setInterval(update, 1000);
     }
+    return () => {
+      clearInterval(interval?.current);
+      interval.current = undefined;
+    };
   }, [interval?.current]);
 
   useEffect(() => {

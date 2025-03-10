@@ -2,10 +2,9 @@ import { useParams } from 'react-router-dom';
 import { OnlineGameProvider } from '../OnlineGame';
 import { LocalGameProvider } from '../LocalGame';
 import { OnlineGame } from '@utils/game/OnlineGame';
-import { ReactNode, useContext, useState } from 'react';
+import { ReactNode, useContext, useEffect, useState } from 'react';
 import { useGameStore } from '@store/useGameStore';
 import { AuthContext } from '@context/AuthContext';
-import { useOnMountUnsafe } from '@pages/Game';
 import { useSendAnswer } from '@query-hooks/game/useSendAnswer';
 import { useSendPlayAgain } from '@query-hooks/game/useSendPlayAgain';
 import { useSendQuitGame } from '@query-hooks/game/useSendQuitGame';
@@ -37,7 +36,7 @@ export const GenerateGame = ({ children, gameData, opponent }: Props) => {
     (state) => state
   );
 
-  useOnMountUnsafe(() => {
+  useEffect(() => {
     if (gameId && !game) {
       setGame(
         new OnlineGame({
