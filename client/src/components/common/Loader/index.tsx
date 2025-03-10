@@ -1,3 +1,5 @@
+import styles from './styles.module.scss';
+
 export const Loader = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -5,6 +7,7 @@ export const Loader = () => (
     viewBox="0 0 810 809.999993"
     preserveAspectRatio="xMidYMid meet"
     version="1.0"
+    className={styles.loader}
   >
     <g clipPath="url(#0b5e328ab1)" opacity={0}>
       <path
