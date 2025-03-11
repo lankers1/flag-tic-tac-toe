@@ -1,20 +1,23 @@
 import React from 'react';
 import styles from './searchInput.module.scss';
 import { Text } from '@components/common/Text';
+import { FlexDiv } from '../FlexDiv';
 
 interface Props {
-  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   type?: string;
   placeholder: string;
   label?: string;
   name: string;
   value: string;
   error?: string;
+  disabled?: boolean;
 }
 
 export const TextInput = ({
   handleChange,
   name,
+  disabled,
   label,
   type = 'text',
   placeholder,
@@ -22,9 +25,10 @@ export const TextInput = ({
   error
 }: Props) => {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
+    <FlexDiv flexDirection="col">
       <Text>{label}</Text>
       <input
+        disabled={disabled}
         name={name}
         className={`${styles.textInput} ${error && styles.error}`}
         onChange={handleChange}
@@ -33,6 +37,6 @@ export const TextInput = ({
         value={value}
       />
       {error && <Text color="error">{error}</Text>}
-    </div>
+    </FlexDiv>
   );
 };
