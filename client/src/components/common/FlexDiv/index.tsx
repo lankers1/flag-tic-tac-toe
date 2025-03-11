@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react';
 
 import styles from './styles.module.scss';
 
-type FlexAlignment = 'flexStart' | 'center' | 'flexEnd';
+type FlexAlignment = 'flexStart' | 'center' | 'flexEnd' | 'spaceBetween';
 
 interface Props {
   justifyContent?: FlexAlignment;
