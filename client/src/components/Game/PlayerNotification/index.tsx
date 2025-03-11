@@ -80,7 +80,7 @@ export const PlayerNotification = ({ index, user }: Props) => {
           <FlexDiv className={styles.notificationContainer}>
             <FlagAvatar flagIso2={user.favouriteFlag} />
             <div className={styles.playerDetails}>
-              <Text fontSize="large">{user?.username}</Text>
+              <Text fontSize="medium">{user?.username}</Text>
               <Text fontSize="small">{user?.rank}</Text>
             </div>
           </FlexDiv>

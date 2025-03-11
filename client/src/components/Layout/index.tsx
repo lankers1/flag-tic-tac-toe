@@ -5,6 +5,7 @@ import { FlagAvatar } from '@components/common/FlagAvatar';
 import { Heading } from '@components/common/Heading';
 import { AuthContext, UserContext } from '../../context/AuthContext';
 import styles from './styles.module.scss';
+import { Link } from '@components/common/Link';
 
 export const Layout = () => {
   const user = useContext(AuthContext);
@@ -34,10 +35,12 @@ const UserMenu = () => {
           <FlagAvatar flagIso2={user.favouriteFlag} />
         </div>
         <div className={styles.menuItems}>
-          <a style={{ paddingLeft: '6px' }}>Account</a>
-          <a style={{ paddingLeft: '6px' }} onClick={user?.logout}>
+          <Link to="/account" className={styles.link}>
+            Account
+          </Link>
+          <Link className={styles.link} handleClick={user?.logout}>
             Logout
-          </a>
+          </Link>
         </div>
       </div>
     </div>

@@ -73,6 +73,10 @@
           overflow: hidden;
           width: min-content;
           padding-bottom: 0.25rem;
+
+          .link {
+            padding-left: 6px;
+          }
         }
 
         &:hover {

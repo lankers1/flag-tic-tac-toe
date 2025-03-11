@@ -46,7 +46,9 @@ export const Game = ({ gameData, board, opponent, refetch }: Props) => {
         <>
           <div className={styles.pageContainer}>
             <div className={styles.container}>
-              <div style={{ display: 'flex', gap: '2rem' }}>
+              <div
+                style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}
+              >
                 {gameId ? (
                   determineOrder(user, opponent?.user, turn).map(
                     (user, index) => (

@@ -69,7 +69,7 @@ export const Clock = ({ size }: { size: number }) => {
           cy={middle}
           r={middle - middle / 20}
           stroke="black"
-          strokeWidth={3}
+          strokeWidth={2}
         />
         <text
           x="50%"
