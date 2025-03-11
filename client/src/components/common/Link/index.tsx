@@ -6,11 +6,21 @@ import styles from './styles.module.scss';
 interface Props {
   to: string;
   className?: string;
+  handleClick?: () => void;
 }
 
-export const Link = ({ to, children, className }: PropsWithChildren<Props>) => {
+export const Link = ({
+  to,
+  children,
+  className,
+  handleClick
+}: PropsWithChildren<Props>) => {
   return (
-    <RRLink to={to} className={`${styles.link} ${className}`}>
+    <RRLink
+      to={to}
+      onClick={handleClick}
+      className={`${styles.link} ${className}`}
+    >
       {children}
     </RRLink>
   );

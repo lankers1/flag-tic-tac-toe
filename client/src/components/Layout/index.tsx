@@ -38,7 +38,7 @@ const UserMenu = () => {
           <Link to="/account" className={styles.link}>
             Account
           </Link>
-          <Link className={styles.link} handleClick={user?.logout}>
+          <Link to="/" className={styles.link} handleClick={user?.logout}>
             Logout
           </Link>
         </div>
