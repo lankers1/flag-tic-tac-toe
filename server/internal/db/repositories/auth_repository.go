@@ -87,6 +87,13 @@ func (authRepo *AuthRepository) Login(body models.Login) (*models.UserLogin, *va
 	res, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.UserWithPassword])
 
 	if err != nil || queryErr != nil {
+		if err == pgx.ErrNoRows {
+			return nil, &validators.AppError{
+				Code:    http.StatusNotFound,
+				Message: "This account does not exist, please register",
+			}
+		}
+
 		return nil, &validators.AppError{
 			Code:    http.StatusInternalServerError,
 			Message: "Something went wrong",
