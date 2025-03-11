@@ -20,7 +20,7 @@ import { Modal } from '../../components/common/Modal';
 import { RegisterModal } from '@components/Auth/RegisterModal';
 import { AuthContext } from '../..//context/AuthContext';
 import { Text } from '@components/common/Text';
-import { Leaderboard } from '@pages/Leaderboard';
+import { Leaderboard } from '@components/Leaderboard';
 import { FlexDiv } from '@components/common/FlexDiv';
 import { OnlineGameSearchModal } from '@components/Home/GameSearchModal';
 

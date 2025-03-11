@@ -6,9 +6,9 @@ import { IconButton } from '@components/common/Buttons/IconButton';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { LinkButton } from '@components/common/Buttons/LinkButton';
 import { Notification } from '@components/common/Notification';
-import styles from './styles.module.scss';
 import { Loader } from '@components/common/Loader';
 import { FlexDiv } from '@components/common/FlexDiv';
+import styles from './styles.module.scss';
 
 export const Leaderboard = () => {
   const navigate = useNavigate();
