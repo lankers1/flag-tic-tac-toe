@@ -30,7 +30,7 @@ func generateGame(conn *pgxpool.Pool, ctx context.Context) (*models.Game, *valid
 	rows, queryErr := conn.Query(ctx, query)
 
 	if queryErr != nil {
-		fmt.Println("Something went wrong when generating game")
+		fmt.Println("Something went wrong when generating game: ", queryErr)
 		return nil, &validators.AppError{
 			Code:    http.StatusInternalServerError,
 			Message: "Something went wrong when generating game",
