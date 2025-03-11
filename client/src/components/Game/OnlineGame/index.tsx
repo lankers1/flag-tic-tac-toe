@@ -1,6 +1,5 @@
 import { ReactNode, useContext, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import AnimatedNumbers from 'react-animated-numbers';
 
 import { AuthContext, UserContext } from '@context/AuthContext';
 import { useGameStore } from '@store/useGameStore';
@@ -66,19 +65,8 @@ export const OnlineGameProvider = ({ children, game, opponent }: Props) => {
             won!
           </Heading>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <Text fontSize="large">Your new rank</Text>
-            <AnimatedNumbers
-              includeComma
-              transitions={(index) => ({
-                type: 'spring',
-                duration: index + 0.1
-              })}
-              animateToNumber={user?.rank}
-              fontStyle={{
-                fontWeight: '500',
-                fontSize: '1.4rem'
-              }}
-            />
+            <Text fontSize="medium">Your new rank</Text>
+            <Text fontSize="large">{user?.rank}</Text>
           </div>
         </FlexDiv>
         <Text>Do you want to play again?</Text>
