@@ -77,7 +77,7 @@ export const PlayerNotification = ({ index, user }: Props) => {
     return (
       <>
         <Notification type={index === 0 ? 'playerOne' : 'playerTwo'}>
-          <FlexDiv>
+          <FlexDiv className={styles.notificationContainer}>
             <FlagAvatar flagIso2={user.favouriteFlag} />
             <div className={styles.playerDetails}>
               <Text fontSize="large">{user?.username}</Text>
