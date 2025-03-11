@@ -22,11 +22,11 @@
     flex-direction: column;
 
     .gameboardContainer {
+      display: flex;
+
       @media screen and (max-width: $medium) {
         margin-top: 1rem;
       }
-
-      display: flex;
     }
 
     .notificationText {
