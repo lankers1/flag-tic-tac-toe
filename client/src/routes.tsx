@@ -6,6 +6,7 @@ import { Layout } from '@components/Layout';
 import { Game } from '@pages/Game';
 import { InitOnlineGame } from '@components/Game/InitOnlineGame';
 import { Board } from '@type-defs/game';
+import { Account } from '@pages/Account';
 
 export const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ export const router = createBrowserRouter([
             )}
           </GameProvider>
         )
+      },
+      {
+        path: '/account',
+        element: <Account />
       },
       {
         path: '/game/:player/:gameId',
