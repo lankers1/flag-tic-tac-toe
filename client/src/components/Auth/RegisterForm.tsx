@@ -42,11 +42,6 @@ export const RegisterForm = () => {
 
   return (
     <>
-      {error?.message && (
-        <Notification className={styles.errorNotification} type="error">
-          <Text>{error?.message}</Text>
-        </Notification>
-      )}
       <Form
         initialData={initialData}
         handleSubmit={handleSubmit}
@@ -62,6 +57,11 @@ export const RegisterForm = () => {
 
           return (
             <>
+              {error?.message && (
+                <Notification type="error">
+                  <Text>{error?.message}</Text>
+                </Notification>
+              )}
               <TextInput
                 label="Username"
                 name="username"

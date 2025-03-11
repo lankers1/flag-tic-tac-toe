@@ -38,11 +38,6 @@ export const LoginForm = () => {
 
   return (
     <>
-      {error?.message && (
-        <Notification type="error">
-          <Text>{error?.message}</Text>
-        </Notification>
-      )}
       <Form
         initialData={initialData}
         handleSubmit={handleSubmit}
@@ -58,6 +53,11 @@ export const LoginForm = () => {
 
           return (
             <>
+              {error?.message && (
+                <Notification type="error">
+                  <Text>{error?.message}</Text>
+                </Notification>
+              )}
               <TextInput
                 label="Username"
                 name="username"

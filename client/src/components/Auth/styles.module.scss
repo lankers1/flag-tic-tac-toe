@@ -5,6 +5,7 @@
   gap: 18px;
   display: flex;
   align-items: center;
+  margin-bottom: 0.5rem;
 }
 
 
@@ -17,8 +18,4 @@
   @media screen and (max-width: $medium) {
     width: 320px
   }
-}
-
-.errorNotification {
-  margin-top: 0.5rem;
 }
