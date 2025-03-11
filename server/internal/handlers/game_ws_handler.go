@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"log"
 	"net"
@@ -175,7 +174,7 @@ func (cs *GameWebsocketHandler) publishPlayAgain(msg []byte, gameId string, user
 	cs.publishLimiter.Wait(context.Background())
 
 	cs.playAgain[gameId] = append(cs.playAgain[gameId], username)
-	fmt.Println(len(cs.playAgain[gameId]))
+
 	if len(cs.playAgain[gameId]) > 1 {
 
 		game, _ := cs.gameRepo.Create()
