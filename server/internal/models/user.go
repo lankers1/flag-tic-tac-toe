@@ -13,3 +13,8 @@ type Users struct {
 type GetUsersBody struct {
 	Offset int `json:"offset"`
 }
+
+type UpdateFavouriteFlagBody struct {
+	FavouriteFlag string `json:"favouriteFlag" binding:"required"`
+	Token         string `json:"token" binding:"required"`
+}

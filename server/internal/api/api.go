@@ -39,7 +39,8 @@ func InitApi(httpHandlers *handlers.Handlers) *gin.Engine {
 
 	router.POST("/users", httpHandlers.UserHandler.GetUsers)
 	router.GET("/user/:username", httpHandlers.UserHandler.GetUser)
-	router.PATCH("/user/:username", httpHandlers.UserHandler.UpdateScore)
+	router.PATCH("/user/:username/score", httpHandlers.UserHandler.UpdateScore)
+	router.PATCH("/user/:username/flag", httpHandlers.UserHandler.UpdateFavouriteFlag)
 
 	return router
 }

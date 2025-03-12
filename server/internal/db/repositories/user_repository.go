@@ -146,3 +146,29 @@ func (userRepo *UserRepository) GetUsers(offset int) (models.Users, *validators.
 
 	return user, nil
 }
+
+func (userRepo *UserRepository) UpdateFavouriteFlag(username string, body *models.UpdateFavouriteFlagBody) (*models.User, *validators.AppError) {
+	query := "UPDATE users SET favourite_flag = $1 WHERE username = $2 AND token = $3 RETURNING username, rank, favourite_flag"
+	rows, queryErr := userRepo.conn.Query(userRepo.ctx, query, body.FavouriteFlag, username, body.Token)
+
+	if queryErr != nil {
+		log.Printf("Query error: %v", queryErr)
+	}
+
+	defer rows.Close()
+
+	user, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.User])
+
+	if (models.User{}) == user {
+		return nil, &validators.AppError{
+			Code:    http.StatusInternalServerError,
+			Message: "You are not authorized to update this user",
+		}
+	}
+
+	if err != nil {
+		log.Printf("CollectRows error: %v", err)
+	}
+
+	return &user, nil
+}

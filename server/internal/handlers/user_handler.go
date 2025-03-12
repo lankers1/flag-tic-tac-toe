@@ -68,3 +68,22 @@ func (userHandler *UserHandler) GetUsers(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, users)
 }
+
+func (userHandler *UserHandler) UpdateFavouriteFlag(ctx *gin.Context) {
+	username := ctx.Param("username")
+	var body *models.UpdateFavouriteFlagBody
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Something went wrong" + err.Error()})
+		return
+	}
+
+	user, err := userHandler.UserRepository.UpdateFavouriteFlag(username, body)
+
+	if err != nil {
+		ctx.AbortWithStatusJSON(err.Code, err.Message)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, user)
+}
