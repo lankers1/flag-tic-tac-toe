@@ -217,7 +217,7 @@ CREATE TABLE related_characteristics(
   count INTEGER
 );
 CREATE TABLE restricted_characteristics(
-  characteristic_id TEXT REFERENCES characteristics (characteristic_id),
+  characteristic_id INTEGER REFERENCES characteristics (characteristic_id),
   restricted_id INTEGER REFERENCES characteristics (characteristic_id)
 );
 CREATE TABLE game(
