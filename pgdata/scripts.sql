@@ -206,4 +206,4 @@ WHERE rc.characteristic_id IS NULL
   AND rc.restricted_id IS NULL
   AND rc2.characteristic_id IS NULL
   AND rc2.restricted_id IS NULL
-  AND count > 9;
+  AND count > 7;
