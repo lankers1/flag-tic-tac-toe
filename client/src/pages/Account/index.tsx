@@ -12,7 +12,6 @@ import { FlagAvatar } from '@components/common/FlagAvatar';
 import { Button } from '@components/common/Buttons/Button';
 import { LinkButton } from '@components/common/Buttons/LinkButton';
 import { FaChevronLeft } from 'react-icons/fa';
-import { FaSave } from 'react-icons/fa';
 import { Modal } from '@components/common/Modal';
 import { SearchFlagModalContent } from '@components/Account/SearchFlagModalContent';
 
