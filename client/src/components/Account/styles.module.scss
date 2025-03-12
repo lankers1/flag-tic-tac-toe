@@ -1,0 +1,32 @@
+@use 'src/sass/theme' as *;
+
+.container {
+  max-height: 400px;
+  min-height: 400px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .errorNotification {
+    margin-top: 1rem;
+  }
+
+  .modalHeader {
+    justify-content: space-between;
+    gap: 18px;
+    display: flex;
+    align-items: center;
+  }
+
+  .listContainer {
+    display: flex;
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 0.5rem;
+    scrollbar-color: grey $background-blue;
+
+    .listItemContent {
+      gap: 0.5rem;
+    }
+  }
+}

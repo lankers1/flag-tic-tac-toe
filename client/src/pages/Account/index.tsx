@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 
 import { Card } from '@components/common/Card';
 import { FlexDiv } from '@components/common/FlexDiv';
@@ -13,55 +13,60 @@ import { Button } from '@components/common/Buttons/Button';
 import { LinkButton } from '@components/common/Buttons/LinkButton';
 import { FaChevronLeft } from 'react-icons/fa';
 import { FaSave } from 'react-icons/fa';
+import { Modal } from '@components/common/Modal';
+import { SearchFlagModalContent } from '@components/Account/SearchFlagModalContent';
 
 export const Account = () => {
+  const [displayFlagModal, setDisplayFlagModal] = useState(false);
   const user = useContext(AuthContext) as UserContext;
+
+  function closeFlagModal() {
+    setDisplayFlagModal(false);
+  }
+
   return (
-    <Card className={styles.card}>
-      <FlexDiv flexDirection="col" className={styles.cardContainer}>
-        <Heading variant="h3">Account details</Heading>
-        <TextInput
-          name="username"
-          label="Username"
-          disabled
-          placeholder="Username"
-          value={user?.username}
-        />
-        <FlexDiv alignItems="flexStart" flexDirection="col">
-          <Text>Favourite flag</Text>
-          <Button
-            label={
-              <>
-                <FlagAvatar
-                  className={styles.flagAvatar}
-                  flagIso2={user?.favouriteFlag}
-                />
-                Change flag
-              </>
-            }
+    <>
+      <Card className={styles.card}>
+        <FlexDiv flexDirection="col" className={styles.cardContainer}>
+          <Heading variant="h3">Account details</Heading>
+          <TextInput
+            name="username"
+            label="Username"
+            disabled
+            placeholder="Username"
+            value={user?.username}
           />
+          <FlexDiv alignItems="flexStart" flexDirection="col">
+            <Text>Favourite flag</Text>
+            <Button
+              handleClick={() => setDisplayFlagModal(true)}
+              label={
+                <>
+                  <FlagAvatar
+                    className={styles.flagAvatar}
+                    flagIso2={user?.favouriteFlag}
+                  />
+                  Change flag
+                </>
+              }
+            />
+          </FlexDiv>
+          <FlexDiv justifyContent="spaceBetween">
+            <LinkButton
+              to="/"
+              label={
+                <>
+                  <FaChevronLeft />
+                  Back
+                </>
+              }
+            />
+          </FlexDiv>
         </FlexDiv>
-        <FlexDiv justifyContent="spaceBetween">
-          <LinkButton
-            to="/"
-            label={
-              <>
-                <FaChevronLeft />
-                Back
-              </>
-            }
-          />
-          <Button
-            color="green"
-            label={
-              <>
-                Update details
-                <FaSave />
-              </>
-            }
-          />
-        </FlexDiv>
-      </FlexDiv>
-    </Card>
+      </Card>
+      <Modal isOpen={displayFlagModal}>
+        <SearchFlagModalContent closeModal={closeFlagModal} />
+      </Modal>
+    </>
   );
 };
