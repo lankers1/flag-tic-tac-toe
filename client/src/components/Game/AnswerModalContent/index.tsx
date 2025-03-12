@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 
 import styles from './styles.module.scss';
@@ -33,6 +33,7 @@ export const AnswerModalContent = ({
   game
 }: Props) => {
   const { currentTurn, selectedFlags } = useGameStore((state) => state);
+  const currentTurnRef = useRef(currentTurn);
   const [searchTerm, setSearchTerm] = useState('');
   const { data: flags, error, isError } = useSearchFlagsQuery(searchTerm);
 
@@ -58,6 +59,13 @@ export const AnswerModalContent = ({
       isCorrectAnswer
     );
   };
+
+  useEffect(() => {
+    if (currentTurn !== currentTurnRef.current) {
+      closeModal();
+      currentTurnRef.current = currentTurn;
+    }
+  }, [currentTurn, currentTurnRef.current]);
 
   return (
     <div className={styles.container}>
