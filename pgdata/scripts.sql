@@ -103,28 +103,29 @@ LIMIT 1;
 --
 -- Function for returning results
 --
-create or replace function get_flag_ids_on_char_id(ids int []) returns text [] language plpgsql as $$
+create or replace function get_flag_ids_on_char_id(ids integer []) returns text [] language plpgsql as $$
 declare flag_ids text [];
 begin
-SELECT array_agg(flag_id) AS results into flag_ids
+SELECT array_agg(encode(flag_id::bytea, 'base64')) AS results into flag_ids
 FROM (
     SELECT flag_id,
       results
-    FROM (
+    FROM(
         SELECT flag_id,
           array_agg(characteristic_id) AS results
         FROM flag_characteristics
         GROUP BY flag_id
-      ) r
+      )
     WHERE results @> ids
-  ) r2;
+  );
 return flag_ids;
 end;
+$$;
 --
 -- Loop for 'and' colours, requires flag_characteristics to be populated first
 --
 DO $BODY$
-DECLARE omgjson json := '[
+DECLARE color_json json := '[
 { "characteristic_id_1": 1, "characteristic_id_2": 2, "result": 68 },
 { "characteristic_id_1": 1, "characteristic_id_2": 3, "result": 69 },
 { "characteristic_id_1": 1, "characteristic_id_2": 4, "result": 70 },
@@ -147,7 +148,7 @@ DECLARE omgjson json := '[
 i json;
 BEGIN FOR i IN
 SELECT *
-FROM json_array_elements(omgjson) LOOP
+FROM json_array_elements(color_json) LOOP
 INSERT INTO flag_characteristics (flag_id, characteristic_id)
 SELECT flag_id,
   (i->>'result')::int as characteristic_id

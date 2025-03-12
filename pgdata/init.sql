@@ -237,21 +237,3 @@ CREATE TABLE users(
   favourite_flag varchar(2) NOT NULL,
   token uuid NOT NULL
 );
-create or replace function get_flag_ids_on_char_id(ids integer []) returns text [] language plpgsql as $$
-declare flag_ids text [];
-begin
-SELECT array_agg(encode(flag_id::bytea, 'base64')) AS results into flag_ids
-FROM (
-    SELECT flag_id,
-      results
-    FROM(
-        SELECT flag_id,
-          array_agg(characteristic_id) AS results
-        FROM flag_characteristics
-        GROUP BY flag_id
-      )
-    WHERE results @> ids
-  );
-return flag_ids;
-end;
-$$
