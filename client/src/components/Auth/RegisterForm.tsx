@@ -4,13 +4,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { TextInput } from '@components/common/Inputs/TextInput';
 import { Button } from '@components/common/Buttons/Button';
 import styles from './styles.module.scss';
-import { AuthContext } from '../../context/AuthContext';
 import { useRegisterUserQuery } from '@query-hooks/auth/useRegisterUser';
 import { Notification } from '@components/common/Notification';
 import { Text } from '@components/common/Text';
 import { Form } from '@components/common/Form';
 import { registerValidation } from './validation';
 import { User } from '@type-defs/user';
+import { AuthContext } from '@context/AuthContext';
 
 const initialData = {
   username: '',
@@ -94,15 +94,12 @@ export const RegisterForm = () => {
                 label={<Text fontSize="medium">Create Account</Text>}
                 size="medium"
               />
-              <div style={{ textAlign: 'center' }}>
+              <footer className={styles.footer}>
                 <Text fontSize="small">Already have an account?</Text>
-                <Link
-                  to="../login"
-                  style={{ fontSize: '1rem', fontWeight: 500 }}
-                >
-                  Log in
-                </Link>
-              </div>
+                <Text fontSize="small">
+                  <Link to="../login">Log in</Link>
+                </Text>
+              </footer>
             </>
           );
         }}

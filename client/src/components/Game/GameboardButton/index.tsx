@@ -49,7 +49,7 @@ export const GameboardButton = ({
       }`}
       aria-label={ariaLabel}
     >
-      {displayIncorrectAnswer && <IoCloseSharp style={{ fontSize: '3rem' }} />}
+      {displayIncorrectAnswer && <IoCloseSharp size="3rem" />}
       {selectedFlag && (
         <>
           <p className={styles.text}>{selectedFlag?.name}</p>

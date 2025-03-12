@@ -14,6 +14,7 @@ import { Board, Game as GameType } from '@type-defs/game';
 import { PublicUser } from '@type-defs/user';
 import { PlayerNotification } from '@components/Game/PlayerNotification';
 import { Modal } from '@components/common/Modal';
+import { FlexDiv } from '@components/common/FlexDiv';
 
 interface Props {
   gameData: { game: GameType; answers: Answers };
@@ -46,8 +47,9 @@ export const Game = ({ gameData, board, opponent, refetch }: Props) => {
         <>
           <div className={styles.pageContainer}>
             <div className={styles.container}>
-              <div
-                style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}
+              <FlexDiv
+                alignItems="center"
+                className={styles.playerNotificationContainer}
               >
                 {gameId ? (
                   determineOrder(user, opponent?.user, turn).map(
@@ -62,7 +64,7 @@ export const Game = ({ gameData, board, opponent, refetch }: Props) => {
                 ) : (
                   <PlayerNotification />
                 )}
-              </div>
+              </FlexDiv>
               <div className={styles.gameboardContainer}>
                 <Gameboard handleClick={handleClick} data={board} />
               </div>

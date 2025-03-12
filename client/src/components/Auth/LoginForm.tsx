@@ -81,15 +81,12 @@ export const LoginForm = () => {
                 label=" Log in"
                 size="xlarge"
               />
-              <div style={{ textAlign: 'center' }}>
+              <footer className={styles.footer}>
                 <Text fontSize="small">Don't have an account?</Text>
-                <Link
-                  to="../register"
-                  style={{ fontSize: '1rem', fontWeight: 500 }}
-                >
-                  Create account
-                </Link>
-              </div>
+                <Text fontSize="small">
+                  <Link to="../register">Create account</Link>
+                </Text>
+              </footer>
             </>
           );
         }}

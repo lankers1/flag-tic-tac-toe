@@ -14,6 +14,7 @@ import { Notification } from '@components/common/Notification';
 import { LinkButton } from '@components/common/Buttons/LinkButton';
 import { FlexDiv } from '@components/common/FlexDiv';
 import { PublicUser } from '@type-defs/user';
+import styles from './styles.module.scss';
 
 interface Props {
   children: ({ game }: { game: InstanceType<typeof OnlineGame> }) => ReactNode;
@@ -32,7 +33,7 @@ export const OnlineGameProvider = ({ children, game, opponent }: Props) => {
 
   if (fullGame) {
     return (
-      <div style={{ display: 'flex', alignItems: 'center', width: '50%' }}>
+      <FlexDiv alignItems="center" className={styles.fullGameNotification}>
         <Notification>
           <Text fontSize="large">
             Woops! Looks like this game is full, go back to find a different
@@ -42,7 +43,7 @@ export const OnlineGameProvider = ({ children, game, opponent }: Props) => {
             <LinkButton label={'Back'} to={'/'} />
           </div>
         </Notification>
-      </div>
+      </FlexDiv>
     );
   }
 
@@ -64,13 +65,13 @@ export const OnlineGameProvider = ({ children, game, opponent }: Props) => {
               : `Your opponent ${opponent?.user?.username}`}{' '}
             won!
           </Heading>
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <FlexDiv className={styles.newRankContent}>
             <Text fontSize="medium">Your new rank</Text>
             <Text fontSize="large">{user?.rank}</Text>
-          </div>
+          </FlexDiv>
         </FlexDiv>
         <Text>Do you want to play again?</Text>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <FlexDiv justifyContent="spaceBetween">
           <Button
             handleClick={() => game?.quitGame(navigate, gameId)}
             label="No"
@@ -81,7 +82,7 @@ export const OnlineGameProvider = ({ children, game, opponent }: Props) => {
             }}
             label="Yes"
           />
-        </div>
+        </FlexDiv>
       </Modal>
     </>
   );
