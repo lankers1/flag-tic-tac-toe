@@ -16,7 +16,7 @@ function randomNumber(multiplier: number) {
 
 function getRandomFlags(flags: Flag[], answers: string[]) {
   const selectableFlags = flags?.filter(
-    (flag) => !answers.includes(flag.iso_2)
+    (flag) => !answers.map(atob).includes(flag.iso_2)
   );
 
   return new Array(answers.length - 1)
@@ -40,7 +40,7 @@ function flagArray(
             .map((f) => f?.iso_2)
             .includes(flag.iso_2)
       )
-      .filter((flag) => answers.includes(flag.iso_2)),
+      .filter((flag) => answers.map(atob).includes(flag.iso_2)),
     ...getRandomFlags(flags, answers)
   ];
 }

@@ -230,14 +230,28 @@ CREATE TABLE game(
   winner varchar(50)
 );
 CREATE TABLE users(
-  username varchar(50) NOT NULL,
+  username varchar(50) CHECK (char_length(username) > 5) UNIQUE NOT NULL,
   password bytea NOT NULL,
   rank integer NOT NULL,
   email varchar(100) NOT NULL,
   favourite_flag varchar(2) NOT NULL,
   token uuid NOT NULL
 );
-ALTER TABLE users
-ADD CONSTRAINT username_unq UNIQUE(username);
-ALTER TABLE users
-ADD CONSTRAINT username_length CHECK (char_length(username) > 5)
+create or replace function get_flag_ids_on_char_id(ids integer []) returns text [] language plpgsql as $$
+declare flag_ids text [];
+begin
+SELECT array_agg(encode(flag_id::bytea, 'base64')) AS results into flag_ids
+FROM (
+    SELECT flag_id,
+      results
+    FROM(
+        SELECT flag_id,
+          array_agg(characteristic_id) AS results
+        FROM flag_characteristics
+        GROUP BY flag_id
+      )
+    WHERE results @> ids
+  );
+return flag_ids;
+end;
+$$

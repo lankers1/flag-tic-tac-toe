@@ -48,7 +48,7 @@ export const AnswerModalContent = ({
       answerMap[selectedSquareIndex[0] - 1][selectedSquareIndex[1] - 1];
 
     const answerArr = answers[answerKey];
-    const isCorrectAnswer = answerArr.includes(flag.iso_2);
+    const isCorrectAnswer = answerArr.map(atob).includes(flag.iso_2);
 
     game.handleAnswer(
       closeModal,
