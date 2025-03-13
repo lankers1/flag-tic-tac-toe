@@ -21,14 +21,10 @@ export const useUpdateUserRank = (
 
   async function completeGame() {
     if (isWinner) {
-      const userResponse = await updateUserRank.mutateAsync({
+      await updateUserRank.mutateAsync({
         username: user?.username,
         token: user?.token,
         result: 'win'
-      });
-      user.setUser({
-        ...user,
-        rank: userResponse.rank
       });
       return await updateGameWinner.mutateAsync({
         gameId,
@@ -37,27 +33,19 @@ export const useUpdateUserRank = (
     }
 
     if (isLoser) {
-      const userResponse = await updateUserRank.mutateAsync({
+      await updateUserRank.mutateAsync({
         username: user.username,
         token: user.token,
         result: 'loss'
-      });
-      user.setUser({
-        ...user,
-        rank: userResponse.rank
       });
       return;
     }
 
     if (opponentLeft) {
-      const userResponse = await updateUserRank.mutateAsync({
+      await updateUserRank.mutateAsync({
         username: user.username,
         token: user.token,
         result: 'win'
-      });
-      user.setUser({
-        ...user,
-        rank: userResponse.rank
       });
       return updateGameWinner.mutateAsync({ gameId, username: user?.username });
     }

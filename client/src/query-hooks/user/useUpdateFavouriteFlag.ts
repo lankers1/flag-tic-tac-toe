@@ -31,16 +31,11 @@ async function handleUpdateFavouriteFlag({
 
 export const useUpdateFavouriteFlagQuery = () => {
   const queryClient = useQueryClient();
-  const user = useContext(AuthContext);
 
   return useMutation({
     mutationFn: handleUpdateFavouriteFlag,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['user', data.username] });
-      user?.setUser({
-        ...user,
-        favouriteFlag: data.favouriteFlag
-      });
     }
   });
 };

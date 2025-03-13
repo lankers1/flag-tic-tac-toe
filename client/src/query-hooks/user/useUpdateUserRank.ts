@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface Args {
   username: string | undefined;
@@ -23,5 +23,12 @@ async function handleUpdateUserRank({ username, token, result }: Args) {
   return res.json();
 }
 
-export const useUpdateUserRankQuery = () =>
-  useMutation({ mutationFn: handleUpdateUserRank });
+export const useUpdateUserRankQuery = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: handleUpdateUserRank,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['user', data.username] });
+    }
+  });
+};

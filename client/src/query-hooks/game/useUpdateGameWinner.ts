@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface Args {
   gameId: string;
@@ -21,5 +21,13 @@ async function handleUpdateGameWinner({ gameId, username }: Args) {
   return res.json();
 }
 
-export const useUpdateGameWinnerQuery = () =>
-  useMutation({ mutationFn: handleUpdateGameWinner });
+export const useUpdateGameWinnerQuery = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: handleUpdateGameWinner,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['user', data.username] });
+    }
+  });
+};
