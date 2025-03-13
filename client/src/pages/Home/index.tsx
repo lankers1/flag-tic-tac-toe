@@ -61,7 +61,6 @@ export const Home = () => {
               {!user?.loggedIn ? (
                 <>
                   <LinkButton
-                    size="xlarge"
                     to="auth/login"
                     label={
                       <>
@@ -71,7 +70,6 @@ export const Home = () => {
                     }
                   />
                   <LinkButton
-                    size="xlarge"
                     to="auth/register"
                     label={
                       <>
@@ -84,23 +82,21 @@ export const Home = () => {
               ) : (
                 <>
                   <Button
-                    size="xlarge"
                     disabled={!!displayGameSearchModal}
                     label={
                       <>
                         <FaGlobeAmericas className={styles.buttonIcons} />
-                        <Text fontSize="small">{'Search for game'}</Text>
+                        Search for game
                       </>
                     }
                     handleClick={searchForGame}
                   />
                   <LinkButton
-                    size="xlarge"
                     to="/leaderboard/1"
                     label={
                       <>
                         <FaTrophy className={styles.buttonIcons} />
-                        <Text fontSize="small">{'Leaderboard'}</Text>
+                        Leaderboard
                       </>
                     }
                   />
@@ -126,22 +122,20 @@ export const Home = () => {
             </div>
             <FlexDiv className={styles.localButtons}>
               <LinkButton
-                size="xlarge"
                 to="/game/local"
                 label={
                   <>
                     <FaUserFriends className={styles.buttonIcons} />
-                    <Text fontSize="small">{'Local Play'}</Text>
+                    Local Play
                   </>
                 }
               />
               <LinkButton
-                size="xlarge"
                 to="/game/computer"
                 label={
                   <>
                     <FaRobot className={styles.buttonIcons} />
-                    <Text fontSize="small">{'VS Computer'}</Text>
+                    VS Computer
                   </>
                 }
               />
@@ -173,7 +167,7 @@ export const Home = () => {
             label={
               <>
                 <FaArrowLeft className={styles.buttonIcons} />
-                <Text>Cancel</Text>
+                Cancel
               </>
             }
           />

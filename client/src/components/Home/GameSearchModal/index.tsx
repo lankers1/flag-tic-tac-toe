@@ -3,7 +3,6 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { Button } from '@components/common/Buttons/Button';
 import { Modal } from '@components/common/Modal';
 import { Loader } from '@components/common/Loader';
-import { Text } from '@components/common/Text';
 import { FlexDiv } from '@components/common/FlexDiv';
 import { Heading } from '@components/common/Heading';
 
@@ -27,7 +26,7 @@ export const OnlineGameSearchModal = ({ cancelSearch, isOpen }: Props) => {
           label={
             <>
               <FaArrowLeft className={styles.buttonIcons} />
-              <Text>Cancel</Text>
+              Cancel
             </>
           }
         />

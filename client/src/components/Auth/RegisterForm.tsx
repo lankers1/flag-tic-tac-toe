@@ -91,7 +91,7 @@ export const RegisterForm = () => {
               <Button
                 color="green"
                 type="submit"
-                label={<Text fontSize="medium">Create Account</Text>}
+                label="Create Account"
                 size="medium"
               />
               <footer className={styles.footer}>
