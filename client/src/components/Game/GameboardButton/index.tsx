@@ -5,6 +5,7 @@ import { IoCloseSharp } from 'react-icons/io5';
 import { IncorrectAnswer } from 'src/type-defs/game';
 import styles from './styles.module.scss';
 import { SelectedFlag } from 'src/type-defs/flag';
+import { Text } from '@components/common/Text';
 
 interface Props {
   handleClick: () => void;
@@ -40,7 +41,7 @@ export const GameboardButton = ({
 
   return (
     <button
-      disabled={disabled}
+      disabled={!!selectedFlag || disabled}
       onClick={handleClick}
       className={`${styles.button} ${answeredButtonStyle(
         selectedFlag
@@ -52,7 +53,9 @@ export const GameboardButton = ({
       {displayIncorrectAnswer && <IoCloseSharp size="3rem" />}
       {selectedFlag && (
         <>
-          <p className={styles.text}>{selectedFlag?.name}</p>
+          <Text fontSize="small" className={styles.text}>
+            {selectedFlag?.name}
+          </Text>
           <Flag className={styles.flag} />
         </>
       )}

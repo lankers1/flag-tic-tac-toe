@@ -5,7 +5,7 @@ import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@components/common/Buttons/Button';
 import { Modal } from '@components/common/Modal';
 import styles from './styles.module.scss';
-import { Heading } from '@components/common/Heading';
+import { Text } from '@components/common/Text';
 
 interface Props {
   winner: number | null;
@@ -64,7 +64,7 @@ const ModalContent = ({
     case 'give_up':
       return (
         <>
-          <Heading variant="h3">Are you sure you want to give up?</Heading>
+          <Text>Are you sure you want to give up?</Text>
           <div className={styles.buttonContainer}>
             <Button handleClick={closeModal} label="No" />
             <Button handleClick={() => quitGame(navigate, type)} label="Yes" />
@@ -74,9 +74,7 @@ const ModalContent = ({
     case 'restart':
       return (
         <>
-          <Heading variant="h3">
-            Are you sure you want to restart the game?
-          </Heading>
+          <Text>Are you sure you want to restart the game?</Text>
           <div className={styles.buttonContainer}>
             <Button handleClick={closeModal} label="No" />
             <Button
