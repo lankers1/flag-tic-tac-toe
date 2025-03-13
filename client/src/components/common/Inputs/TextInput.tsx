@@ -36,7 +36,11 @@ export const TextInput = ({
         placeholder={placeholder}
         value={value}
       />
-      {error && <Text color="error">{error}</Text>}
+      {error && (
+        <Text fontSize="small" color="error">
+          {error}
+        </Text>
+      )}
     </FlexDiv>
   );
 };
