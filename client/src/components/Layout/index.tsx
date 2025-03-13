@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { FaAngleUp } from 'react-icons/fa';
 import { FlagAvatar } from '@components/common/FlagAvatar';
 import { Heading } from '@components/common/Heading';
@@ -27,21 +27,28 @@ export const Layout = () => {
 
 const UserMenu = () => {
   const user = useContext(AuthContext) as UserContext;
+  const location = useLocation();
+  const regex = /\/game\/online/;
+
   return (
     <div className={styles.avatarWrapper}>
       <div className={styles.avatarContainer}>
         <div className={styles.innerContainer}>
-          <FaAngleUp className={styles.icon} />
+          {!regex.test(location.pathname) && (
+            <FaAngleUp className={styles.icon} />
+          )}
           <FlagAvatar flagIso2={user.favouriteFlag} />
         </div>
-        <div className={styles.menuItems}>
-          <Link to="/account" className={styles.link}>
-            Account
-          </Link>
-          <Link to="/" className={styles.link} handleClick={user?.logout}>
-            Logout
-          </Link>
-        </div>
+        {!regex.test(location.pathname) && (
+          <div className={styles.menuItems}>
+            <Link to="/account" className={styles.link}>
+              Account
+            </Link>
+            <Link to="/" className={styles.link} handleClick={user?.logout}>
+              Logout
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );
