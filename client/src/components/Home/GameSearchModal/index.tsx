@@ -4,7 +4,7 @@ import { Button } from '@components/common/Buttons/Button';
 import { Modal } from '@components/common/Modal';
 import { Loader } from '@components/common/Loader';
 import { FlexDiv } from '@components/common/FlexDiv';
-import { Heading } from '@components/common/Heading';
+import { Text } from '@components/common/Text';
 
 import styles from './styles.module.scss';
 
@@ -17,10 +17,12 @@ export const OnlineGameSearchModal = ({ cancelSearch, isOpen }: Props) => {
   return (
     <Modal isOpen={isOpen}>
       <FlexDiv alignItems="center" flexDirection="col">
-        <Heading variant="h3">Searching for game</Heading>
         <FlexDiv className={styles.loaderContainer}>
           <Loader />
         </FlexDiv>
+        <Text className={styles.text} fontSize="small">
+          Searching for game
+        </Text>
         <Button
           handleClick={cancelSearch}
           label={

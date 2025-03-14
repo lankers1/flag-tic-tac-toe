@@ -7,7 +7,12 @@
 
   .nav {
     display: flex;
-    gap: 1.5rem;
+    gap: 1rem;
+    align-items: center;
+
+    .flagIcon {
+      margin-right: 0.25rem;
+    }
 
     @media screen and (max-width: $medium) {
       gap: 0.5rem;

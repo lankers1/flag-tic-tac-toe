@@ -38,110 +38,116 @@ export const Home = () => {
   return (
     <>
       <FlexDiv
-        justifyContent="center"
         alignItems="center"
+        justifyContent="center"
         className={styles.container}
       >
-        <Card className={styles.card}>
-          <FlexDiv
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="col"
-            className={styles.cardContainer}
-          >
-            <div className={styles.subheading}>
-              <Heading variant="h2">Play online</Heading>
-              <Text>
-                Aim to beat your opponent by guessing the flags based on
-                categories. The first to complete three in a row, column or
-                diagonally wins.
-              </Text>
-            </div>
-            <FlexDiv className={styles.localButtons}>
-              {!user?.loggedIn ? (
-                <>
-                  <LinkButton
-                    to="auth/login"
-                    label={
-                      <>
-                        <IoMdLogIn className={styles.buttonIcons} />
-                        <Text fontSize="small">{'Login'}</Text>
-                      </>
-                    }
-                  />
-                  <LinkButton
-                    to="auth/register"
-                    label={
-                      <>
-                        <FaGlobeAmericas className={styles.buttonIcons} />
-                        <Text fontSize="small">{'Register'}</Text>
-                      </>
-                    }
-                  />
-                </>
-              ) : (
-                <>
-                  <Button
-                    disabled={!!displayGameSearchModal}
-                    label={
-                      <>
-                        <FaGlobeAmericas className={styles.buttonIcons} />
-                        Search for game
-                      </>
-                    }
-                    handleClick={searchForGame}
-                  />
-                  <LinkButton
-                    to="/leaderboard/1"
-                    label={
-                      <>
-                        <FaTrophy className={styles.buttonIcons} />
-                        Leaderboard
-                      </>
-                    }
-                  />
-                </>
-              )}
-            </FlexDiv>
-          </FlexDiv>
-        </Card>
-        <Card className={styles.card}>
-          <FlexDiv
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="col"
-            className={styles.cardContainer}
-          >
-            <div className={styles.subheading}>
-              <Heading variant="h2">Play locally</Heading>
-              <Text>
-                Aim to beat your opponent by guessing the flags based on
-                categories. The first to complete three in a row, column or
-                diagonally wins.
-              </Text>
-            </div>
-            <FlexDiv className={styles.localButtons}>
-              <LinkButton
-                to="/game/local"
-                label={
+        <FlexDiv
+          justifyContent="center"
+          alignItems="center"
+          className={styles.container}
+        >
+          <Card className={styles.card}>
+            <FlexDiv
+              justifyContent="center"
+              alignItems="center"
+              flexDirection="col"
+              className={styles.cardContainer}
+            >
+              <div className={styles.subheading}>
+                <Heading variant="h2">Play online</Heading>
+                <Text>
+                  Rise up the ranks by beating other players. As you go up the
+                  leaderboard the difficulty increases, so you better keep on
+                  top of your vexillology knowledge.
+                </Text>
+              </div>
+              <FlexDiv className={styles.localButtons}>
+                {!user?.loggedIn ? (
                   <>
-                    <FaUserFriends className={styles.buttonIcons} />
-                    Local Play
+                    <LinkButton
+                      to="auth/login"
+                      label={
+                        <>
+                          <IoMdLogIn className={styles.buttonIcons} />
+                          <Text fontSize="small">{'Login'}</Text>
+                        </>
+                      }
+                    />
+                    <LinkButton
+                      to="auth/register"
+                      label={
+                        <>
+                          <FaGlobeAmericas className={styles.buttonIcons} />
+                          <Text fontSize="small">{'Register'}</Text>
+                        </>
+                      }
+                    />
                   </>
-                }
-              />
-              <LinkButton
-                to="/game/computer"
-                label={
+                ) : (
                   <>
-                    <FaRobot className={styles.buttonIcons} />
-                    VS Computer
+                    <Button
+                      disabled={!!displayGameSearchModal}
+                      label={
+                        <>
+                          <FaGlobeAmericas className={styles.buttonIcons} />
+                          Search for game
+                        </>
+                      }
+                      handleClick={searchForGame}
+                    />
+                    <LinkButton
+                      to="/leaderboard/1"
+                      label={
+                        <>
+                          <FaTrophy className={styles.buttonIcons} />
+                          Leaderboard
+                        </>
+                      }
+                    />
                   </>
-                }
-              />
+                )}
+              </FlexDiv>
             </FlexDiv>
-          </FlexDiv>
-        </Card>
+          </Card>
+          <Card className={styles.card}>
+            <FlexDiv
+              justifyContent="center"
+              alignItems="center"
+              flexDirection="col"
+              className={styles.cardContainer}
+            >
+              <div className={styles.subheading}>
+                <Heading variant="h2">Play locally</Heading>
+                <Text>
+                  Play locally against a friend or versus the computer to hone
+                  your skills. However, beware, the computer won't go easy on
+                  you!
+                </Text>
+              </div>
+              <FlexDiv className={styles.localButtons}>
+                <LinkButton
+                  to="/game/local"
+                  label={
+                    <>
+                      <FaUserFriends className={styles.buttonIcons} />
+                      Local Play
+                    </>
+                  }
+                />
+                <LinkButton
+                  to="/game/computer"
+                  label={
+                    <>
+                      <FaRobot className={styles.buttonIcons} />
+                      VS Computer
+                    </>
+                  }
+                />
+              </FlexDiv>
+            </FlexDiv>
+          </Card>
+        </FlexDiv>
       </FlexDiv>
       <OnlineGameSearchModal
         isOpen={displayGameSearchModal}

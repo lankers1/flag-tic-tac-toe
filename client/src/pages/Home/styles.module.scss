@@ -9,6 +9,8 @@
 
   @media screen and (max-width: $large) {
     flex-direction: column;
+    gap: 2rem;
+
   }
 
   .card {
@@ -17,12 +19,16 @@
     background-color: #fafafa;
     display: flex;
 
+    @media screen and (max-width: $large) {
+      width: 60%;
+    }
+
     .cardContainer {
       flex: 1;
       width: 100%;
 
       .localButtons {
-        gap: 20px;
+        gap: 1rem;
         flex: 1;
         width: 100%;
 
