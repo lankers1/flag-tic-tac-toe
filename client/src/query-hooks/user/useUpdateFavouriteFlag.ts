@@ -1,6 +1,4 @@
-import { AuthContext } from '@context/AuthContext';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useContext } from 'react';
 
 interface Args {
   username: string | undefined;
