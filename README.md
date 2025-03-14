@@ -1,3 +1,4 @@
+### Work in progress
 # flag-tic-tac-toe
 ## Background
 This project started out as a means to learn Golang and websockets, a technology I’d never encountered professionally. I am a lover of Geography and gaming, so I combined these two to create Flag tic-tac-toe in an attempt to test my vexillological knowledge.
@@ -29,7 +30,7 @@ This was an easy choice, the data model made sense to use a RDBMS like Postgres.
 For security, as the site is really just a personal project I implemented a very basic authorization system whereby users would have a unique token and when updating their data the token is required in the request payload. In the future I will look into implementing JWT authentication.
 
 
-### Architecture
+## Architecture
 ![Architecture](https://github.com/user-attachments/assets/2bd39796-6303-41e3-a580-55b0220cc402)
 
  
