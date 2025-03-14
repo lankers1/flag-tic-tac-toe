@@ -10,4 +10,7 @@ As my main focus was on learning about backend I wanted a lightweight frontend c
 - Sass, CSS preprocessor
 - React-router
 
+### Architecture
+![Architecture](https://github.com/user-attachments/assets/2bd39796-6303-41e3-a580-55b0220cc402)
+
  
