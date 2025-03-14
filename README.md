@@ -10,6 +10,12 @@ As my main focus was on learning about backend I wanted a lightweight frontend c
 - Sass, CSS preprocessor
 - React-router
 
+Other tools used throughout development:
+- Figma to design the mockups
+- Lucidchart for database modeling 
+- NeonDB for database hosting
+- Google cloud for hosting/deployments
+
 ## Considerations
 ### SSR vs CSR
 I explored using Next.js or Remix for SSR capabilities, but ultimately the speed of development and developer experience of Vite persuaded me to go with Vite. The SEO benefits of SSR were negligible as I am currently receiving a score of 100 in lighthouse for SEO.
