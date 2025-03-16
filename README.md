@@ -12,16 +12,18 @@ As my main focus was on learning about backend I wanted a lightweight frontend c
 - React-router
 
 Other tools used throughout development:
-- Figma to design the mockups
+- Figma to design site mockups
 - Lucidchart for database modeling 
 - NeonDB for database hosting
 - Google cloud for hosting/deployments
 
 ## Considerations
 ### SSR vs CSR
-I explored using Next.js or Remix for SSR capabilities, but ultimately the speed of development and developer experience of Vite persuaded me to go with Vite. The SEO benefits of SSR were negligible as I am currently receiving a score of 100 in lighthouse for SEO.
+I explored using Next.js or Remix for the SSR capabilities (SEO and first paint speed), but ultimately the developer experience of Vite persuaded me to go with the latter. 
 
-I also was reluctant to get vendor locked with the Next.js ecosystem, it felt too cumbersome and I wanted to explore alternative host providers to vercel. Similarly, my goal was to implement my API with golang, introducing Next.js would have added unnecessary complexity and an additional backend-for-frontend layer that was unnecessary with my project.
+My choice to go with Vite for the client-side development server was vindicated and the performace of the site is extremely fast. The SEO benefits often attributed with SSR were negligible as I am currently receiving a score of 100 in lighthouse for SEO.
+
+I also was reluctant to be vendor locked with the Next.js ecosystem, it felt too cumbersome and I wanted to explore alternative host providers to vercel. Similarly, my goal was to implement my API with golang, introducing Next.js would have added unnecessary complexity and an additional backend-for-frontend layer that was unnecessary with my project.
 
 ### Relational DB vs Document model (NOSQL)
 This was an easy choice, the data model made sense to use a RDBMS like Postgres. This was mainly due to the concept of flag characteristics and the joining that occurs when generating a new game.
