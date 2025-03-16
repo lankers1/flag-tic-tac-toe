@@ -2,7 +2,7 @@ import { FlexDiv } from '@components/common/FlexDiv';
 import { Notification } from '@components/common/Notification';
 import { useGetUserQuery } from '@query-hooks/user/useGetUser';
 import { createContext, useState } from 'react';
-import { PublicUser } from 'src/type-defs/user';
+import { PublicUser } from '@type-defs/user';
 import styles from './styles.module.scss';
 
 export interface UserContext {

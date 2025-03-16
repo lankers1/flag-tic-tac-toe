@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import * as flags from 'country-flag-icons/react/3x2';
 import { IoCloseSharp } from 'react-icons/io5';
 
-import { IncorrectAnswer } from 'src/type-defs/game';
+import { IncorrectAnswer } from '@type-defs/game';
 import styles from './styles.module.scss';
-import { SelectedFlag } from 'src/type-defs/flag';
+import { SelectedFlag } from '@type-defs/flag';
 import { Text } from '@components/common/Text';
 
 interface Props {

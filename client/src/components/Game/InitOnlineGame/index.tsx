@@ -6,8 +6,8 @@ import { useGetUserQuery } from '@query-hooks/user/useGetUser';
 import { Loader } from '@components/common/Loader';
 import { AuthContext } from '@context/AuthContext';
 import { useGameStore } from '@store/useGameStore';
-import { PublicUser } from 'src/type-defs/user';
-import { Game } from 'src/type-defs/game';
+import { PublicUser } from '@type-defs/user';
+import { Game } from '@type-defs/game';
 
 import styles from './styles.module.scss';
 
