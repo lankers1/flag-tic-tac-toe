@@ -26,7 +26,7 @@ export const TextInput = ({
 }: Props) => {
   return (
     <FlexDiv flexDirection="col">
-      <Text>{label}</Text>
+      <label htmlFor={name}>{label}</label>
       <input
         disabled={disabled}
         name={name}
