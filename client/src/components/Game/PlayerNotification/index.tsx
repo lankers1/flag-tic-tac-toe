@@ -8,6 +8,7 @@ import { FlexDiv } from '@components/common/FlexDiv';
 import styles from './styles.module.scss';
 import { useGameStore } from '@store/useGameStore';
 import { PublicUser } from '@type-defs/user';
+import { useGetUserQuery } from '@query-hooks/user/useGetUser';
 
 interface Props {
   index?: number;
@@ -59,6 +60,7 @@ function winnerNotification(player: string, winner: number) {
 export const PlayerNotification = ({ index, user }: Props) => {
   const { turn, winner, currentTurn } = useGameStore((state) => state);
   const { gameId, player } = useParams() as { gameId: string; player: string };
+  const { data: userData } = useGetUserQuery(user?.username);
 
   if (!gameId) {
     return (
@@ -81,7 +83,7 @@ export const PlayerNotification = ({ index, user }: Props) => {
             <FlagAvatar flagIso2={user.favouriteFlag} />
             <div className={styles.playerDetails}>
               <Text fontSize="medium">{user?.username}</Text>
-              <Text fontSize="small">{user?.rank}</Text>
+              <Text fontSize="small">{userData?.user?.rank}</Text>
             </div>
           </FlexDiv>
         </Notification>
