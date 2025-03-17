@@ -74,10 +74,10 @@ export const Clock = ({ size }: { size: number }) => {
         <text
           x="50%"
           y="50%"
-          text-anchor="middle"
+          textAnchor="middle"
           fill="black"
-          font-size="15px"
-          font-family="Arial"
+          fontSize="15px"
+          fontFamily="Arial"
           dy=".3em"
         >
           {30 - time}
