@@ -57,9 +57,9 @@ export const Home = () => {
               <div className={styles.subheading}>
                 <Heading variant="h2">Play online</Heading>
                 <Text>
-                  Rise up the ranks by beating other players. As you go up the
-                  leaderboard the difficulty increases, so you better keep on
-                  top of your vexillology knowledge.
+                  Rise up the ranks by beating other players. As you climb up
+                  the leaderboard the difficulty increases, so you better keep
+                  on top of your vexillology knowledge.
                 </Text>
               </div>
               <FlexDiv className={styles.localButtons}>
