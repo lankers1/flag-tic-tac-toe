@@ -7,17 +7,21 @@ import { Game } from '@pages/Game';
 import { InitOnlineGame } from '@components/Game/InitOnlineGame';
 import { Board } from '@type-defs/game';
 import { Account } from '@pages/Account';
+import { ErrorBoundary } from '@components/common/ErrorBoundary';
 
 export const router = createBrowserRouter([
   {
     element: <Layout />,
+    errorElement: <ErrorBoundary />,
     children: [
       {
         path: '/*',
+        errorElement: <ErrorBoundary />,
         element: <Home />
       },
       {
         path: '/game/:player',
+        errorElement: <ErrorBoundary />,
         element: (
           <GameProvider>
             {(gameData, refetch) => (
@@ -32,10 +36,12 @@ export const router = createBrowserRouter([
       },
       {
         path: '/account',
+        errorElement: <ErrorBoundary />,
         element: <Account />
       },
       {
         path: '/game/:player/:gameId',
+        errorElement: <ErrorBoundary />,
         element: (
           <InitOnlineGame>
             {(gameData, opponent, refetch) => (
