@@ -1,5 +1,5 @@
 import { AuthContext } from '@context/AuthContext';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -23,10 +23,14 @@ async function handleSendQuitGame(
 }
 
 export const useSendQuitGame = () => {
+  const queryClient = useQueryClient();
   const { gameId } = useParams();
   const user = useContext(AuthContext);
 
   return useMutation({
-    mutationFn: () => handleSendQuitGame(user?.username, gameId)
+    mutationFn: () => handleSendQuitGame(user?.username, gameId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user', user?.username] });
+    }
   });
 };
