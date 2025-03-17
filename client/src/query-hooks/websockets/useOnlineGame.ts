@@ -5,11 +5,11 @@ import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import { useGameStore } from '@store/useGameStore';
 import { Message } from '@type-defs/game';
 
-export const useOnlineGame = (
-  setOpponentQuit: (arg: boolean) => void,
-  game: InstanceType<typeof OnlineGame> | void
-) => {
+export const useOnlineGame = (game: InstanceType<typeof OnlineGame> | void) => {
   const [fullGame, setFullGame] = useState(false);
+  const [opponentQuit, setOpponentQuit] = useState(false);
+  const [opponentPlayAgain, setOpponentPlayAgain] = useState(false);
+
   const user = useContext(AuthContext);
   const navigate = useNavigate();
   const { resetState } = useGameStore((state) => state);
@@ -24,6 +24,7 @@ export const useOnlineGame = (
             message,
             game,
             setOpponentQuit,
+            setOpponentPlayAgain,
             navigate,
             resetState,
             setFullGame
@@ -35,13 +36,14 @@ export const useOnlineGame = (
     }
   }, [gameId, player, game, user?.username]);
 
-  return { fullGame };
+  return { fullGame, opponentPlayAgain, opponentQuit };
 };
 
 function handleWsMessage(
   message: Message,
   game: InstanceType<typeof OnlineGame>,
   setOpponentQuit: (arg: boolean) => void,
+  setOpponentPlayAgain: (arg: boolean) => void,
   navigate: NavigateFunction,
   resetState: () => void,
   setFullGame: (fullGame: boolean) => void
@@ -62,6 +64,8 @@ function handleWsMessage(
       break;
     case 'quit':
       return setOpponentQuit(true);
+    case 'play-again-opponent':
+      return setOpponentPlayAgain(true);
     case 'play-again':
       const { gameId } = message;
       resetState();
