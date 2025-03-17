@@ -193,6 +193,19 @@ func (cs *GameWebsocketHandler) publishPlayAgain(msg []byte, gameId string, user
 				go s.closeSlow()
 			}
 		}
+	} else {
+		clients := cs.subscribers[gameId]
+
+		message := Message{GameId: "", Type: "play-again-opponent"}
+		newFsConfigBytes, _ := json.Marshal(message)
+
+		for s := range clients {
+			select {
+			case s.msgs <- newFsConfigBytes:
+			default:
+				go s.closeSlow()
+			}
+		}
 	}
 }
 

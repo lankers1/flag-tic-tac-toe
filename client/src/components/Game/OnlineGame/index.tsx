@@ -15,6 +15,7 @@ import { LinkButton } from '@components/common/Buttons/LinkButton';
 import { FlexDiv } from '@components/common/FlexDiv';
 import { PublicUser } from '@type-defs/user';
 import styles from './styles.module.scss';
+import { useGetUserQuery } from '@query-hooks/user/useGetUser';
 
 interface Props {
   children: ({ game }: { game: InstanceType<typeof OnlineGame> }) => ReactNode;
@@ -24,11 +25,12 @@ interface Props {
 
 export const OnlineGameProvider = ({ children, game, opponent }: Props) => {
   const navigate = useNavigate();
+  const [playAgain, setPlayAgain] = useState(false);
   const { gameId } = useParams() as { gameId: string };
-  const [opponentQuit, setOpponentQuit] = useState(false);
   const user = useContext(AuthContext) as UserContext;
   const { turn, winner } = useGameStore((state) => state);
-  const { fullGame } = useOnlineGame(setOpponentQuit, game);
+  const { fullGame, opponentQuit, opponentPlayAgain } = useOnlineGame(game);
+  const { data: userData } = useGetUserQuery(user?.username);
   useUpdateUserRank(turn, winner, opponentQuit);
 
   if (fullGame) {
@@ -51,7 +53,7 @@ export const OnlineGameProvider = ({ children, game, opponent }: Props) => {
     <>
       {children({ game })}
       <Modal isOpen={opponentQuit}>
-        <Heading variant="h2">It looks like your opponent quit!</Heading>
+        <Text>It looks like your opponent quit!</Text>
         <Button
           handleClick={() => game?.quitGame(navigate, gameId)}
           label="Back"
@@ -67,17 +69,22 @@ export const OnlineGameProvider = ({ children, game, opponent }: Props) => {
           </Heading>
           <FlexDiv className={styles.newRankContent}>
             <Text fontSize="medium">Your new rank</Text>
-            <Text fontSize="large">{user?.rank}</Text>
+            <Text fontSize="large">{userData?.user?.rank}</Text>
           </FlexDiv>
+          <Text>Do you want to play again?</Text>
+          {opponentPlayAgain && !playAgain && (
+            <Text>Your opponent wants to play again</Text>
+          )}
         </FlexDiv>
-        <Text>Do you want to play again?</Text>
         <FlexDiv justifyContent="spaceBetween">
           <Button
             handleClick={() => game?.quitGame(navigate, gameId)}
             label="No"
           />
           <Button
+            color="green"
             handleClick={() => {
+              setPlayAgain(true);
               game?.playAgain();
             }}
             label="Yes"
