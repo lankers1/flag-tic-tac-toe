@@ -20,9 +20,7 @@ export const OnlineGameSearchModal = ({ cancelSearch, isOpen }: Props) => {
         <FlexDiv className={styles.loaderContainer}>
           <Loader />
         </FlexDiv>
-        <Text className={styles.text} fontSize="small">
-          Searching for game
-        </Text>
+        <Text className={styles.text}>Searching for game</Text>
         <Button
           handleClick={cancelSearch}
           label={
