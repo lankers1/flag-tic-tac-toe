@@ -104,21 +104,21 @@ LIMIT 1;
 -- Function for returning results
 --
 create or replace function get_flag_ids_on_char_id(ids integer []) returns text [] language plpgsql as $$
-declare flag_ids text [];
+declare flag_isos text [];
 begin
-SELECT array_agg(encode(flag_id::bytea, 'base64')) AS results into flag_ids
+SELECT array_agg(encode(iso_2::bytea, 'base64')) AS results into flag_isos
 FROM (
-    SELECT flag_id,
+    SELECT iso_2,
       results
     FROM(
-        SELECT flag_id,
+        SELECT iso_2,
           array_agg(characteristic_id) AS results
         FROM flag_characteristics
-        GROUP BY flag_id
+        GROUP BY iso_2
       )
     WHERE results @> ids
   );
-return flag_ids;
+return flag_isos;
 end;
 $$;
 --
@@ -149,16 +149,16 @@ i json;
 BEGIN FOR i IN
 SELECT *
 FROM json_array_elements(color_json) LOOP
-INSERT INTO flag_characteristics (flag_id, characteristic_id)
-SELECT flag_id,
+INSERT INTO flag_characteristics (iso_2, characteristic_id)
+SELECT iso_2,
   (i->>'result')::int as characteristic_id
 FROM (
-    SELECT flag_id,
+    SELECT iso_2,
       ARRAY_AGG(characteristic_id) as results
     FROM flag_characteristics
     WHERE characteristic_id = (i->>'characteristic_id_1')::int
       OR characteristic_id = (i->>'characteristic_id_2')::int
-    GROUP BY flag_id
+    GROUP BY iso_2
   ) r
 WHERE cardinality(results) > 1;
 END LOOP;
@@ -186,12 +186,12 @@ FROM (
               c.name,
               c.difficulty
             FROM flags f
-              JOIN flag_characteristics fc ON f.iso_2 = fc.flag_id
+              JOIN flag_characteristics fc ON f.iso_2 = fc.iso_2
               JOIN characteristics c ON fc.characteristic_id = c.characteristic_id
             WHERE c.difficulty = 'easy'
           ) AS A
           JOIN flags f2 ON f2.iso_2 = a.iso_2
-          JOIN flag_characteristics fc2 ON f2.iso_2 = fc2.flag_id
+          JOIN flag_characteristics fc2 ON f2.iso_2 = fc2.iso_2
           JOIN characteristics c2 ON fc2.characteristic_id = c2.characteristic_id
         WHERE fc2.characteristic_id != A.characteristic_id
         GROUP BY id,
@@ -207,3 +207,21 @@ WHERE rc.characteristic_id IS NULL
   AND rc2.characteristic_id IS NULL
   AND rc2.restricted_id IS NULL
   AND count > 7;
+--
+-- SELECT by flag characteristics
+--
+SELECT iso_2,
+name,
+characteristics
+FROM (
+    SELECT f.iso_2,
+      f.name,
+      ARRAY_AGG(c.name) as characteristics
+    FROM flags f
+      JOIN flag_characteristics fc ON f.iso_2 = fc.flag_id
+      JOIN characteristics c ON fc.characteristic_id = c.characteristic_id
+    GROUP BY f.iso_2,
+      f.name
+  ) characteristics_by_flag_iso
+WHERE array ['horizontal_stripes', 'contains_blue'] <@ characteristics
+  AND name ILIKE '%%';
