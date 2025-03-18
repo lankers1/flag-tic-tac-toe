@@ -33,6 +33,7 @@ func InitApi(httpHandlers *handlers.Handlers) *gin.Engine {
 	router.POST("/game/:gameId/winner/:username", httpHandlers.GameHandler.UpdateWinner)
 
 	router.POST("/search_flags", httpHandlers.FlagHandler.SearchFlags)
+	router.POST("/search_flag_characteristics", httpHandlers.FlagHandler.SearchFlagCharacteristics)
 
 	router.POST("/register", httpHandlers.AuthHandler.Register)
 	router.POST("/login", httpHandlers.AuthHandler.Login)
