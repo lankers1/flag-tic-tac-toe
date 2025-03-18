@@ -208,7 +208,7 @@ CREATE TABLE characteristics(
   difficulty TEXT
 );
 CREATE TABLE flag_characteristics(
-  flag_id TEXT REFERENCES flags (iso_2),
+  iso_2 TEXT REFERENCES flags (iso_2),
   characteristic_id INTEGER REFERENCES characteristics (characteristic_id)
 );
 CREATE TABLE related_characteristics(
