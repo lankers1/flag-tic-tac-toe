@@ -18,14 +18,14 @@ Other tools used throughout development:
 - Google cloud for hosting/deployments
 
 ## Considerations
-### SSR vs CSR
+### SSR or CSR
 I explored using Next.js or Remix for the SSR capabilities (SEO and first paint speed), but ultimately the developer experience of Vite persuaded me to go with the latter. 
 
 My choice to go with Vite for the client-side development server was vindicated and the performace of the site is extremely fast. The SEO benefits often attributed with SSR were negligible as I am currently receiving a score of 100 in lighthouse for SEO.
 
 I also was reluctant to be vendor locked with the Next.js ecosystem, it felt too cumbersome and I wanted to explore alternative host providers to vercel. Similarly, my goal was to implement my API with golang, introducing Next.js would have added unnecessary complexity and an additional backend-for-frontend layer that was unnecessary with my project.
 
-### Relational DB vs Document model (NOSQL)
+### Relational DB or NOSQL DB
 This was an easy choice, the data model made sense to use a RDBMS like Postgres. This was mainly due to the concept of flag characteristics and the joining that occurs when generating a new game.
 
 ### Security
