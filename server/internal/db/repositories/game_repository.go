@@ -26,7 +26,20 @@ func NewGameRepository(conn *pgxpool.Pool, ctx context.Context) *GameRepository 
 }
 
 func generateGame(conn *pgxpool.Pool, ctx context.Context) (*models.Game, *validators.AppError) {
-	query := "SELECT * FROM generate_game"
+	query := `SELECT 
+		first_row_id,
+		first_row,
+		first_column_id,
+		first_column,
+		second_row_id,
+		second_row,
+		second_column_id,
+		second_column,
+		third_row_id,
+		third_row,
+		third_column_id,
+		third_column
+	FROM generate_game`
 	rows, queryErr := conn.Query(ctx, query)
 
 	if queryErr != nil {
