@@ -12,8 +12,8 @@ export const useSearchGameWs = () => {
 
   const navigate = useNavigate();
 
-  function toggleDisplaySearchModal() {
-    setDisplayGameSearchModal((state) => !state);
+  function toggleDisplaySearchModal(displayModal: boolean) {
+    setDisplayGameSearchModal(displayModal);
   }
 
   function closeAccountSearchingModal() {
@@ -46,14 +46,14 @@ export const useSearchGameWs = () => {
     socket.onopen = () => {
       console.info('websocket connected');
       localStorage.setItem('ftt-searching-for-game', user?.username || '');
-      toggleDisplaySearchModal();
+      toggleDisplaySearchModal(true);
     };
   }
 
   function cancelSearch() {
     localStorage.removeItem('ftt-searching-for-game');
     socket?.close();
-    toggleDisplaySearchModal();
+    toggleDisplaySearchModal(false);
   }
 
   useEffect(() => {
