@@ -6,6 +6,7 @@ import { Heading } from '@components/common/Heading';
 import { AuthContext, UserContext } from '../../context/AuthContext';
 import styles from './styles.module.scss';
 import { Link } from '@components/common/Link';
+import { useGetUserQuery } from '@query-hooks/user/useGetUser';
 
 export const Layout = () => {
   const user = useContext(AuthContext);
@@ -27,8 +28,14 @@ export const Layout = () => {
 
 const UserMenu = () => {
   const user = useContext(AuthContext) as UserContext;
+  const { data, isLoading, isError } = useGetUserQuery(user?.username);
+
   const location = useLocation();
   const regex = /\/game\/online/;
+
+  if (isLoading || isError) {
+    return null;
+  }
 
   return (
     <div className={styles.avatarWrapper}>
@@ -37,7 +44,7 @@ const UserMenu = () => {
           {!regex.test(location.pathname) && (
             <FaAngleUp className={styles.icon} />
           )}
-          <FlagAvatar flagIso2={user.favouriteFlag} />
+          <FlagAvatar flagIso2={data?.user?.favouriteFlag} />
         </div>
         {!regex.test(location.pathname) && (
           <div className={styles.menuItems}>
