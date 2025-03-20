@@ -60,7 +60,7 @@ function winnerNotification(player: string, winner: number) {
 export const PlayerNotification = ({ index, user }: Props) => {
   const { turn, winner, currentTurn } = useGameStore((state) => state);
   const { gameId, player } = useParams() as { gameId: string; player: string };
-  const { data: userData } = useGetUserQuery(user?.username);
+  const { data: userData } = useGetUserQuery(user?.username as string);
 
   if (!gameId) {
     return (
