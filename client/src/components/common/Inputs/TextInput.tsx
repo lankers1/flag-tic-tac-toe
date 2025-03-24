@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './searchInput.module.scss';
+import styles from './inputs.module.scss';
 import { Text } from '@components/common/Text';
 import { FlexDiv } from '../FlexDiv';
 
@@ -25,17 +25,21 @@ export const TextInput = ({
   error
 }: Props) => {
   return (
-    <FlexDiv flexDirection="col">
-      <label htmlFor={name}>{label}</label>
+    <FlexDiv flexDirection="col" className={styles.container}>
       <input
         disabled={disabled}
         name={name}
-        className={`${styles.textInput} ${error && styles.error}`}
+        className={`${styles.input} ${error && styles.error}`}
         onChange={handleChange}
         type={type}
         placeholder={placeholder}
         value={value}
       />
+      <fieldset className={styles.fieldset}>
+        <legend>
+          <Text fontSize="small">{label}</Text>
+        </legend>
+      </fieldset>
       {error && (
         <Text fontSize="small" color="error">
           {error}
