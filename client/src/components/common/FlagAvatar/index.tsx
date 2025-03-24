@@ -9,11 +9,5 @@ interface Props {
 export const FlagAvatar = ({ flagIso2, className }: Props) => {
   const Flag = flags?.[flagIso2 as keyof typeof flags];
 
-  return (
-    <Flag
-      className={`${styles.flagAvatar} ${className && className}`}
-      height="48"
-      width="48"
-    />
-  );
+  return <Flag className={`${styles.flagAvatar} ${className && className}`} />;
 };
