@@ -8,6 +8,7 @@ import { InitOnlineGame } from '@components/Game/InitOnlineGame';
 import { Board } from '@type-defs/game';
 import { Account } from '@pages/Account';
 import { ErrorBoundary } from '@components/common/ErrorBoundary';
+import { Flags } from '@pages/Flags';
 
 export const router = createBrowserRouter([
   {
@@ -18,6 +19,11 @@ export const router = createBrowserRouter([
         path: '/*',
         errorElement: <ErrorBoundary />,
         element: <Home />
+      },
+      {
+        path: '/flags',
+        errorElement: <ErrorBoundary />,
+        element: <Flags />
       },
       {
         path: '/game/:player',
