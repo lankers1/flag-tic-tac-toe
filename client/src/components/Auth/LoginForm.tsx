@@ -76,10 +76,11 @@ export const LoginForm = () => {
                 error={errors?.password}
               />
               <Button
+                className={styles.submitButton}
                 color="green"
                 type="submit"
-                label=" Log in"
-                size="xlarge"
+                label="Log in"
+                size="medium"
               />
               <footer className={styles.footer}>
                 <Text fontSize="small">Don't have an account?</Text>

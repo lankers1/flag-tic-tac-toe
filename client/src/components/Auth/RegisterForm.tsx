@@ -93,6 +93,7 @@ export const RegisterForm = () => {
                 type="submit"
                 label="Create Account"
                 size="medium"
+                className={styles.submitButton}
               />
               <footer className={styles.footer}>
                 <Text fontSize="small">Already have an account?</Text>
