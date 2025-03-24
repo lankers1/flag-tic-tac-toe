@@ -3,7 +3,7 @@ import { IconType } from 'react-icons';
 import styles from './styles.module.scss';
 
 interface Props {
-  handleClick: () => void;
+  handleClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   height?: string;
   width?: string;
   Icon: IconType;
