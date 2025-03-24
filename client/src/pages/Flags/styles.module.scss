@@ -1,0 +1,45 @@
+@use 'src/sass/theme' as *;
+
+.container {
+  width: 100%;
+
+  .card {
+    width: 70vw;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+
+    @media screen and (max-width: $large) {
+      width: 80%;
+    }
+
+    .listContainer {
+      flex: 1;
+      height: 0px;
+      margin-top: 1rem;
+
+      .listItemWrapper {
+        gap: 1rem;
+      }
+
+      .characteristicWrapper {
+        flex-wrap: wrap;
+        gap: 0.25rem;
+
+        .chipContainer {
+          gap: 0.25rem;
+        }
+      }
+
+      .flagAvatar {
+        height: 2.5rem;
+        width: 2.5rem;
+        margin-right: 0.5rem;
+      }
+    }
+
+    .loadingContainer {
+      height: 100%;
+    }
+  }
+}
