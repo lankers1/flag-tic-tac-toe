@@ -1,15 +1,19 @@
 import { useContext } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { FaAngleUp } from 'react-icons/fa';
+import { FaAngleUp, FaFlag } from 'react-icons/fa';
 import { FlagAvatar } from '@components/common/FlagAvatar';
 import { Heading } from '@components/common/Heading';
 import { AuthContext, UserContext } from '../../context/AuthContext';
 import styles from './styles.module.scss';
 import { Link } from '@components/common/Link';
+
+import { Text } from '@components/common/Text';
 import { useGetUserQuery } from '@query-hooks/user/useGetUser';
 
 export const Layout = () => {
   const user = useContext(AuthContext);
+  const location = useLocation();
+  const regex = /\/game\/online/;
 
   return (
     <div className={styles.container}>
@@ -17,7 +21,17 @@ export const Layout = () => {
         <Heading variant="h2" bold>
           FTTT
         </Heading>
-        <nav className={styles.nav}>{user?.loggedIn && <UserMenu />}</nav>
+        <nav className={styles.nav}>
+          {!regex.test(location.pathname) && (
+            <Text>
+              <Link to="/flags">
+                <FaFlag className={styles.flagIcon} />
+                Flags
+              </Link>
+            </Text>
+          )}
+          {user?.loggedIn && <UserMenu />}
+        </nav>
       </header>
       <main className={styles.main}>
         <Outlet />
