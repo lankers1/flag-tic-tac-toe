@@ -25,6 +25,6 @@ export const useSearchFlagCharacteristicsQuery = (
   characteristics: string[]
 ) =>
   useQuery<Flag[]>({
-    queryKey: [searchTerm, ...characteristics],
+    queryKey: ['search-flags', searchTerm, ...characteristics],
     queryFn: () => handleSearchFlagCharacteristics(searchTerm, characteristics)
   });
