@@ -9,6 +9,7 @@ interface Props {
   type?: 'reset' | 'button' | 'submit' | undefined;
   handleClick?: () => void;
   color?: Color;
+  className?: string;
 }
 
 function determineColor(color: Color) {
@@ -28,7 +29,8 @@ export const Button = ({
   handleClick,
   type = 'button',
   color = 'default',
-  disabled = false
+  disabled = false,
+  className = ''
 }: Props) => {
   return (
     <button
@@ -36,7 +38,7 @@ export const Button = ({
       onClick={handleClick}
       className={`${styles.button} ${
         size === 'xlarge' && styles.xlarge
-      } ${determineColor(color)}`}
+      } ${determineColor(color)} ${className}`}
       type={type}
     >
       {label}
