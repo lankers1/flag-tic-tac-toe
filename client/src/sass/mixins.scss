@@ -1,0 +1,15 @@
+@mixin fieldset() {
+  .fieldset {
+    position: absolute;
+    pointer-events: none;
+    height: calc(100% - 5px);
+    top: -0.75rem;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    box-shadow: 5px 5px rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(0, 0, 0, 0.6);
+    border-radius: 28px;
+    background-color: white;
+  }
+}
