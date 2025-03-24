@@ -56,7 +56,7 @@ export const Home = () => {
             >
               <div className={styles.subheading}>
                 <Heading variant="h2">Play online</Heading>
-                <Text>
+                <Text fontSize="small">
                   Rise up the ranks by beating other players. As you climb up
                   the leaderboard the difficulty increases, so you better keep
                   on top of your vexillology knowledge.
@@ -119,7 +119,7 @@ export const Home = () => {
             >
               <div className={styles.subheading}>
                 <Heading variant="h2">Play locally</Heading>
-                <Text>
+                <Text fontSize="small">
                   Play locally against a friend or versus the computer to hone
                   your skills. However, beware, the computer won't go easy on
                   you!
