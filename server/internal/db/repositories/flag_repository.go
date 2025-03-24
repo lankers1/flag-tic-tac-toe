@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/jackc/pgx/v5"
@@ -55,18 +56,23 @@ characteristics
 FROM (
     SELECT f.iso_2,
       f.name,
-      ARRAY_AGG(c.name) as characteristics
+	  jsonb_agg(jsonb_build_object('name', c.name, 'type', c.type)) as characteristics
     FROM flags f
       JOIN flag_characteristics fc ON f.iso_2 = fc.flag_id
       JOIN characteristics c ON fc.characteristic_id = c.characteristic_id
-    GROUP BY f.iso_2,
-      f.name
+    GROUP BY f.iso_2, f.name
   ) characteristics_by_flag_iso
-WHERE $1 <@ characteristics
-  AND name ILIKE $2;`
+	 WHERE $1 <@ ARRAY(SELECT jsonb_array_elements_text(jsonb_path_query_array(
+    characteristics,
+    '$.name'
+  )))
+		AND name ILIKE $2
+  ORDER BY name
+	;`
 	rows, queryErr := flagRepo.conn.Query(flagRepo.ctx, query, characteristics, "%"+searchTerm+"%")
 
 	if queryErr != nil {
+		fmt.Println(queryErr)
 		return nil, &validators.AppError{
 			Code:    http.StatusInternalServerError,
 			Message: "Something went wrong when searching for flags",
@@ -81,6 +87,32 @@ WHERE $1 <@ characteristics
 		return nil, &validators.AppError{
 			Code:    http.StatusInternalServerError,
 			Message: "Something went wrong when searching for flags",
+		}
+	}
+
+	return &flags, nil
+}
+
+func (flagRepo *FlagRepository) Characteristics() (*[]models.Characteristics, *validators.AppError) {
+	query := "SELECT characteristic_id, name, type FROM characteristics ORDER BY type;"
+	rows, queryErr := flagRepo.conn.Query(flagRepo.ctx, query)
+
+	if queryErr != nil {
+		fmt.Println(queryErr)
+		return nil, &validators.AppError{
+			Code:    http.StatusInternalServerError,
+			Message: "Something went wrong when selecting flag characteristics",
+		}
+	}
+
+	defer rows.Close()
+
+	flags, err := pgx.CollectRows(rows, pgx.RowToStructByPos[models.Characteristics])
+
+	if err != nil {
+		return nil, &validators.AppError{
+			Code:    http.StatusInternalServerError,
+			Message: "Something went wrong when selecting flag characteristics",
 		}
 	}
 

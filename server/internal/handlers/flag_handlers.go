@@ -52,12 +52,23 @@ func (flagHandler *FlagHandler) SearchFlagCharacteristics(ctx *gin.Context) {
 		return
 	}
 
-	countries, err := flagHandler.FlagRepository.SearchFlagCharacteristics(body.SearchTerm, body.Characteristics)
+	flags, err := flagHandler.FlagRepository.SearchFlagCharacteristics(body.SearchTerm, body.Characteristics)
 
 	if err != nil {
 		ctx.AbortWithStatusJSON(err.Code, err.Message)
 		return
 	}
 
-	ctx.JSON(http.StatusOK, countries)
+	ctx.JSON(http.StatusOK, flags)
+}
+
+func (flagHandler *FlagHandler) Characteristics(ctx *gin.Context) {
+	flagCharacteristics, err := flagHandler.FlagRepository.Characteristics()
+
+	if err != nil {
+		ctx.AbortWithStatusJSON(err.Code, err.Message)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, flagCharacteristics)
 }
