@@ -5,6 +5,8 @@
   margin: 0;
   list-style-type: none;
   width: 100%;
+  overflow-y: auto;
+  scrollbar-color: grey transparent;
 }
 
 .listItem {
