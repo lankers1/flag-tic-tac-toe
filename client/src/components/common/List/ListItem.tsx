@@ -1,21 +1,25 @@
-import { ReactElement } from "react";
+import { ReactElement } from 'react';
 
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
 interface Props {
   content: string | number | ReactElement;
-  handleClick: () => void;
+  handleClick?: () => void;
   clickable?: boolean;
+  className?: string;
 }
 
 export const ListItem = ({
   content,
   handleClick,
-  clickable = false,
+  className = '',
+  clickable = false
 }: Props) => {
   return (
     <li
-      className={`${styles.listItem} ${clickable && styles.clickable}`}
+      className={`${styles.listItem} ${className} ${
+        clickable && styles.clickable
+      }`}
       onClick={clickable ? handleClick : undefined}
     >
       {content}
