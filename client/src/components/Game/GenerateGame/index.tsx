@@ -8,7 +8,7 @@ import { AuthContext } from '@context/AuthContext';
 import { useSendAnswer } from '@query-hooks/game/useSendAnswer';
 import { useSendPlayAgain } from '@query-hooks/game/useSendPlayAgain';
 import { useSendQuitGame } from '@query-hooks/game/useSendQuitGame';
-import { Game } from '@type-defs/game';
+import { Answers, Game } from '@type-defs/game';
 import { PublicUser } from '@type-defs/user';
 import { LocalGame } from '@utils/game/LocalGame';
 

@@ -6,7 +6,7 @@ import { AuthContext } from '@context/AuthContext';
 import { useSearchFlagsQuery } from '@query-hooks/flags/useSearchFlags';
 import { useGameStore } from '@store/useGameStore';
 import { LocalGame } from '@utils/game/LocalGame';
-import { Game } from '@type-defs/game';
+import { Answers, Game } from '@type-defs/game';
 
 interface Props {
   children: ({ game }: { game: InstanceType<typeof LocalGame> }) => ReactNode;

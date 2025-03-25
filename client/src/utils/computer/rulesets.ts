@@ -1,7 +1,7 @@
 import { answerMap } from '@components/Game/AnswerModalContent';
 import { determineComputerMove } from '../game-ai/minmax';
-import { IncorrectAnswer } from '@type-defs/game';
-import { SelectedFlag, SelectedFlags } from '@type-defs/flag';
+import { Answers, IncorrectAnswer } from '@type-defs/game';
+import { Flag, SelectedFlag, SelectedFlags } from '@type-defs/flag';
 
 interface Args {
   flags: Flag[];

@@ -7,7 +7,7 @@ import { Loader } from '@components/common/Loader';
 import { AuthContext } from '@context/AuthContext';
 import { useGameStore } from '@store/useGameStore';
 import { PublicUser } from '@type-defs/user';
-import { Game } from '@type-defs/game';
+import { Answers, Game } from '@type-defs/game';
 
 import styles from './styles.module.scss';
 

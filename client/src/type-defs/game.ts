@@ -20,10 +20,6 @@ export type Game = {
   playerTwoId: string;
 };
 
-export type Answers = {
-  string: string[];
-};
-
 export type Message = {
   playerTurn: number;
   isCorrect: boolean;
@@ -41,3 +37,10 @@ export type IncorrectAnswer = {
   cell: { row: number; col: number };
   flag: Flag;
 };
+
+export type Cell = {
+  row: number;
+  col: number;
+};
+
+export type Answers = Record<string, string[]>;

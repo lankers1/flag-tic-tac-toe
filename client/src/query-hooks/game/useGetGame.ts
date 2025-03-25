@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { Game } from '@type-defs/game';
+import { Answers, Game } from '@type-defs/game';
 
 async function handleGetGame(gameId: string | undefined) {
   if (gameId) {

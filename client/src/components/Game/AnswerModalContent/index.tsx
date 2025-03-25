@@ -12,6 +12,7 @@ import { SearchInput } from '@components/common/Inputs/SearchInput';
 import { IconButton } from '@components/common/Buttons/IconButton';
 import { List } from '@components/common/List';
 import { ListItem } from '@components/common/List/ListItem';
+import { Answers } from '@type-defs/game';
 
 interface Props {
   closeModal: () => void;

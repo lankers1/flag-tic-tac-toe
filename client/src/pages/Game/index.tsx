@@ -10,7 +10,7 @@ import { GenerateGame } from '@components/Game/GenerateGame';
 import { AuthContext, UserContext } from '@context/AuthContext';
 import { ActionButtons } from '@components/Game/ActionButtons';
 import { AnswerModalContent } from '@components/Game/AnswerModalContent';
-import { Board, Game as GameType } from '@type-defs/game';
+import { Answers, Board, Game as GameType } from '@type-defs/game';
 import { PublicUser } from '@type-defs/user';
 import { PlayerNotification } from '@components/Game/PlayerNotification';
 import { Modal } from '@components/common/Modal';

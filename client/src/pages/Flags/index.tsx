@@ -39,6 +39,7 @@ import { GiStarsStack } from 'react-icons/gi';
 import { RiPlantFill, RiRectangleLine } from 'react-icons/ri';
 import { TbBoxAlignTopLeftFilled, TbFocusCentered } from 'react-icons/tb';
 import { Chip } from '@components/common/Chip';
+import { Characteristic } from '@type-defs/flag';
 
 function mapCharacteristics(characteristics: Characteristic[]) {
   return characteristics?.reduce<Record<string, string[]>>(
