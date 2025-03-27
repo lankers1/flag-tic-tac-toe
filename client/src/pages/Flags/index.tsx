@@ -39,45 +39,7 @@ import { GiStarsStack } from 'react-icons/gi';
 import { RiPlantFill, RiRectangleLine } from 'react-icons/ri';
 import { TbBoxAlignTopLeftFilled, TbFocusCentered } from 'react-icons/tb';
 import { Chip } from '@components/common/Chip';
-import { Characteristic } from '@type-defs/flag';
-
-function mapCharacteristics(characteristics: Characteristic[]) {
-  return characteristics?.reduce<Record<string, string[]>>(
-    (acc, characteristic) => {
-      if (characteristic.type === 'color') {
-        acc['colors'] = [
-          ...(acc['colors'] || []),
-          characteristic.name.slice(9)
-        ];
-      }
-      if (characteristic.type === 'symmetry') {
-        acc['symmetry'] = [...(acc['symmetry'] || []), characteristic.name];
-      }
-      if (characteristic.type === 'region') {
-        acc['region'] = [...(acc['region'] || []), characteristic.name];
-      }
-      if (characteristic.type === 'shapes') {
-        acc['shapes'] = [...(acc['shapes'] || []), characteristic.name];
-      }
-      if (characteristic.type === 'object') {
-        acc['object'] = [...(acc['object'] || []), characteristic.name];
-      }
-      if (
-        characteristic.type === 'astronomical' &&
-        characteristic.name !== 'moon_and_stars' &&
-        characteristic.name !== 'stars_and_stripes' &&
-        characteristic.name !== 'contains_stars'
-      ) {
-        acc['astronomical'] = [
-          ...(acc['astronomical'] || []),
-          characteristic.name
-        ];
-      }
-      return acc;
-    },
-    {}
-  );
-}
+import { mapCharacteristics } from '@utils/flags/mapCharacteristics';
 
 export const Flags = () => {
   const [selectedCharacteristics, setSelectedCharacteristics] = useState<
@@ -115,18 +77,20 @@ export const Flags = () => {
             </Notification>
           ))}
         <>
-          <MultiSelect
-            items={characteristics ? characteristics : []}
-            name="flag-filters"
-            label="Search"
-            onSelect={handleSelect}
-            onRemove={(index) =>
-              setSelectedCharacteristics((state) =>
-                state.filter((_, cIndex) => index !== cIndex)
-              )
-            }
-            selectedItems={selectedCharacteristics}
-          />
+          {!(isError || isCharacteristicsError) && (
+            <MultiSelect
+              items={characteristics ? characteristics : []}
+              name="flag-filters"
+              label="Search"
+              onSelect={handleSelect}
+              onRemove={(index) =>
+                setSelectedCharacteristics((state) =>
+                  state.filter((_, cIndex) => index !== cIndex)
+                )
+              }
+              selectedItems={selectedCharacteristics}
+            />
+          )}
           {loading && (
             <FlexDiv
               className={styles.loadingContainer}
@@ -221,6 +185,17 @@ function RenderChip({ chipType, chars }: RenderChipProps) {
           </FlexDiv>
         </Chip>
       );
+    case 'main_color':
+      return chars.map((char, i) => (
+        <Chip key={`main_color-${i}`}>
+          <FlexDiv alignItems="center" className={styles.chipContainer}>
+            <DetermineIcon type="main_color" characteristic={char} />
+            <Text fontSize="small">
+              {capitaliseFirst(removeSnakeCase(char))}
+            </Text>
+          </FlexDiv>
+        </Chip>
+      ));
     case 'symmetry':
       return chars.map((char, i) => (
         <Chip key={`symmetry-${i}`}>
@@ -338,15 +313,6 @@ export function DetermineIcon({ characteristic, type }: DetermineIconProps) {
           />
         ))}
       </div>
-      // <div
-      //   style={{
-      //     border: '2px solid black',
-      //     borderRadius: '1rem',
-      //     height: '1rem',
-      //     width: '1rem',
-      //     backgroundColor: characteristic.slice(9)
-      //   }}
-      // />
     );
   }
 
@@ -383,6 +349,311 @@ export function DetermineIcon({ characteristic, type }: DetermineIconProps) {
       );
     case 'three_plus_stars':
       return <GiStarsStack />;
+    case 'triband':
+      return (
+        <div
+          style={{
+            border: '2px solid black',
+            borderRadius: '1rem',
+            height: '1rem',
+            width: '1rem',
+            overflow: 'hidden',
+            position: 'relative'
+          }}
+        >
+          <div
+            style={{
+              height: '0.33rem',
+              width: '1rem',
+              backgroundColor: 'red',
+              position: 'absolute',
+              top: 0
+            }}
+          />
+          <div
+            style={{
+              height: '0.33rem',
+              width: '1rem',
+              backgroundColor: 'yellow',
+              position: 'absolute',
+              top: '0.33rem'
+            }}
+          />
+          <div
+            style={{
+              height: '0.33rem',
+              width: '1rem',
+              backgroundColor: 'green',
+              position: 'absolute',
+              top: '0.66rem'
+            }}
+          />
+        </div>
+      );
+
+    case 'horizontal_stripes':
+      return (
+        <div
+          style={{
+            border: '2px solid black',
+            borderRadius: '1rem',
+            height: '1rem',
+            width: '1rem',
+            overflow: 'hidden',
+            position: 'relative',
+            backgroundColor: 'blue'
+          }}
+        >
+          <div
+            style={{
+              height: '0.33rem',
+              width: '1rem',
+              backgroundColor: 'yellow',
+              position: 'absolute',
+              top: '0.33rem'
+            }}
+          />
+        </div>
+      );
+
+    case 'three_horizontal_stripes':
+      return (
+        <div
+          style={{
+            border: '2px solid black',
+            borderRadius: '1rem',
+            height: '1rem',
+            width: '1rem',
+            overflow: 'hidden',
+            position: 'relative',
+            backgroundColor: 'blue'
+          }}
+        >
+          <div
+            style={{
+              height: '0.33rem',
+              width: '1rem',
+              backgroundColor: 'red',
+              position: 'absolute',
+              top: 0
+            }}
+          />
+          <div
+            style={{
+              height: '0.33rem',
+              width: '1rem',
+              backgroundColor: 'yellow',
+              position: 'absolute',
+              top: '0.33rem'
+            }}
+          />
+          <div
+            style={{
+              height: '0.33rem',
+              width: '1rem',
+              backgroundColor: 'green',
+              position: 'absolute',
+              top: '0.66rem'
+            }}
+          />
+        </div>
+      );
+
+    case 'three_vertical_stripes':
+      return (
+        <div
+          style={{
+            border: '2px solid black',
+            borderRadius: '1rem',
+            height: '1rem',
+            width: '1rem',
+            overflow: 'hidden',
+            position: 'relative',
+            backgroundColor: 'blue'
+          }}
+        >
+          <div
+            style={{
+              height: '1rem',
+              width: '0.33rem',
+              backgroundColor: 'red',
+              position: 'absolute',
+              right: 0
+            }}
+          />
+          <div
+            style={{
+              height: '1rem',
+              width: '0.33rem',
+              backgroundColor: 'yellow',
+              position: 'absolute',
+              right: '0.33rem'
+            }}
+          />
+          <div
+            style={{
+              height: '1rem',
+              width: '0.33rem',
+              backgroundColor: 'green',
+              position: 'absolute',
+              right: '0.66rem'
+            }}
+          />
+        </div>
+      );
+
+    case 'four_plus_horizontal_stripes':
+      return (
+        <div
+          style={{
+            border: '2px solid black',
+            borderRadius: '1rem',
+            height: '1rem',
+            width: '1rem',
+            overflow: 'hidden',
+            position: 'relative'
+          }}
+        >
+          <div
+            style={{
+              height: '0.25rem',
+              width: '1rem',
+              backgroundColor: 'red',
+              position: 'absolute',
+              top: 0
+            }}
+          />
+          <div
+            style={{
+              height: '0.25rem',
+              width: '1rem',
+              backgroundColor: 'green',
+              position: 'absolute',
+              top: '0.25rem'
+            }}
+          />
+          <div
+            style={{
+              height: '0.25rem',
+              width: '1rem',
+              backgroundColor: 'red',
+              position: 'absolute',
+              top: '0.50rem'
+            }}
+          />
+          <div
+            style={{
+              height: '0.25rem',
+              width: '1rem',
+              backgroundColor: 'green',
+              position: 'absolute',
+              top: '0.75rem'
+            }}
+          />
+        </div>
+      );
+
+    case 'vertical_stripes':
+      return (
+        <div
+          style={{
+            border: '2px solid black',
+            borderRadius: '1rem',
+            height: '1rem',
+            width: '1rem',
+            overflow: 'hidden',
+            position: 'relative',
+            backgroundColor: 'blue'
+          }}
+        >
+          <div
+            style={{
+              height: '1rem',
+              width: '0.33rem',
+              backgroundColor: 'yellow',
+              position: 'absolute',
+              right: '0.33rem'
+            }}
+          />
+        </div>
+      );
+
+    case 'two_vertical_stripes':
+      return (
+        <div
+          style={{
+            border: '2px solid black',
+            borderRadius: '1rem',
+            height: '1rem',
+            width: '1rem',
+            overflow: 'hidden',
+            position: 'relative',
+            backgroundColor: 'white'
+          }}
+        >
+          <div
+            style={{
+              height: '1rem',
+              width: '0.5rem',
+              backgroundColor: 'red',
+              position: 'absolute',
+              right: '0rem'
+            }}
+          />
+        </div>
+      );
+
+    case 'two_horizontal_stripes':
+      return (
+        <div
+          style={{
+            border: '2px solid black',
+            borderRadius: '1rem',
+            height: '1rem',
+            width: '1rem',
+            overflow: 'hidden',
+            position: 'relative',
+            backgroundColor: 'white'
+          }}
+        >
+          <div
+            style={{
+              height: '0.5rem',
+              width: '1rem',
+              backgroundColor: 'red',
+              position: 'absolute',
+              top: '0rem'
+            }}
+          />
+        </div>
+      );
+
+    case 'diagonal_stripes':
+      return (
+        <div
+          style={{
+            border: '2px solid black',
+            borderRadius: '1rem',
+            height: '1rem',
+            width: '1rem',
+            overflow: 'hidden',
+            position: 'relative',
+            backgroundColor: 'blue'
+          }}
+        >
+          <div
+            style={{
+              height: '0.35rem',
+              width: '1.3rem',
+              backgroundColor: 'yellow',
+              position: 'absolute',
+              top: '0.35rem',
+              transform: 'rotate(45deg)',
+              right: ' -0.2rem'
+            }}
+          />
+        </div>
+      );
     case 'contains_moon':
       return <FaMoon />;
     case 'contains_sun':
