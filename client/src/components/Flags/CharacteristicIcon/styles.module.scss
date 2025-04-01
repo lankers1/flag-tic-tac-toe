@@ -1,0 +1,224 @@
+@use 'src/sass/theme' as *;
+
+.icon {
+  border: 2px solid $icon-black;
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.redStar {
+  color: $icon-red;
+  stroke: $icon-black;
+  stroke-width: 50px;
+}
+
+.whiteStar {
+  color: $icon-white;
+  stroke: $icon-black;
+  stroke-width: 50px;
+}
+
+.yellowStar {
+  color: $icon-yellow;
+  stroke: $icon-black;
+  stroke-width: 50px
+}
+
+.threeHorizontalStripe {
+  .topStripe {
+    background-color: $icon-red;
+    top: 0
+  }
+
+  .middleStripe {
+    background-color: $icon-yellow;
+    top: 0.33rem;
+  }
+
+  .bottomStripe {
+    background-color: $icon-green;
+    top: 0.66rem;
+  }
+}
+
+.threeVerticalStripe {
+  .leftVerticalStripe {
+    background-color: $icon-red;
+    right: 0;
+  }
+
+  .middleVerticalStripe {
+    background-color: $icon-yellow;
+    right: 0.33rem;
+  }
+
+  .rightVerticalStripe {
+    background-color: $icon-green;
+    right: 0.66rem;
+  }
+}
+
+.comboColorContainer {
+  position: relative;
+  display: flex;
+
+  .comboColor {
+    position: absolute;
+    bottom: -0.6rem;
+  }
+}
+
+.fourHorizontalStripes {
+  .stripe {
+    height: 0.25rem;
+    width: 1rem;
+    position: absolute;
+  }
+
+  .topStripe {
+    top: 0;
+    background-color: $icon-red;
+  }
+
+  .topMiddleStripe {
+    top: 0.25rem;
+    background-color: $icon-green;
+  }
+
+  .bottomMiddleStripe {
+    top: 0.5rem;
+    background-color: $icon-red;
+  }
+
+  .bottomStripe {
+    top: 0.75rem;
+    background-color: $icon-green;
+  }
+}
+
+.twoHorizontalStripes {
+  background-color: $icon-white;
+
+  .halfHorizontalStripe {
+    height: 0.5rem;
+    width: 1rem;
+    background-color: $icon-red;
+    position: absolute;
+    top: 0rem;
+  }
+}
+
+.horizontalStripe {
+  background-color: $icon-blue;
+
+  .horizontalMiddleBandStripe {
+    background-color: $icon-yellow;
+    top: 0.33rem;
+  }
+}
+
+.verticalStripe {
+  background-color: $icon-blue;
+
+  .middleStripe {
+    background-color: $icon-yellow;
+    right: 0.33rem;
+
+  }
+}
+
+.horizontalBand {
+  height: 0.33rem;
+  width: 1rem;
+  position: absolute;
+}
+
+.verticalBand {
+  height: 1rem;
+  width: 0.33rem;
+  position: absolute;
+}
+
+.twoVerticalStripes {
+  background-color: $icon-white;
+
+  .halfVerticalStripe {
+    height: 1rem;
+    width: 0.5rem;
+    background-color: $icon-red;
+    position: absolute;
+    right: 0rem;
+  }
+}
+
+.diagonalStripes {
+  background-color: $icon-blue;
+
+  .diagonalStripe {
+    height: 0.35rem;
+    width: 1.3rem;
+    background-color: $icon-yellow;
+    position: absolute;
+    top: 0.35rem;
+    transform: rotate(45deg);
+    right: -0.2rem;
+  }
+}
+
+.tribandContainer {
+  background-color: $icon-blue;
+
+  .tribandTopBand {
+    top: 0;
+    background-color: $icon-red;
+  }
+
+  .tribandMiddleBand {
+    top: 0.33rem;
+    background-color: $icon-yellow;
+  }
+
+  .tribandBottomBand {
+    top: 0.66rem;
+
+  }
+}
+
+.redIcon {
+  background-color: $icon-red;
+}
+
+.blueIcon {
+  background-color: $icon-blue;
+}
+
+.greenIcon {
+  background-color: $icon-green;
+}
+
+.yellowIcon {
+  background-color: $icon-yellow;
+}
+
+.blackIcon {
+  background-color: $icon-black;
+}
+
+.whiteIcon {
+  background-color: $icon-white;
+}
+
+.orangeIcon {
+  background-color: $icon-orange;
+}
+
+.greyIcon {
+  background-color: $icon-grey;
+}
+
+.pinkIcon {
+  background-color: $icon-pink;
+}

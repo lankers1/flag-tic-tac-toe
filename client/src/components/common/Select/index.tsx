@@ -1,11 +1,11 @@
 import { useRef, useState } from 'react';
 import { capitalise, removeSnakeCase } from '@utils/removeSnakeCase';
-import { DetermineIcon } from '@pages/Flags';
 import { FlexDiv } from '../FlexDiv';
 import { ListItem } from '../List/ListItem';
 import { Text } from '../Text';
 import styles from './styles.module.scss';
 import { Chip } from '../Chip';
+import { CharacteristicIcon } from '@components/Flags/CharacteristicIcon';
 
 interface Props {
   items: { name: string; type: string }[];
@@ -104,7 +104,7 @@ export const MultiSelect = ({
                               marginRight: '6px'
                             }}
                           >
-                            <DetermineIcon
+                            <CharacteristicIcon
                               characteristic={item.name}
                               type={item.type}
                             />
