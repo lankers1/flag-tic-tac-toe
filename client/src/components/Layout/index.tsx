@@ -9,6 +9,7 @@ import { Link } from '@components/common/Link';
 
 import { Text } from '@components/common/Text';
 import { useGetUserQuery } from '@query-hooks/user/useGetUser';
+import { FaHouse } from 'react-icons/fa6';
 
 export const Layout = () => {
   const user = useContext(AuthContext);
@@ -22,6 +23,14 @@ export const Layout = () => {
           FTTT
         </Heading>
         <nav className={styles.nav}>
+          {!regex.test(location.pathname) && (
+            <Text>
+              <Link to="/">
+                <FaHouse className={styles.flagIcon} />
+                Home
+              </Link>
+            </Text>
+          )}
           {!regex.test(location.pathname) && (
             <Text>
               <Link to="/flags">
