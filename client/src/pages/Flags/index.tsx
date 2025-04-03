@@ -55,7 +55,7 @@ export const Flags = () => {
             <MultiSelect
               items={characteristics ? characteristics : []}
               name="flag-filters"
-              label="Search"
+              label="Search by characteristics"
               onSelect={handleSelect}
               onRemove={(index) =>
                 setSelectedCharacteristics((state) =>
