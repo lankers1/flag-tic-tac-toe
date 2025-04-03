@@ -75,6 +75,12 @@
       .selectedListItem {
         background-color: $background-pink;
       }
+
+      .iconContainer {
+        display: flex;
+        align-items: center;
+        margin-right: 6px
+      }
     }
   }
 

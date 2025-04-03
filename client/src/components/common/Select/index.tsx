@@ -97,13 +97,7 @@ export const MultiSelect = ({
                     content={
                       <FlexDiv justifyContent="spaceBetween">
                         <FlexDiv alignItems="center">
-                          <div
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              marginRight: '6px'
-                            }}
-                          >
+                          <div className={styles.iconContainer}>
                             <CharacteristicIcon
                               characteristic={item.name}
                               type={item.type}

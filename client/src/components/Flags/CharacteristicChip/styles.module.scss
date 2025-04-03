@@ -1,0 +1,17 @@
+.chipContainer {
+  gap: 0.25rem;
+
+  .colorWrapper {
+    position: relative;
+    display: flex;
+
+    .colorIcon {
+      border: 2px solid black;
+      border-radius: 1rem;
+      height: 1rem;
+      width: 1rem;
+      position: absolute;
+      bottom: -0.6rem;
+    }
+  }
+}
