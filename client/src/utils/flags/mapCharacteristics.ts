@@ -1,5 +1,4 @@
-import { Characteristic } from "@type-defs/flag";
-
+import { Characteristic } from '@type-defs/flag';
 
 export function mapCharacteristics(characteristics: Characteristic[]) {
   return characteristics?.reduce<Record<string, string[]>>(
@@ -21,6 +20,15 @@ export function mapCharacteristics(characteristics: Characteristic[]) {
       }
       if (characteristic.type === 'shapes') {
         acc['shapes'] = [...(acc['shapes'] || []), characteristic.name];
+      }
+      if (characteristic.type === 'stripes') {
+        acc['stripes'] = [...(acc['stripes'] || []), characteristic.name];
+      }
+      if (characteristic.type === 'stripes_count') {
+        acc['stripes_count'] = [
+          ...(acc['stripes_count'] || []),
+          characteristic.name
+        ];
       }
       if (characteristic.type === 'object') {
         acc['object'] = [...(acc['object'] || []), characteristic.name];

@@ -92,7 +92,7 @@ export const Flags = () => {
                             className={styles.flagAvatar}
                             flagIso2={flag?.iso_2}
                           />
-                          <Text fontSize="small">{flag?.name}</Text>
+                          <Text>{flag?.name}</Text>
                         </FlexDiv>
                         <FlexDiv className={styles.characteristicWrapper}>
                           {charMap &&

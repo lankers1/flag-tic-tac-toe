@@ -71,8 +71,10 @@ export const MultiSelect = ({
             {items
               .filter(
                 (item) =>
-                  removeSnakeCase(item.name).includes(inputValue) ||
-                  item.type.includes(inputValue)
+                  removeSnakeCase(item.name.toLowerCase()).includes(
+                    inputValue.toLowerCase()
+                  ) ||
+                  item.type.toLowerCase().includes(inputValue.toLowerCase())
               )
               .map((item) => {
                 const isSelected = selectedItems.find((i) => i === item.name);
