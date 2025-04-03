@@ -186,12 +186,12 @@ FROM (
               c.name,
               c.difficulty
             FROM flags f
-              JOIN flag_characteristics fc ON f.iso_2 = fc.iso_2
+              JOIN flag_characteristics fc ON f.iso_2 = fc.flag_id
               JOIN characteristics c ON fc.characteristic_id = c.characteristic_id
             WHERE c.difficulty = 'easy'
           ) AS A
           JOIN flags f2 ON f2.iso_2 = a.iso_2
-          JOIN flag_characteristics fc2 ON f2.iso_2 = fc2.iso_2
+          JOIN flag_characteristics fc2 ON f2.iso_2 = fc2.flag_id
           JOIN characteristics c2 ON fc2.characteristic_id = c2.characteristic_id
         WHERE fc2.characteristic_id != A.characteristic_id
         GROUP BY id,
