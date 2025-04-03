@@ -1,3 +1,5 @@
+import { Flag } from './flag';
+
 export type Board = {
   first_column: string;
   first_column_id: number;

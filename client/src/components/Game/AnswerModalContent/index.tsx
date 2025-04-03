@@ -13,6 +13,7 @@ import { IconButton } from '@components/common/Buttons/IconButton';
 import { List } from '@components/common/List';
 import { ListItem } from '@components/common/List/ListItem';
 import { Answers } from '@type-defs/game';
+import { Flag } from '@type-defs/flag';
 
 interface Props {
   closeModal: () => void;

@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { FlagCharacteristics } from '@type-defs/flag';
 
 async function handleSearchFlagCharacteristics(
   searchTerm: string,
@@ -24,7 +25,7 @@ export const useSearchFlagCharacteristicsQuery = (
   searchTerm: string,
   characteristics: string[]
 ) =>
-  useQuery<Flag[]>({
+  useQuery<FlagCharacteristics[]>({
     queryKey: ['search-flags', searchTerm, ...characteristics],
     queryFn: () => handleSearchFlagCharacteristics(searchTerm, characteristics)
   });

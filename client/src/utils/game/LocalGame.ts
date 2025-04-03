@@ -1,6 +1,7 @@
 import { NavigateFunction } from 'react-router-dom';
 import { SetSelectedFlag } from '@store/useGameStore';
 import { Cell, IncorrectAnswer } from '@type-defs/game';
+import { Flag } from '@type-defs/flag';
 
 type Args = {
   gameId: string | undefined;

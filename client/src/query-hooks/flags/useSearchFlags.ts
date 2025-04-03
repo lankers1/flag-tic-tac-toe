@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { Flag } from '@type-defs/flag';
 
 async function handleSearchFlags(searchTerm: string) {
   const res = await fetch(`${import.meta.env.VITE_API_URL}/search_flags`, {

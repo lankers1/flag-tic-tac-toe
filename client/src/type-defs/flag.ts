@@ -9,5 +9,8 @@ export type Characteristic = { type: string; name: string };
 export type Flag = {
   iso_2: string;
   name: string;
-  characteristics: Characteristic[];
 };
+
+export type FlagCharacteristics = {
+  characteristics: Characteristic[];
+} & Flag;

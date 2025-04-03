@@ -1,5 +1,6 @@
 import { SendAnswerArgs } from '@query-hooks/game/useSendAnswer';
 import { SetSelectedFlag } from '@store/useGameStore';
+import { Flag } from '@type-defs/flag';
 import { Cell, IncorrectAnswer } from '@type-defs/game';
 import { NavigateFunction } from 'react-router-dom';
 

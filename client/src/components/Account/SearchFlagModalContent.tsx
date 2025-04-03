@@ -14,6 +14,7 @@ import { Text } from '@components/common/Text';
 import { FlexDiv } from '@components/common/FlexDiv';
 import { useUpdateFavouriteFlagQuery } from '@query-hooks/user/useUpdateFavouriteFlag';
 import { AuthContext } from '@context/AuthContext';
+import { Flag } from '@type-defs/flag';
 
 interface Props {
   closeModal: () => void;
